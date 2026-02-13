@@ -20,22 +20,22 @@ const BottomNav = () => {
       <div className="flex items-center justify-around h-16 max-w-lg mx-auto">
         {tabs.map((tab) => {
           const isActive = location.pathname === tab.path;
-          return (
-            <button
-              key={tab.path}
-              onClick={() => navigate(tab.path)}
-              className={`flex flex-col items-center gap-0.5 px-4 py-2 rounded-xl transition-all duration-200 ${
-              isActive ?
-              "text-primary scale-105" :
-              "text-muted-foreground hover:text-foreground"}`
-              }>
+          return;
 
-              
-              <span className="text-[10px] font-semibold">{tab.label}</span>
-              {isActive &&
-              <div className="absolute -bottom-0 w-8 h-0.5 rounded-full gradient-primary" />
-              }
-            </button>);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         })}
       </div>
