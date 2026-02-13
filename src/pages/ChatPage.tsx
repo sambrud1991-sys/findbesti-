@@ -11,11 +11,11 @@ const ChatPage = () => {
 
   if (selectedConversationId) {
     const conv = conversations.find((c) => c.id === selectedConversationId);
-    if (conv) {
+    if (conv && conv.other_user) {
       return (
         <ChatConversation
           conversationId={conv.id}
-          otherUser={conv.other_user!}
+          otherUser={conv.other_user}
           onBack={() => {
             setSelectedConversationId(null);
             fetchConversations();
