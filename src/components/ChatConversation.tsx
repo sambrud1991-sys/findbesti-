@@ -76,7 +76,7 @@ const ChatConversation = ({ chat, onBack }: ChatConversationProps) => {
       </div>
 
       {/* Input */}
-      <div className="sticky bottom-0 glass-card border-t border-border/50 px-4 py-3 safe-bottom">
+      <div className="sticky bottom-0 glass-card border-t border-border/50 px-4 py-3 mb-16">
         <div className="flex items-center gap-2">
           <input
             type="text"
