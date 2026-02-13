@@ -5,11 +5,11 @@ import { mockUsers } from "@/data/mockData";
 import { useNavigate } from "react-router-dom";
 
 const tabs = [
-  { label: "Hot 🔥", icon: Flame },
-  { label: "Nearby", icon: MapPin },
-  { label: "New", icon: Clock },
-  { label: "Popular", icon: TrendingUp },
-];
+{ label: "Hot 🔥", icon: Flame },
+{ label: "Nearby", icon: MapPin },
+{ label: "New", icon: Clock },
+{ label: "Popular", icon: TrendingUp }];
+
 
 const HomePage = () => {
   const [activeTab, setActiveTab] = useState(0);
@@ -22,7 +22,7 @@ const HomePage = () => {
         <div className="px-4 pt-4 pb-2">
           <div className="flex items-center justify-between mb-3 animate-slide-up">
             <h1 className="text-2xl font-extrabold">
-              <span className="text-gradient">JoyMet</span>
+              <span className="text-gradient">FIND BESTI 💫</span>
             </h1>
             <button className="w-10 h-10 rounded-full bg-muted flex items-center justify-center hover:scale-110 transition-transform duration-200">
               <Search size={18} className="text-muted-foreground" />
@@ -31,20 +31,20 @@ const HomePage = () => {
 
           {/* Tabs */}
           <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2">
-            {tabs.map((tab, i) => (
-              <button
-                key={tab.label}
-                onClick={() => setActiveTab(i)}
-                className={`px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all duration-300 animate-stagger-in ${
-                  activeTab === i
-                    ? "gradient-primary text-primary-foreground shadow-md scale-105"
-                    : "bg-muted text-muted-foreground hover:bg-muted/80 hover:scale-105"
-                }`}
-                style={{ animationDelay: `${i * 80}ms` }}
-              >
+            {tabs.map((tab, i) =>
+            <button
+              key={tab.label}
+              onClick={() => setActiveTab(i)}
+              className={`px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all duration-300 animate-stagger-in ${
+              activeTab === i ?
+              "gradient-primary text-primary-foreground shadow-md scale-105" :
+              "bg-muted text-muted-foreground hover:bg-muted/80 hover:scale-105"}`
+              }
+              style={{ animationDelay: `${i * 80}ms` }}>
+
                 {tab.label}
               </button>
-            ))}
+            )}
           </div>
         </div>
       </header>
@@ -57,8 +57,8 @@ const HomePage = () => {
           onClick={() => {
             const randomUser = mockUsers[Math.floor(Math.random() * mockUsers.length)];
             navigate(`/video-call/${randomUser.id}`);
-          }}
-        >
+          }}>
+
           <div className="w-12 h-12 rounded-full bg-primary-foreground/20 flex items-center justify-center" style={{ animation: "float 3s ease-in-out infinite" }}>
             <Sparkles size={24} className="text-primary-foreground" />
           </div>
@@ -75,19 +75,19 @@ const HomePage = () => {
       {/* User Grid */}
       <div className="px-4">
         <div className="grid grid-cols-2 gap-3">
-          {mockUsers.map((user, index) => (
-            <div
-              key={user.id}
-              className="animate-stagger-in"
-              style={{ animationDelay: `${300 + index * 100}ms` }}
-            >
+          {mockUsers.map((user, index) =>
+          <div
+            key={user.id}
+            className="animate-stagger-in"
+            style={{ animationDelay: `${300 + index * 100}ms` }}>
+
               <UserCard user={user} />
             </div>
-          ))}
+          )}
         </div>
       </div>
-    </div>
-  );
+    </div>);
+
 };
 
 export default HomePage;
