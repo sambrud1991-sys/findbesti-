@@ -12,13 +12,6 @@ const tabs = [
 
 
 const regions = ["All", "🇮🇳 India", "🇵🇰 Pakistan", "🇺🇸 USA", "🇧🇩 Bangladesh", "🇵🇭 Philippines"];
-const regionCountryMap: Record<string, string> = {
-  "🇮🇳 India": "India",
-  "🇵🇰 Pakistan": "Pakistan",
-  "🇺🇸 USA": "USA",
-  "🇧🇩 Bangladesh": "Bangladesh",
-  "🇵🇭 Philippines": "Philippines",
-};
 
 const HomePage = () => {
   const [activeTab, setActiveTab] = useState(0);
@@ -34,26 +27,26 @@ const HomePage = () => {
             <h1 className="text-2xl font-extrabold">
               <span className="text-gradient">FIND BESTI 💫</span>
             </h1>
-            <button className="w-10 h-10 rounded-full bg-muted flex items-center justify-center hover:scale-110 transition-transform duration-200">
-              <Search size={18} className="text-muted-foreground" />
-            </button>
-          </div>
-
-          {/* Regions */}
-          <div className="flex gap-1.5 overflow-x-auto no-scrollbar mb-2">
-            {regions.map((region, i) => (
-              <button
-                key={region}
-                onClick={() => setActiveRegion(i)}
-                className={`px-3 py-1 rounded-full text-[10px] font-bold whitespace-nowrap transition-all duration-300 ${
-                  activeRegion === i
-                    ? "gradient-primary text-primary-foreground shadow-sm scale-105"
-                    : "bg-muted text-muted-foreground hover:bg-muted/80"
-                }`}
-              >
-                {region}
+            <div className="flex items-center gap-2">
+              <div className="flex gap-1.5 overflow-x-auto no-scrollbar">
+                {regions.map((region, i) => (
+                  <button
+                    key={region}
+                    onClick={() => setActiveRegion(i)}
+                    className={`px-2.5 py-1 rounded-full text-[10px] font-bold whitespace-nowrap transition-all duration-300 ${
+                      activeRegion === i
+                        ? "gradient-primary text-primary-foreground shadow-sm"
+                        : "bg-muted text-muted-foreground"
+                    }`}
+                  >
+                    {region}
+                  </button>
+                ))}
+              </div>
+              <button className="w-10 h-10 rounded-full bg-muted flex items-center justify-center hover:scale-110 transition-transform duration-200 shrink-0">
+                <Search size={18} className="text-muted-foreground" />
               </button>
-            ))}
+            </div>
           </div>
 
           {/* Tabs */}
@@ -102,19 +95,14 @@ const HomePage = () => {
       {/* User Grid */}
       <div className="px-4">
         <div className="grid grid-cols-2 gap-3">
-          {mockUsers
-            .filter((user) => {
-              if (activeRegion === 0) return true;
-              const selectedCountry = regionCountryMap[regions[activeRegion]];
-              return user.country === selectedCountry;
-            })
-            .map((user, index) =>
-            <div
-              key={user.id}
-              className="animate-stagger-in"
-              style={{ animationDelay: `${300 + index * 100}ms` }}>
-                <UserCard user={user} />
-              </div>
+          {mockUsers.map((user, index) =>
+          <div
+            key={user.id}
+            className="animate-stagger-in"
+            style={{ animationDelay: `${300 + index * 100}ms` }}>
+
+              <UserCard user={user} />
+            </div>
           )}
         </div>
       </div>
