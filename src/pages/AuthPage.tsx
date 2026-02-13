@@ -62,9 +62,9 @@ const AuthPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="h-[100dvh] flex flex-col bg-background overflow-hidden">
       {/* Hero Section - Large pink area */}
-      <div className="gradient-primary relative flex-1 min-h-[55vh] flex flex-col px-6 pt-10 pb-6 overflow-hidden">
+      <div className="gradient-primary relative flex-1 flex flex-col px-6 pt-10 pb-6 overflow-hidden">
         {/* App Name */}
         <div className="flex items-center justify-between">
           <h1 className="text-4xl font-black text-primary-foreground italic tracking-tight">
