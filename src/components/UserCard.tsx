@@ -3,6 +3,14 @@ import { Video, Phone, Heart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
+const countryFlags: Record<string, string> = {
+  India: "🇮🇳",
+  Pakistan: "🇵🇰",
+  USA: "🇺🇸",
+  Bangladesh: "🇧🇩",
+  Philippines: "🇵🇭",
+};
+
 interface UserCardProps {
   user: UserProfile;
 }
@@ -55,7 +63,10 @@ const UserCard = ({ user }: UserCardProps) => {
       <div className="absolute bottom-0 left-0 right-0 p-3">
         <div className="flex items-end justify-between">
           <div className="transform group-hover:translate-y-0 translate-y-1 transition-transform duration-300">
-            <h3 className="text-primary-foreground font-bold text-sm drop-shadow-md">{user.name}, {user.age}</h3>
+            <h3 className="text-primary-foreground font-bold text-sm drop-shadow-md flex items-center gap-1">
+              {user.name}, {user.age}
+              <span className="text-xs">{countryFlags[user.country] || "🌍"}</span>
+            </h3>
             <p className="text-primary-foreground/70 text-[10px] drop-shadow">{user.country}</p>
           </div>
           <div className="flex gap-1.5 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
