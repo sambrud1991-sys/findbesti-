@@ -34,8 +34,8 @@ const AuthPage = () => {
           password,
           options: {
             emailRedirectTo: window.location.origin,
-            data: { display_name: displayName || "User" },
-          },
+            data: { display_name: displayName || "User" }
+          }
         });
         if (error) throw error;
         toast.success("Signup सफल! कृपया अपना email verify करें।");
@@ -103,30 +103,30 @@ const AuthPage = () => {
         <div className="glass-card rounded-2xl p-6 shadow-xl">
           {/* Mode Toggle */}
           <div className="flex gap-2 mb-6">
-            <button
-              onClick={() => setMode("login")}
-              className={`flex-1 py-2.5 rounded-xl text-sm font-bold transition-all ${
-                mode === "login"
-                  ? "gradient-primary text-primary-foreground shadow-lg"
-                  : "bg-muted text-muted-foreground"
-              }`}
-            >
-              Login
-            </button>
+            
+
+
+
+
+
+
+
+
+
             <button
               onClick={() => setMode("signup")}
               className={`flex-1 py-2.5 rounded-xl text-sm font-bold transition-all ${
-                mode === "signup"
-                  ? "gradient-primary text-primary-foreground shadow-lg"
-                  : "bg-muted text-muted-foreground"
-              }`}
-            >
+              mode === "signup" ?
+              "gradient-primary text-primary-foreground shadow-lg" :
+              "bg-muted text-muted-foreground"}`
+              }>
+
               Sign Up
             </button>
           </div>
 
           {/* Method Tabs */}
-          <Tabs value={method} onValueChange={(v) => { setMethod(v as AuthMethod); setOtpSent(false); }}>
+          <Tabs value={method} onValueChange={(v) => {setMethod(v as AuthMethod);setOtpSent(false);}}>
             <TabsList className="w-full mb-5 bg-muted/60">
               <TabsTrigger value="email" className="flex-1 gap-1.5 text-xs font-semibold">
                 <Mail className="w-3.5 h-3.5" /> Email
@@ -138,17 +138,17 @@ const AuthPage = () => {
 
             {/* Email Auth */}
             <TabsContent value="email" className="space-y-4">
-              {mode === "signup" && (
-                <div className="relative">
+              {mode === "signup" &&
+              <div className="relative">
                   <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <Input
-                    placeholder="नाम दर्ज करें"
-                    value={displayName}
-                    onChange={(e) => setDisplayName(e.target.value)}
-                    className="pl-10 h-12 rounded-xl border-border/60 bg-background"
-                  />
+                  placeholder="नाम दर्ज करें"
+                  value={displayName}
+                  onChange={(e) => setDisplayName(e.target.value)}
+                  className="pl-10 h-12 rounded-xl border-border/60 bg-background" />
+
                 </div>
-              )}
+              }
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
@@ -156,8 +156,8 @@ const AuthPage = () => {
                   placeholder="Email दर्ज करें"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10 h-12 rounded-xl border-border/60 bg-background"
-                />
+                  className="pl-10 h-12 rounded-xl border-border/60 bg-background" />
+
               </div>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -166,68 +166,68 @@ const AuthPage = () => {
                   placeholder="Password दर्ज करें"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="pl-10 pr-10 h-12 rounded-xl border-border/60 bg-background"
-                />
+                  className="pl-10 pr-10 h-12 rounded-xl border-border/60 bg-background" />
+
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
-                >
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
               <Button
                 onClick={handleEmailAuth}
                 disabled={loading}
-                className="w-full h-12 rounded-xl gradient-primary text-primary-foreground font-bold text-base shadow-lg hover:opacity-90 transition-opacity"
-              >
+                className="w-full h-12 rounded-xl gradient-primary text-primary-foreground font-bold text-base shadow-lg hover:opacity-90 transition-opacity">
+
                 {loading ? "कृपया प्रतीक्षा करें..." : mode === "login" ? "Login करें" : "Sign Up करें"}
               </Button>
             </TabsContent>
 
             {/* Phone OTP Auth */}
             <TabsContent value="phone" className="space-y-4">
-              {!otpSent ? (
-                <>
+              {!otpSent ?
+              <>
                   <h3 className="text-lg font-bold text-foreground">Mobile number</h3>
                   <div className="flex items-center gap-0 h-14 rounded-xl bg-muted/50 border border-border/60 overflow-hidden">
                     <span className="pl-4 pr-2 text-base font-semibold text-primary shrink-0">+91</span>
                     <div className="w-px h-6 bg-border/60" />
                     <Input
-                      type="tel"
-                      placeholder="Enter mobile number"
-                      value={phone}
-                      onChange={(e) => {
-                        const val = e.target.value.replace(/\D/g, "").slice(0, 10);
-                        setPhone(val);
-                      }}
-                      className="border-0 bg-transparent h-full text-base font-medium focus-visible:ring-0 shadow-none pl-3"
-                    />
+                    type="tel"
+                    placeholder="Enter mobile number"
+                    value={phone}
+                    onChange={(e) => {
+                      const val = e.target.value.replace(/\D/g, "").slice(0, 10);
+                      setPhone(val);
+                    }}
+                    className="border-0 bg-transparent h-full text-base font-medium focus-visible:ring-0 shadow-none pl-3" />
+
                   </div>
                   <p className="text-xs font-medium text-online">
                     We don't share your number with anyone
                   </p>
                   <Button
-                    onClick={() => {
-                      if (phone.length === 10) {
-                        setPhone("+91" + phone);
-                        handleSendOtp();
-                      } else {
-                        toast.error("कृपया 10 digit का mobile number भरें");
-                      }
-                    }}
-                    disabled={loading || phone.replace(/\D/g, "").length !== 10}
-                    className="w-full h-14 rounded-full bg-accent/20 text-accent font-bold text-lg shadow-none hover:bg-accent/30 transition-colors"
-                  >
+                  onClick={() => {
+                    if (phone.length === 10) {
+                      setPhone("+91" + phone);
+                      handleSendOtp();
+                    } else {
+                      toast.error("कृपया 10 digit का mobile number भरें");
+                    }
+                  }}
+                  disabled={loading || phone.replace(/\D/g, "").length !== 10}
+                  className="w-full h-14 rounded-full bg-accent/20 text-accent font-bold text-lg shadow-none hover:bg-accent/30 transition-colors">
+
                     {loading ? "भेज रहे हैं..." : "Get OTP"}
                   </Button>
-                </>
-              ) : (
-                <>
+                </> :
+
+              <>
                   <button
-                    onClick={() => { setOtpSent(false); setPhone(phone.replace("+91", "")); }}
-                    className="flex items-center gap-1 text-sm text-muted-foreground mb-2"
-                  >
+                  onClick={() => {setOtpSent(false);setPhone(phone.replace("+91", ""));}}
+                  className="flex items-center gap-1 text-sm text-muted-foreground mb-2">
+
                     <ArrowLeft className="w-4 h-4" /> नंबर बदलें
                   </button>
                   <p className="text-sm text-muted-foreground text-center">
@@ -236,23 +236,23 @@ const AuthPage = () => {
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                     <Input
-                      type="text"
-                      placeholder="6-digit OTP दर्ज करें"
-                      value={otp}
-                      onChange={(e) => setOtp(e.target.value)}
-                      maxLength={6}
-                      className="pl-10 h-12 rounded-xl border-border/60 bg-background text-center tracking-[0.5em] font-bold"
-                    />
+                    type="text"
+                    placeholder="6-digit OTP दर्ज करें"
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value)}
+                    maxLength={6}
+                    className="pl-10 h-12 rounded-xl border-border/60 bg-background text-center tracking-[0.5em] font-bold" />
+
                   </div>
                   <Button
-                    onClick={handleVerifyOtp}
-                    disabled={loading}
-                    className="w-full h-12 rounded-xl gradient-primary text-primary-foreground font-bold text-base shadow-lg hover:opacity-90 transition-opacity"
-                  >
+                  onClick={handleVerifyOtp}
+                  disabled={loading}
+                  className="w-full h-12 rounded-xl gradient-primary text-primary-foreground font-bold text-base shadow-lg hover:opacity-90 transition-opacity">
+
                     {loading ? "Verify कर रहे हैं..." : "OTP Verify करें"}
                   </Button>
                 </>
-              )}
+              }
             </TabsContent>
           </Tabs>
         </div>
@@ -264,8 +264,8 @@ const AuthPage = () => {
           <span className="font-bold text-foreground">Terms of Use</span>
         </p>
       </div>
-    </div>
-  );
+    </div>);
+
 };
 
 export default AuthPage;
