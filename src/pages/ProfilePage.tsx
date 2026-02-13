@@ -1,6 +1,7 @@
-import { Settings, Edit3, Crown, Heart, Star, Gift, ChevronRight, LogOut } from "lucide-react";
+import { Settings, Edit3, Crown, Heart, Star, Gift, ChevronRight, LogOut, Shield } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useAdminCheck } from "@/hooks/useAdminCheck";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -16,6 +17,7 @@ const menuItems = [
 
 const ProfilePage = () => {
   const { user, signOut } = useAuth();
+  const { isAdmin } = useAdminCheck();
   const navigate = useNavigate();
 
   const { data: profile, isLoading } = useQuery({
@@ -88,6 +90,25 @@ const ProfilePage = () => {
           ))}
         </div>
       </div>
+
+      {/* Admin Panel Shortcut */}
+      {isAdmin && (
+        <div className="px-4 mt-6">
+          <button
+            onClick={() => navigate("/admin")}
+            className="w-full flex items-center gap-3 py-3.5 px-3 rounded-xl bg-primary/10 hover:bg-primary/20 transition-colors"
+          >
+            <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center">
+              <Shield size={18} className="text-primary" />
+            </div>
+            <div className="flex-1 text-left">
+              <h3 className="font-bold text-sm text-primary">Admin Panel</h3>
+              <p className="text-[10px] text-muted-foreground">Manage users, reports & more</p>
+            </div>
+            <ChevronRight size={16} className="text-primary" />
+          </button>
+        </div>
+      )}
 
       {/* Menu */}
       <div className="px-4 mt-6 space-y-1">
