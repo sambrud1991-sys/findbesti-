@@ -113,16 +113,16 @@ const AuthPage = () => {
 
 
 
-            <button
-              onClick={() => setMode("signup")}
-              className={`flex-1 py-2.5 rounded-xl text-sm font-bold transition-all ${
-              mode === "signup" ?
-              "gradient-primary text-primary-foreground shadow-lg" :
-              "bg-muted text-muted-foreground"}`
-              }>
+            
 
-              Sign Up
-            </button>
+
+
+
+
+
+
+
+
           </div>
 
           {/* Method Tabs */}
