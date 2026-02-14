@@ -9,11 +9,15 @@ Deno.serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  const raw = (key: string) => (Deno.env.get(key) || "").replace(/^["'\s]+|["'\s,]+$/g, "");
+
+  const authDomain = raw("FIREBASE_AUTH_DOMAIN").replace(/^https?:\/\//, "");
+
   return new Response(
     JSON.stringify({
-      apiKey: Deno.env.get("FIREBASE_API_KEY"),
-      authDomain: Deno.env.get("FIREBASE_AUTH_DOMAIN"),
-      projectId: Deno.env.get("FIREBASE_PROJECT_ID"),
+      apiKey: raw("FIREBASE_API_KEY"),
+      authDomain,
+      projectId: raw("FIREBASE_PROJECT_ID"),
     }),
     { headers: { ...corsHeaders, "Content-Type": "application/json" } }
   );
