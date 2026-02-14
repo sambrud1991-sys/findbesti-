@@ -31,12 +31,15 @@ const AuthPage = () => {
     const fullPhone = "+91" + phone;
     setLoading(true);
     try {
-      const { error } = await supabase.auth.signInWithOtp({ phone: fullPhone });
-      if (error) throw error;
+      const res = await supabase.functions.invoke("send-otp", {
+        body: { phone: fullPhone },
+      });
+      if (res.error) throw new Error(res.error.message);
+      if (res.data?.error) throw new Error(res.data.error);
       setOtpSent(true);
       toast.success("OTP भेजा गया!");
     } catch (error: any) {
-      toast.error(error.message);
+      toast.error(error.message || "OTP भेजने में error आया");
     } finally {
       setLoading(false);
     }
@@ -50,11 +53,24 @@ const AuthPage = () => {
     const fullPhone = "+91" + phone;
     setLoading(true);
     try {
-      const { error } = await supabase.auth.verifyOtp({ phone: fullPhone, token: otp, type: "sms" });
-      if (error) throw error;
-      toast.success("Login सफल!");
+      const res = await supabase.functions.invoke("verify-otp", {
+        body: { phone: fullPhone, otp },
+      });
+      if (res.error) throw new Error(res.error.message);
+      if (res.data?.error) throw new Error(res.data.error);
+
+      // Set the session from the edge function response
+      if (res.data?.session) {
+        await supabase.auth.setSession({
+          access_token: res.data.session.access_token,
+          refresh_token: res.data.session.refresh_token,
+        });
+        toast.success("Login सफल!");
+      } else {
+        throw new Error("Session not received");
+      }
     } catch (error: any) {
-      toast.error(error.message);
+      toast.error(error.message || "OTP verify में error आया");
     } finally {
       setLoading(false);
     }
