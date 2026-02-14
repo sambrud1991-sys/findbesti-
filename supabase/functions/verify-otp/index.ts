@@ -3,7 +3,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
+    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
 Deno.serve(async (req) => {
@@ -12,11 +12,11 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { phone, otp } = await req.json();
+    const { phone, firebase_uid } = await req.json();
 
-    if (!phone || !otp) {
+    if (!phone || !firebase_uid) {
       return new Response(
-        JSON.stringify({ error: "Phone and OTP are required" }),
+        JSON.stringify({ error: "Phone and firebase_uid are required" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -26,31 +26,6 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
-    // Find valid OTP
-    const { data: otpRecord, error: fetchError } = await supabase
-      .from("otp_codes")
-      .select("*")
-      .eq("phone", phone)
-      .eq("code", otp)
-      .eq("verified", false)
-      .gte("expires_at", new Date().toISOString())
-      .order("created_at", { ascending: false })
-      .limit(1)
-      .single();
-
-    if (fetchError || !otpRecord) {
-      return new Response(
-        JSON.stringify({ error: "Invalid or expired OTP" }),
-        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
-    // Mark OTP as verified
-    await supabase
-      .from("otp_codes")
-      .update({ verified: true })
-      .eq("id", otpRecord.id);
-
     // Check if user exists with this phone
     const { data: existingUsers } = await supabase.auth.admin.listUsers();
     const existingUser = existingUsers?.users?.find(
@@ -58,40 +33,19 @@ Deno.serve(async (req) => {
     );
 
     let session;
+    const email = `${phone.replace("+", "")}@phone.findbesti.app`;
+    const tempPassword = crypto.randomUUID();
 
     if (existingUser) {
-      // Generate magic link / sign in existing user
-      const { data, error } = await supabase.auth.admin.generateLink({
-        type: "magiclink",
-        email: existingUser.email || `${phone.replace("+", "")}@phone.findbesti.app`,
+      // Update existing user and sign in
+      await supabase.auth.admin.updateUserById(existingUser.id, {
+        password: tempPassword,
+        phone,
+        user_metadata: { ...existingUser.user_metadata, firebase_uid },
       });
 
-      if (error) throw error;
-
-      // Sign in with the token
-      const { data: signInData, error: signInError } = await supabase.auth.admin.updateUserById(
-        existingUser.id,
-        { phone }
-      );
-      if (signInError) throw signInError;
-
-      // Create a session for the user
-      const { data: sessionData, error: sessionError } = await supabase.auth.admin.generateLink({
-        type: "magiclink", 
-        email: existingUser.email || `${phone.replace("+", "")}@phone.findbesti.app`,
-      });
-
-      // Return user info - client will use signInWithPassword with a temp password approach
-      // Actually, let's use a simpler approach with admin API
-      const tempPassword = crypto.randomUUID();
-      await supabase.auth.admin.updateUserById(existingUser.id, { 
-        password: tempPassword 
-      });
-
-      const email = existingUser.email || `${phone.replace("+", "")}@phone.findbesti.app`;
-      
       const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({
-        email,
+        email: existingUser.email || email,
         password: tempPassword,
       });
 
@@ -99,16 +53,13 @@ Deno.serve(async (req) => {
       session = loginData.session;
     } else {
       // Create new user
-      const email = `${phone.replace("+", "")}@phone.findbesti.app`;
-      const tempPassword = crypto.randomUUID();
-
-      const { data: newUser, error: createError } = await supabase.auth.admin.createUser({
+      const { error: createError } = await supabase.auth.admin.createUser({
         email,
         password: tempPassword,
         phone,
         email_confirm: true,
         phone_confirm: true,
-        user_metadata: { phone, display_name: "User" },
+        user_metadata: { phone, display_name: "User", firebase_uid },
       });
 
       if (createError) throw createError;
