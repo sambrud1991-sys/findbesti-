@@ -44,10 +44,8 @@ const AuthPage = () => {
     try {
       const auth = firebaseAuthRef.current || await initFirebase();
       
-      // Setup recaptcha
-      if (!recaptchaVerifierRef.current) {
-        recaptchaVerifierRef.current = setupRecaptcha(auth, "recaptcha-container");
-      }
+      // Always create fresh recaptcha verifier
+      recaptchaVerifierRef.current = setupRecaptcha(auth, "recaptcha-container");
 
       const confirmationResult = await sendFirebaseOtp(fullPhone, recaptchaVerifierRef.current);
       confirmationResultRef.current = confirmationResult;
