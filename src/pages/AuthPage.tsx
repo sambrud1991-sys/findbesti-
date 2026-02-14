@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Phone, Lock, ArrowLeft, Shield, Sparkles, Heart } from "lucide-react";
 import { toast } from "sonner";
+import { initFirebase, setupRecaptcha, sendFirebaseOtp, type ConfirmationResult, type Auth } from "@/lib/firebase";
 
 const AuthPage = () => {
   const [phone, setPhone] = useState("");
@@ -12,6 +13,16 @@ const AuthPage = () => {
   const [loading, setLoading] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const confirmationResultRef = useRef<ConfirmationResult | null>(null);
+  const recaptchaVerifierRef = useRef<any>(null);
+  const firebaseAuthRef = useRef<Auth | null>(null);
+
+  useEffect(() => {
+    // Pre-init Firebase
+    initFirebase().then((auth) => {
+      firebaseAuthRef.current = auth;
+    }).catch(console.error);
+  }, []);
 
   const handleGoogleSignIn = async () => {
     setGoogleLoading(true);
@@ -31,14 +42,21 @@ const AuthPage = () => {
     const fullPhone = "+91" + phone;
     setLoading(true);
     try {
-      const res = await supabase.functions.invoke("send-otp", {
-        body: { phone: fullPhone },
-      });
-      if (res.error) throw new Error(res.error.message);
-      if (res.data?.error) throw new Error(res.data.error);
+      const auth = firebaseAuthRef.current || await initFirebase();
+      
+      // Setup recaptcha
+      if (!recaptchaVerifierRef.current) {
+        recaptchaVerifierRef.current = setupRecaptcha(auth, "recaptcha-container");
+      }
+
+      const confirmationResult = await sendFirebaseOtp(fullPhone, recaptchaVerifierRef.current);
+      confirmationResultRef.current = confirmationResult;
       setOtpSent(true);
       toast.success("OTP भेजा गया!");
     } catch (error: any) {
+      console.error("Send OTP error:", error);
+      // Reset recaptcha on error
+      recaptchaVerifierRef.current = null;
       toast.error(error.message || "OTP भेजने में error आया");
     } finally {
       setLoading(false);
@@ -50,16 +68,25 @@ const AuthPage = () => {
       toast.error("कृपया OTP भरें");
       return;
     }
-    const fullPhone = "+91" + phone;
     setLoading(true);
     try {
+      if (!confirmationResultRef.current) {
+        throw new Error("Please request OTP first");
+      }
+
+      // Verify OTP with Firebase
+      const result = await confirmationResultRef.current.confirm(otp);
+      const firebaseUser = result.user;
+
+      // Now create/login Supabase session via edge function
+      const fullPhone = "+91" + phone;
       const res = await supabase.functions.invoke("verify-otp", {
-        body: { phone: fullPhone, otp },
+        body: { phone: fullPhone, firebase_uid: firebaseUser.uid },
       });
+
       if (res.error) throw new Error(res.error.message);
       if (res.data?.error) throw new Error(res.data.error);
 
-      // Set the session from the edge function response
       if (res.data?.session) {
         await supabase.auth.setSession({
           access_token: res.data.session.access_token,
@@ -70,6 +97,7 @@ const AuthPage = () => {
         throw new Error("Session not received");
       }
     } catch (error: any) {
+      console.error("Verify OTP error:", error);
       toast.error(error.message || "OTP verify में error आया");
     } finally {
       setLoading(false);
@@ -78,6 +106,9 @@ const AuthPage = () => {
 
   return (
     <div className="h-[100dvh] flex flex-col bg-background overflow-hidden">
+      {/* Recaptcha container - invisible */}
+      <div id="recaptcha-container" />
+
       {/* Hero Section */}
       <div className="gradient-primary relative flex-1 flex flex-col px-6 pt-12 pb-8 overflow-hidden">
         {/* Floating decorative elements */}
@@ -167,7 +198,7 @@ const AuthPage = () => {
         ) : (
           <div className="space-y-3.5">
             <button
-              onClick={() => { setOtpSent(false); setOtp(""); }}
+              onClick={() => { setOtpSent(false); setOtp(""); confirmationResultRef.current = null; }}
               className="flex items-center gap-1.5 text-sm font-semibold text-muted-foreground mb-1 hover:text-foreground transition-colors"
             >
               <ArrowLeft className="w-4 h-4" /> नंबर बदलें
