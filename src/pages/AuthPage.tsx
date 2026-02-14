@@ -16,6 +16,7 @@ const AuthPage = () => {
   const confirmationResultRef = useRef<ConfirmationResult | null>(null);
   const recaptchaVerifierRef = useRef<any>(null);
   const firebaseAuthRef = useRef<Auth | null>(null);
+  const recaptchaContainerIdRef = useRef(0);
 
   useEffect(() => {
     // Pre-init Firebase
@@ -44,14 +45,21 @@ const AuthPage = () => {
     try {
     const auth = firebaseAuthRef.current || await initFirebase();
       
-      // Always clear and recreate recaptcha to avoid "already rendered" error
+      // Always clear old recaptcha
       if (recaptchaVerifierRef.current) {
         try { recaptchaVerifierRef.current.clear(); } catch (_) {}
         recaptchaVerifierRef.current = null;
       }
-      // Clear the container's innerHTML to remove any leftover recaptcha widgets
-      const container = document.getElementById("recaptcha-container");
-      if (container) container.innerHTML = "";
+      
+      // Create a fresh container with unique ID to avoid "already rendered" error
+      const oldContainer = document.getElementById("recaptcha-container");
+      if (oldContainer) oldContainer.remove();
+      
+      recaptchaContainerIdRef.current += 1;
+      const newContainer = document.createElement("div");
+      newContainer.id = "recaptcha-container";
+      newContainer.setAttribute("data-key", String(recaptchaContainerIdRef.current));
+      document.body.appendChild(newContainer);
       
       recaptchaVerifierRef.current = setupRecaptcha(auth, "recaptcha-container");
 
@@ -67,7 +75,7 @@ const AuthPage = () => {
       }
       recaptchaVerifierRef.current = null;
       const container = document.getElementById("recaptcha-container");
-      if (container) container.innerHTML = "";
+      if (container) container.remove();
       toast.error(error.message || "OTP भेजने में error आया");
     } finally {
       setLoading(false);
@@ -119,8 +127,6 @@ const AuthPage = () => {
 
   return (
     <div className="h-[100dvh] flex flex-col bg-background overflow-hidden">
-      {/* Recaptcha container - invisible */}
-      <div id="recaptcha-container" />
 
       {/* Hero Section */}
       <div className="gradient-primary relative flex-1 flex flex-col px-6 pt-12 pb-8 overflow-hidden">
