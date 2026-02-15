@@ -126,7 +126,7 @@ const EarnCoinsPage = () => {
           <button onClick={() => navigate(-1)} className="w-9 h-9 rounded-full bg-primary-foreground/10 flex items-center justify-center">
             <ArrowLeft size={18} className="text-primary-foreground" />
           </button>
-          <h1 className="text-xl font-extrabold text-primary-foreground">Pack Coins</h1>
+          <h1 className="text-xl font-extrabold text-primary-foreground">Gift Coins</h1>
         </div>
 
         {/* Balance Card */}
@@ -150,7 +150,7 @@ const EarnCoinsPage = () => {
             </div>
           </div>
           <div className="mt-3 flex items-center justify-center gap-1.5 bg-primary-foreground/10 rounded-full py-1.5 px-3">
-            <span className="text-[10px] font-bold text-primary-foreground/80">1 Coin = ₹1</span>
+            <span className="text-[10px] font-bold text-primary-foreground/80">10Coin = ₹1</span>
           </div>
         </div>
 
