@@ -16,6 +16,7 @@ import PremiumPage from "./pages/PremiumPage";
 import FavoritesPage from "./pages/FavoritesPage";
 import WhoLikedMePage from "./pages/WhoLikedMePage";
 import EarnCoinsPage from "./pages/EarnCoinsPage";
+import CoinPackPage from "./pages/CoinPackPage";
 import SettingsPage from "./pages/SettingsPage";
 import AuthPage from "./pages/AuthPage";
 import NotFound from "./pages/NotFound";
@@ -119,6 +120,7 @@ const App = () => (
                   <Route path="/favorites" element={<ProtectedRoute><FavoritesPage /></ProtectedRoute>} />
                   <Route path="/who-liked-me" element={<ProtectedRoute><WhoLikedMePage /></ProtectedRoute>} />
                   <Route path="/earn-coins" element={<ProtectedRoute><EarnCoinsPage /></ProtectedRoute>} />
+                  <Route path="/coin-pack" element={<ProtectedRoute><CoinPackPage /></ProtectedRoute>} />
                   <Route path="/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>

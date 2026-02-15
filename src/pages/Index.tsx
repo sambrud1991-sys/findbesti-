@@ -55,7 +55,10 @@ const HomePage = () => {
                   <Heart size={16} className="text-accent fill-accent" />
                   <span className="text-sm font-bold text-foreground">0</span>
                 </div>
-                <div className="w-5 h-5 rounded-full bg-muted-foreground/20 flex items-center justify-center">
+                <div
+                  onClick={() => navigate("/coin-pack")}
+                  className="w-5 h-5 rounded-full bg-muted-foreground/20 flex items-center justify-center cursor-pointer hover:bg-muted-foreground/30"
+                >
                   <Plus size={12} className="text-muted-foreground" />
                 </div>
               </div>
