@@ -56,7 +56,7 @@ const HomePage = () => {
                   <span className="text-sm font-bold text-foreground">0</span>
                 </div>
                 <div
-                  onClick={(e) => { e.stopPropagation(); navigate("/coin-pack"); }}
+                  onClick={() => navigate("/coin-pack")}
                   className="w-5 h-5 rounded-full bg-muted-foreground/20 flex items-center justify-center cursor-pointer hover:bg-muted-foreground/30"
                 >
                   <Plus size={12} className="text-muted-foreground" />
