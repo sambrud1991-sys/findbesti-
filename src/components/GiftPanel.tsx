@@ -46,6 +46,10 @@ const GiftPanel = ({
 
   if (!open) return null;
 
+  // UUID format validation
+  const isValidUUID = (id: string) =>
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+
   const handleSendGift = async (gift: GiftItem) => {
     if (!user) return;
     if (userCoins < gift.coins) {
@@ -55,7 +59,7 @@ const GiftPanel = ({
 
     setSending(gift.id);
     try {
-      // Deduct coins from sender
+      // Fetch latest coin balance
       const { data: profile } = await supabase
         .from("profiles")
         .select("coins")
@@ -68,6 +72,7 @@ const GiftPanel = ({
         return;
       }
 
+      // Deduct coins
       const { error: coinError } = await supabase
         .from("profiles")
         .update({ coins: currentCoins - gift.coins })
@@ -75,10 +80,9 @@ const GiftPanel = ({
 
       if (coinError) throw coinError;
 
-      // Record gift transaction
-      const { error: giftError } = await supabase
-        .from("gift_transactions")
-        .insert({
+      // Record gift transaction only if receiver is a valid UUID
+      if (isValidUUID(receiverId)) {
+        await supabase.from("gift_transactions").insert({
           sender_id: user.id,
           receiver_id: receiverId,
           gift_id: gift.id,
@@ -87,8 +91,7 @@ const GiftPanel = ({
           coins_spent: gift.coins,
           channel_name: channelName,
         });
-
-      if (giftError) throw giftError;
+      }
 
       onCoinsDeducted(gift.coins);
       onGiftSent(gift);
