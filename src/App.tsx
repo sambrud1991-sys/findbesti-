@@ -126,7 +126,7 @@ const App = () => (
               <Route path="/favorites" element={<ProtectedRoute><MaintenanceScreen><FavoritesPage /></MaintenanceScreen></ProtectedRoute>} />
               <Route path="/who-liked-me" element={<ProtectedRoute><MaintenanceScreen><WhoLikedMePage /></MaintenanceScreen></ProtectedRoute>} />
               <Route path="/earn-coins" element={<ProtectedRoute><MaintenanceScreen><EarnCoinsPage /></MaintenanceScreen></ProtectedRoute>} />
-              <Route path="/coin-packs" element={<ProtectedRoute><MaintenanceScreen><CoinPackPage /></MaintenanceScreen></ProtectedRoute>} />
+              <Route path="/coin-pack" element={<ProtectedRoute><MaintenanceScreen><CoinPackPage /></MaintenanceScreen></ProtectedRoute>} />
               <Route path="/settings" element={<ProtectedRoute><MaintenanceScreen><SettingsPage /></MaintenanceScreen></ProtectedRoute>} />
               <Route path="/referral" element={<ProtectedRoute><MaintenanceScreen><ReferralPage /></MaintenanceScreen></ProtectedRoute>} />
               <Route path="/leaderboard" element={<ProtectedRoute><MaintenanceScreen><LeaderboardPage /></MaintenanceScreen></ProtectedRoute>} />
