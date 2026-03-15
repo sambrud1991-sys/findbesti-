@@ -396,15 +396,6 @@ const AdminSettingsPage = () => {
         </div>
       </div>
 
-      {/* Save */}
-      <Button
-        onClick={handleSave}
-        disabled={saving}
-        className="w-full h-12 rounded-xl gradient-primary text-primary-foreground font-bold gap-2"
-      >
-        <Save className="w-4 h-4" />
-        {saving ? "Saving..." : "Save All Settings"}
-      </Button>
     </div>
   );
 };
