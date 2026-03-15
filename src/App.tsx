@@ -38,7 +38,9 @@ import AnnouncementBanner from "./components/AnnouncementBanner";
 import { useAdminCheck } from "@/hooks/useAdminCheck";
 import { useScreenProtection } from "@/hooks/useScreenProtection";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { retry: 1 } },
+});
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, loading } = useAuth();
