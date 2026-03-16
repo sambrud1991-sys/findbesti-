@@ -102,11 +102,10 @@ const App = () => (
                 <Route path="coin-packs" element={<AdminCoinPacksPage />} />
               </Route>
 
-              {/* Auth route */}
-              <Route path="/auth" element={<AuthRoute><AuthPage /></AuthRoute>} />
-
-              {/* Protected user routes */}
-              <Route path="/" element={<ProtectedRoute><MaintenanceScreen><AnnouncementBanner /><Index /></MaintenanceScreen></ProtectedRoute>} />
+              {/* Root: auth if logged out, home if logged in */}
+              <Route path="/" element={<RootRoute />} />
+              {/* Legacy redirect */}
+              <Route path="/auth" element={<Navigate to="/" replace />} />
               <Route path="/chat" element={<ProtectedRoute><MaintenanceScreen><ChatPage /></MaintenanceScreen></ProtectedRoute>} />
               <Route path="/call" element={<ProtectedRoute><MaintenanceScreen><CallPage /></MaintenanceScreen></ProtectedRoute>} />
               <Route path="/profile" element={<ProtectedRoute><MaintenanceScreen><ProfilePage /></MaintenanceScreen></ProtectedRoute>} />
