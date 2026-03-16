@@ -112,6 +112,7 @@ const App = () => (
                 <Route path="notifications" element={<AdminNotificationsPage />} />
                 <Route path="settings" element={<AdminSettingsPage />} />
                 <Route path="secrets" element={<AdminSecretsPage />} />
+                <Route path="coin-packs" element={<AdminCoinPacksPage />} />
               </Route>
 
               {/* Auth route */}
