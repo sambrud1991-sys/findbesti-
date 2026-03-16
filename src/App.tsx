@@ -52,11 +52,11 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
       </div>
     );
   }
-  if (!user) return <Navigate to="/auth" replace />;
+  if (!user) return <Navigate to="/" replace />;
   return <>{children}</>;
 };
 
-const AuthRoute = ({ children }: { children: React.ReactNode }) => {
+const RootRoute = () => {
   const { user, loading } = useAuth();
   if (loading) {
     return (
@@ -65,8 +65,8 @@ const AuthRoute = ({ children }: { children: React.ReactNode }) => {
       </div>
     );
   }
-  if (user) return <Navigate to="/" replace />;
-  return <>{children}</>;
+  if (!user) return <AuthPage />;
+  return <MaintenanceScreen><AnnouncementBanner /><Index /></MaintenanceScreen>;
 };
 
 const AdminRoute = ({ children }: { children: React.ReactNode }) => {
@@ -115,11 +115,10 @@ const App = () => (
                 <Route path="coin-packs" element={<AdminCoinPacksPage />} />
               </Route>
 
-              {/* Auth route */}
-              <Route path="/auth" element={<AuthRoute><AuthPage /></AuthRoute>} />
-
-              {/* Protected user routes */}
-              <Route path="/" element={<ProtectedRoute><MaintenanceScreen><AnnouncementBanner /><Index /></MaintenanceScreen></ProtectedRoute>} />
+              {/* Root: auth if logged out, home if logged in */}
+              <Route path="/" element={<RootRoute />} />
+              {/* Legacy redirect */}
+              <Route path="/auth" element={<Navigate to="/" replace />} />
               <Route path="/chat" element={<ProtectedRoute><MaintenanceScreen><ChatPage /></MaintenanceScreen></ProtectedRoute>} />
               <Route path="/call" element={<ProtectedRoute><MaintenanceScreen><CallPage /></MaintenanceScreen></ProtectedRoute>} />
               <Route path="/profile" element={<ProtectedRoute><MaintenanceScreen><ProfilePage /></MaintenanceScreen></ProtectedRoute>} />
