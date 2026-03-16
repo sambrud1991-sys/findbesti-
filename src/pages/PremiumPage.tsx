@@ -60,7 +60,11 @@ const PremiumPage = () => {
       }
 
       const { data, error } = await supabase.functions.invoke("create-razorpay-order", {
-        body: { amount: plan.amount, plan_name: plan.name },
+        body: {
+          amount: plan.amount,
+          plan_name: plan.name,
+          product_type: "premium",
+        },
       });
 
       if (error || !data?.order_id) {
@@ -78,7 +82,21 @@ const PremiumPage = () => {
           email: user?.email || "",
         },
         theme: { color: "#7c3aed" },
-        handler: () => {
+        handler: async (response: any) => {
+          const { data: verifyData, error: verifyError } = await supabase.functions.invoke("verify-razorpay-payment", {
+            body: {
+              product_type: "premium",
+              plan_name: plan.name,
+              razorpay_order_id: response?.razorpay_order_id,
+              razorpay_payment_id: response?.razorpay_payment_id,
+              razorpay_signature: response?.razorpay_signature,
+            },
+          });
+
+          if (verifyError || verifyData?.error || !verifyData?.success) {
+            throw new Error(verifyError?.message || verifyData?.error || "Payment verification failed");
+          }
+
           toast.success(`🎉 ${plan.name} plan activated! Welcome to Premium!`);
         },
         modal: {
