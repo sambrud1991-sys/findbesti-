@@ -78,6 +78,16 @@ serve(async (req) => {
       .select()
       .single();
 
+    if (insertError) {
+      console.error('Insert error:', insertError);
+      // Refund coins since withdrawal record failed
+      await adminClient.rpc('refund_coins', { _user_id: user.id, _amount: amount });
+      return new Response(JSON.stringify({ error: 'Failed to create withdrawal request. Coins refunded.' }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
     // Check for Cashfree Payouts credentials
     const CASHFREE_CLIENT_ID = Deno.env.get('CASHFREE_CLIENT_ID');
     const CASHFREE_CLIENT_SECRET = Deno.env.get('CASHFREE_CLIENT_SECRET');
