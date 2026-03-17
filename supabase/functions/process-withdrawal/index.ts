@@ -53,28 +53,20 @@ serve(async (req) => {
 
     const adminClient = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Check coin balance
-    const { data: profile, error: profileError } = await adminClient
-      .from('profiles')
-      .select('coins')
-      .eq('user_id', user.id)
-      .single();
+    // Atomic coin deduction - prevents race conditions
+    const { error: deductError } = await adminClient.rpc('process_withdrawal_atomic', {
+      _user_id: user.id,
+      _amount: amount,
+    });
 
-    if (profileError || !profile) {
-      return new Response(JSON.stringify({ error: 'Profile not found' }), {
-        status: 404,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
-
-    if ((profile.coins ?? 0) < amount) {
+    if (deductError) {
       return new Response(JSON.stringify({ error: 'Insufficient coins' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
-    // Insert withdrawal request
+    // Insert withdrawal request after successful deduction
     const { data: withdrawal, error: insertError } = await adminClient
       .from('withdrawal_requests')
       .insert({
@@ -88,17 +80,13 @@ serve(async (req) => {
 
     if (insertError) {
       console.error('Insert error:', insertError);
-      return new Response(JSON.stringify({ error: insertError.message }), {
+      // Refund coins since withdrawal record failed
+      await adminClient.rpc('refund_coins', { _user_id: user.id, _amount: amount });
+      return new Response(JSON.stringify({ error: 'Failed to create withdrawal request. Coins refunded.' }), {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
-
-    // Deduct coins
-    await adminClient
-      .from('profiles')
-      .update({ coins: (profile.coins ?? 0) - amount })
-      .eq('user_id', user.id);
 
     // Check for Cashfree Payouts credentials
     const CASHFREE_CLIENT_ID = Deno.env.get('CASHFREE_CLIENT_ID');
@@ -170,7 +158,7 @@ serve(async (req) => {
       if (beneData.subCode !== '409') {
         console.error('Beneficiary creation failed:', beneData);
         await adminClient.from('withdrawal_requests').update({ status: 'failed' }).eq('id', withdrawal.id);
-        await adminClient.from('profiles').update({ coins: profile.coins ?? 0 }).eq('user_id', user.id);
+        await adminClient.rpc('refund_coins', { _user_id: user.id, _amount: amount });
         return new Response(JSON.stringify({ error: 'Invalid UPI ID or payout setup failed. Coins refunded.' }), {
           status: 400,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -199,7 +187,7 @@ serve(async (req) => {
     if (!transferRes.ok) {
       console.error('Transfer failed:', transferData);
       await adminClient.from('withdrawal_requests').update({ status: 'failed' }).eq('id', withdrawal.id);
-      await adminClient.from('profiles').update({ coins: profile.coins ?? 0 }).eq('user_id', user.id);
+      await adminClient.rpc('refund_coins', { _user_id: user.id, _amount: amount });
       return new Response(JSON.stringify({
         error: transferData?.message || 'Payout failed. Coins refunded.',
       }), {
