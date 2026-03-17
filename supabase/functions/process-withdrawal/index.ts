@@ -177,9 +177,7 @@ serve(async (req) => {
     if (!transferRes.ok) {
       console.error('Transfer failed:', transferData);
       await adminClient.from('withdrawal_requests').update({ status: 'failed' }).eq('id', withdrawal.id);
-      // Refund coins
-      await adminClient.from('profiles').update({}).eq('user_id', user.id); // placeholder
-      await adminClient.rpc('process_withdrawal_atomic', { _user_id: user.id, _amount: -amount }).catch(() => {});
+      await adminClient.rpc('refund_coins', { _user_id: user.id, _amount: amount });
       return new Response(JSON.stringify({
         error: transferData?.message || 'Payout failed. Coins refunded.',
       }), {
