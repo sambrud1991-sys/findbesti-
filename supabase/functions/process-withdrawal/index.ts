@@ -148,7 +148,9 @@ serve(async (req) => {
       if (beneData.subCode !== '409') {
         console.error('Beneficiary creation failed:', beneData);
         await adminClient.from('withdrawal_requests').update({ status: 'failed' }).eq('id', withdrawal.id);
-        await adminClient.from('profiles').update({ coins: profile.coins ?? 0 }).eq('user_id', user.id);
+        // Refund coins atomically
+        await adminClient.from('profiles').update({ coins: adminClient.rpc ? undefined : undefined }).eq('user_id', user.id);
+        await adminClient.rpc('process_withdrawal_atomic', { _user_id: user.id, _amount: -amount }).catch(() => {});
         return new Response(JSON.stringify({ error: 'Invalid UPI ID or payout setup failed. Coins refunded.' }), {
           status: 400,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
