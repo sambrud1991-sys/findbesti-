@@ -636,6 +636,10 @@ export type Database = {
         }
         Returns: boolean
       }
+      process_withdrawal_atomic: {
+        Args: { _amount: number; _user_id: string }
+        Returns: undefined
+      }
       send_gift: {
         Args: {
           _channel_name?: string
