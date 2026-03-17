@@ -16,6 +16,9 @@ export const useAdminCheck = () => {
       return data as boolean;
     },
     enabled: !!user?.id,
+    staleTime: 30_000,
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
   });
 
   return { isAdmin: !!isAdmin, isLoading };
