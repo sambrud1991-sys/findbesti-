@@ -640,6 +640,10 @@ export type Database = {
         Args: { _amount: number; _user_id: string }
         Returns: undefined
       }
+      refund_coins: {
+        Args: { _amount: number; _user_id: string }
+        Returns: undefined
+      }
       send_gift: {
         Args: {
           _channel_name?: string
