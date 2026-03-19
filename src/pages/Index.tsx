@@ -294,6 +294,59 @@ const HomePage = () => {
           )}
         </div>
       </div>
+      {/* Withdraw Modal */}
+      {showWithdrawModal && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 animate-in fade-in" onClick={() => setShowWithdrawModal(false)}>
+          <div className="w-full max-w-md bg-card rounded-t-3xl p-5 pb-8 space-y-4 animate-in slide-in-from-bottom" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Wallet size={20} className="text-primary" />
+                <h3 className="font-extrabold text-lg text-foreground">Withdraw</h3>
+              </div>
+              <button onClick={() => setShowWithdrawModal(false)} className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
+                <X size={16} className="text-muted-foreground" />
+              </button>
+            </div>
+
+            <div className="bg-muted/50 rounded-2xl p-4 flex items-center justify-between">
+              <div>
+                <p className="text-xs text-muted-foreground">Available Balance</p>
+                <p className="text-2xl font-extrabold text-foreground">{coins} <span className="text-xs font-normal">coins</span></p>
+              </div>
+              <div className="flex items-center gap-0.5">
+                <IndianRupee size={18} className="text-accent" />
+                <span className="text-xl font-extrabold text-accent">{coins}</span>
+              </div>
+            </div>
+
+            <div>
+              <label className="text-xs font-bold text-muted-foreground mb-1.5 block">Enter UPI ID</label>
+              <Input
+                type="text"
+                placeholder="e.g. name@upi"
+                value={upiId}
+                onChange={(e) => setUpiId(e.target.value)}
+                className="h-12 rounded-xl text-base border-border/60"
+                autoFocus
+              />
+            </div>
+
+            {upiId.includes("@") && (
+              <Button
+                onClick={handleWithdraw}
+                disabled={coins < 100 || withdrawLoading}
+                className="w-full h-12 rounded-xl gradient-primary text-primary-foreground font-bold text-base"
+              >
+                {withdrawLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : `Withdraw ₹${coins}`}
+              </Button>
+            )}
+
+            <p className="text-[10px] text-muted-foreground text-center">
+              Minimum 100 coins • 1 Coin = ₹1 • Instant UPI Transfer
+            </p>
+          </div>
+        </div>
+      )}
     </div>);
 
 };
