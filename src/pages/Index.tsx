@@ -99,40 +99,6 @@ const HomePage = () => {
       })
     : mockUsers;
 
-  const handleWithdraw = async () => {
-    if (!user) { toast.error("पहले login करें"); return; }
-    if (!upiId || !upiId.includes("@")) {
-      toast.error("सही UPI ID डालें (e.g. name@upi)");
-      return;
-    }
-    if (coins < 100) {
-      toast.error("Minimum 100 coins चाहिए withdrawal के लिए");
-      return;
-    }
-    setWithdrawLoading(true);
-    try {
-      const { data, error } = await supabase.functions.invoke("process-withdrawal", {
-        body: { upi_id: upiId, amount: coins },
-      });
-      if (error) throw error;
-      if (data?.error) throw new Error(data.error);
-      if (data?.status === 'completed') {
-        toast.success(`₹${coins} आपके UPI ${upiId} पर भेज दिया गया! 🎉`);
-      } else {
-        toast.success(data?.message || `₹${coins} withdrawal request भेजा गया!`);
-      }
-      setShowWithdrawModal(false);
-      setUpiId("");
-      // Refresh coins
-      supabase.from("profiles").select("coins").eq("user_id", user.id).maybeSingle()
-        .then(({ data }) => { if (data) setCoins(data.coins ?? 0); });
-    } catch (error: any) {
-      toast.error(error.message || "Withdrawal failed");
-    } finally {
-      setWithdrawLoading(false);
-    }
-  };
-
   return (
     <div className="min-h-screen bg-background pb-20">
       {/* Header */}
