@@ -94,7 +94,7 @@ async function encodeHMac(key: string, message: Uint8Array): Promise<Uint8Array>
     false,
     ["sign"]
   );
-  const sig = await crypto.subtle.sign("HMAC", cryptoKey, message);
+  const sig = await crypto.subtle.sign("HMAC", cryptoKey, message as ArrayBufferView<ArrayBuffer>);
   return new Uint8Array(sig);
 }
 
