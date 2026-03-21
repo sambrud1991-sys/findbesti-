@@ -135,7 +135,7 @@ const AuthPage = () => {
       }
     } catch (error: any) {
       console.error("Verify OTP error:", error);
-      toast.error(error.message || "OTP verification failed");
+      toast.error(error.message || t("toast.otpVerifyFailed"));
     } finally {
       setLoading(false);
     }
