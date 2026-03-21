@@ -175,7 +175,7 @@ const AuthPage = () => {
             <div className="w-8 h-8 rounded-full bg-primary-foreground/20 flex items-center justify-center">
               <Sparkles className="w-4 h-4 text-primary-foreground" />
             </div>
-            <p className="text-lg font-bold text-primary-foreground/80">Zero fake profiles</p>
+            <p className="text-lg font-bold text-primary-foreground/80">{t("auth.noFake")}</p>
           </div>
         </div>
 
