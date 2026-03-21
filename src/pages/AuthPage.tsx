@@ -335,9 +335,9 @@ const AuthPage = () => {
 
         {/* Footer */}
         <p className="text-center text-[11px] text-muted-foreground mt-3.5 leading-relaxed">
-          By proceeding I accept the{" "}
-          <span className="font-bold text-foreground underline underline-offset-2">Terms</span> &{" "}
-          <span className="font-bold text-foreground underline underline-offset-2">Community Guidelines</span>
+          {t("auth.terms")}{" "}
+          <span className="font-bold text-foreground underline underline-offset-2">{t("auth.termsLink")}</span> &{" "}
+          <span className="font-bold text-foreground underline underline-offset-2">{t("auth.guidelinesLink")}</span>
         </p>
       </div>
     </div>
