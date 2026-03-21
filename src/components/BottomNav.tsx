@@ -1,19 +1,20 @@
 import { Home, MessageCircle, Video, User } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useLanguage } from "@/contexts/LanguageContext";
 import NotificationBell from "./NotificationBell";
-
-const tabs = [
-{ icon: Home, label: "Home", path: "/" },
-{ icon: MessageCircle, label: "Chat", path: "/chat" },
-{ icon: Video, label: "Call", path: "/call" },
-{ icon: User, label: "Profile", path: "/profile" }];
-
 
 const BottomNav = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
-  // Hide on video call and auth screens
+  const tabs = [
+    { icon: Home, label: t("nav.home"), path: "/" },
+    { icon: MessageCircle, label: t("nav.chat"), path: "/chat" },
+    { icon: Video, label: t("nav.call"), path: "/call" },
+    { icon: User, label: t("nav.profile"), path: "/profile" },
+  ];
+
   if (location.pathname.startsWith("/video-call") || location.pathname.startsWith("/audio-call") || location.pathname === "/auth" || location.pathname.startsWith("/x-panel")) return null;
 
   return (
@@ -35,8 +36,8 @@ const BottomNav = () => {
           );
         })}
       </div>
-    </nav>);
-
+    </nav>
+  );
 };
 
 export default BottomNav;

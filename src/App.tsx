@@ -142,6 +142,7 @@ const App = () => (
         </BrowserRouter>
       </ScreenProtectionWrapper>
     </TooltipProvider>
+    </LanguageProvider>
   </QueryClientProvider>
 );
 
