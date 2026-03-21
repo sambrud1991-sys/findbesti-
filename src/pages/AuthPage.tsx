@@ -269,7 +269,7 @@ const AuthPage = () => {
                 if (phone.length >= 7) {
                   handleSendOtp();
                 } else {
-                  toast.error("Please enter a valid mobile number");
+                  toast.error(t("toast.invalidMobile"));
                 }
               }}
               disabled={loading || phone.length < 7}
