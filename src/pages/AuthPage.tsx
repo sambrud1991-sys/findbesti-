@@ -96,7 +96,7 @@ const AuthPage = () => {
       recaptchaVerifierRef.current = null;
       const container = document.getElementById("recaptcha-container");
       if (container) container.remove();
-      toast.error(error.message || "Failed to send OTP");
+      toast.error(error.message || t("toast.otpFailed"));
     } finally {
       setLoading(false);
     }
