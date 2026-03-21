@@ -127,7 +127,7 @@ const AuthPage = () => {
           access_token: res.data.session.access_token,
           refresh_token: res.data.session.refresh_token,
         });
-        toast.success("Login सफल!");
+        toast.success("Login successful!");
       } else {
         throw new Error("Session not received");
       }
