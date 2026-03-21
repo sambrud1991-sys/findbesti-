@@ -287,7 +287,7 @@ const AuthPage = () => {
               <ArrowLeft className="w-4 h-4" /> {t("auth.changeNumber")}
             </button>
             <p className="text-sm text-muted-foreground text-center">
-              OTP sent to: <span className="font-extrabold text-foreground">{selectedCountry.flag} {selectedCountry.code} {phone}</span>
+              {t("auth.otpSentTo")} <span className="font-extrabold text-foreground">{selectedCountry.flag} {selectedCountry.code} {phone}</span>
             </p>
             <div className="relative">
               <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
