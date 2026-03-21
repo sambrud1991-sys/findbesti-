@@ -104,7 +104,7 @@ const AuthPage = () => {
 
   const handleVerifyOtp = async () => {
     if (!otp) {
-      toast.error("Please enter OTP");
+      toast.error(t("toast.enterOtp"));
       return;
     }
     setLoading(true);
