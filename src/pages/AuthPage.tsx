@@ -284,7 +284,7 @@ const AuthPage = () => {
               onClick={() => { setOtpSent(false); setOtp(""); confirmationResultRef.current = null; }}
               className="flex items-center gap-1.5 text-sm font-semibold text-muted-foreground mb-1 hover:text-foreground transition-colors"
             >
-              <ArrowLeft className="w-4 h-4" /> Change Number
+              <ArrowLeft className="w-4 h-4" /> {t("auth.changeNumber")}
             </button>
             <p className="text-sm text-muted-foreground text-center">
               OTP sent to: <span className="font-extrabold text-foreground">{selectedCountry.flag} {selectedCountry.code} {phone}</span>
