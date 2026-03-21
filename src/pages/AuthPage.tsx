@@ -267,7 +267,7 @@ const AuthPage = () => {
                 if (phone.length >= 7) {
                   handleSendOtp();
                 } else {
-                  toast.error("कृपया valid mobile number भरें");
+                  toast.error("Please enter a valid mobile number");
                 }
               }}
               disabled={loading || phone.length < 7}
