@@ -293,7 +293,7 @@ const AuthPage = () => {
               <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
                 type="text"
-                placeholder="Enter 6-digit OTP"
+                placeholder={t("auth.enterOtp")}
                 value={otp}
                 onChange={(e) => setOtp(e.target.value)}
                 maxLength={6}
