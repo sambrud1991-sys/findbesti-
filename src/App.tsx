@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 import BottomNav from "@/components/BottomNav";
 import Index from "./pages/Index";
 import ChatPage from "./pages/ChatPage";
@@ -91,6 +92,7 @@ const ScreenProtectionWrapper = ({ children }: { children: React.ReactNode }) =>
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
+    <LanguageProvider>
     <TooltipProvider>
       <ScreenProtectionWrapper>
         <Toaster />
@@ -140,6 +142,7 @@ const App = () => (
         </BrowserRouter>
       </ScreenProtectionWrapper>
     </TooltipProvider>
+    </LanguageProvider>
   </QueryClientProvider>
 );
 

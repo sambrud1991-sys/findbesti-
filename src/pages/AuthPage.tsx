@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Phone, Lock, ArrowLeft, Shield, Sparkles, Heart, ChevronDown, Search, X } from "lucide-react";
@@ -9,6 +10,7 @@ import { initFirebase, setupRecaptcha, sendFirebaseOtp, type ConfirmationResult,
 import { countryCodes, type CountryCode } from "@/data/countryCodes";
 
 const AuthPage = () => {
+  const { t } = useLanguage();
   const [phone, setPhone] = useState("");
   const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
@@ -85,7 +87,7 @@ const AuthPage = () => {
       const confirmationResult = await sendFirebaseOtp(fullPhone, recaptchaVerifierRef.current);
       confirmationResultRef.current = confirmationResult;
       setOtpSent(true);
-      toast.success("OTP sent successfully!");
+      toast.success(t("toast.otpSent"));
     } catch (error: any) {
       console.error("Send OTP error:", error);
       if (recaptchaVerifierRef.current) {
@@ -94,7 +96,7 @@ const AuthPage = () => {
       recaptchaVerifierRef.current = null;
       const container = document.getElementById("recaptcha-container");
       if (container) container.remove();
-      toast.error(error.message || "Failed to send OTP");
+      toast.error(error.message || t("toast.otpFailed"));
     } finally {
       setLoading(false);
     }
@@ -102,7 +104,7 @@ const AuthPage = () => {
 
   const handleVerifyOtp = async () => {
     if (!otp) {
-      toast.error("Please enter OTP");
+      toast.error(t("toast.enterOtp"));
       return;
     }
     setLoading(true);
@@ -127,13 +129,13 @@ const AuthPage = () => {
           access_token: res.data.session.access_token,
           refresh_token: res.data.session.refresh_token,
         });
-        toast.success("Login successful!");
+        toast.success(t("toast.loginSuccess"));
       } else {
         throw new Error("Session not received");
       }
     } catch (error: any) {
       console.error("Verify OTP error:", error);
-      toast.error(error.message || "OTP verification failed");
+      toast.error(error.message || t("toast.otpVerifyFailed"));
     } finally {
       setLoading(false);
     }
@@ -167,13 +169,13 @@ const AuthPage = () => {
             <div className="w-8 h-8 rounded-full bg-primary-foreground/20 flex items-center justify-center">
               <Shield className="w-4 h-4 text-primary-foreground" />
             </div>
-            <p className="text-lg font-bold text-primary-foreground/90">100% safe & secure</p>
+            <p className="text-lg font-bold text-primary-foreground/90">{t("auth.safe")}</p>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-full bg-primary-foreground/20 flex items-center justify-center">
               <Sparkles className="w-4 h-4 text-primary-foreground" />
             </div>
-            <p className="text-lg font-bold text-primary-foreground/80">Zero fake profiles</p>
+            <p className="text-lg font-bold text-primary-foreground/80">{t("auth.noFake")}</p>
           </div>
         </div>
 
@@ -253,7 +255,7 @@ const AuthPage = () => {
               <div className="w-px h-7 bg-border/50" />
               <Input
                 type="tel"
-                placeholder="Enter mobile number"
+                placeholder={t("auth.enterMobile")}
                 value={phone}
                 onChange={(e) => {
                   const val = e.target.value.replace(/\D/g, "").slice(0, selectedCountry.maxDigits);
@@ -267,13 +269,13 @@ const AuthPage = () => {
                 if (phone.length >= 7) {
                   handleSendOtp();
                 } else {
-                  toast.error("Please enter a valid mobile number");
+                  toast.error(t("toast.invalidMobile"));
                 }
               }}
               disabled={loading || phone.length < 7}
               className="w-full h-12 rounded-2xl gradient-primary text-primary-foreground font-extrabold text-base shadow-lg hover:opacity-90 transition-all active:scale-[0.98]"
             >
-              {loading ? "Sending..." : "Get OTP →"}
+              {loading ? t("auth.sending") : t("auth.getOtp")}
             </Button>
           </div>
         ) : (
@@ -282,16 +284,16 @@ const AuthPage = () => {
               onClick={() => { setOtpSent(false); setOtp(""); confirmationResultRef.current = null; }}
               className="flex items-center gap-1.5 text-sm font-semibold text-muted-foreground mb-1 hover:text-foreground transition-colors"
             >
-              <ArrowLeft className="w-4 h-4" /> Change Number
+              <ArrowLeft className="w-4 h-4" /> {t("auth.changeNumber")}
             </button>
             <p className="text-sm text-muted-foreground text-center">
-              OTP sent to: <span className="font-extrabold text-foreground">{selectedCountry.flag} {selectedCountry.code} {phone}</span>
+              {t("auth.otpSentTo")} <span className="font-extrabold text-foreground">{selectedCountry.flag} {selectedCountry.code} {phone}</span>
             </p>
             <div className="relative">
               <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
                 type="text"
-                placeholder="Enter 6-digit OTP"
+                placeholder={t("auth.enterOtp")}
                 value={otp}
                 onChange={(e) => setOtp(e.target.value)}
                 maxLength={6}
@@ -303,7 +305,7 @@ const AuthPage = () => {
               disabled={loading}
               className="w-full h-12 rounded-2xl gradient-primary text-primary-foreground font-extrabold text-base shadow-lg hover:opacity-90 transition-all active:scale-[0.98]"
             >
-              {loading ? "Verifying..." : "Verify OTP ✓"}
+              {loading ? t("auth.verifying") : t("auth.verifyOtp")}
             </Button>
           </div>
         )}
@@ -311,7 +313,7 @@ const AuthPage = () => {
         {/* Divider */}
         <div className="flex items-center gap-3 my-3.5">
           <div className="flex-1 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
-          <span className="text-xs text-muted-foreground font-bold uppercase tracking-wider">or</span>
+          <span className="text-xs text-muted-foreground font-bold uppercase tracking-wider">{t("auth.or")}</span>
           <div className="flex-1 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
         </div>
 
@@ -328,14 +330,14 @@ const AuthPage = () => {
             <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
             <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
           </svg>
-          {googleLoading ? "Please wait..." : "Continue with Google"}
+          {googleLoading ? t("auth.pleaseWait") : t("auth.continueGoogle")}
         </Button>
 
         {/* Footer */}
         <p className="text-center text-[11px] text-muted-foreground mt-3.5 leading-relaxed">
-          By proceeding I accept the{" "}
-          <span className="font-bold text-foreground underline underline-offset-2">Terms</span> &{" "}
-          <span className="font-bold text-foreground underline underline-offset-2">Community Guidelines</span>
+          {t("auth.terms")}{" "}
+          <span className="font-bold text-foreground underline underline-offset-2">{t("auth.termsLink")}</span> &{" "}
+          <span className="font-bold text-foreground underline underline-offset-2">{t("auth.guidelinesLink")}</span>
         </p>
       </div>
     </div>
