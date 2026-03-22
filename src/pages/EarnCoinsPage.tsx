@@ -19,7 +19,6 @@ const EarnCoinsPage = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [upiId, setUpiId] = useState("");
-  const [showWithdraw, setShowWithdraw] = useState(false);
   const [earnedCoins, setEarnedCoins] = useState(0);
   const [completedTasks, setCompletedTasks] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
