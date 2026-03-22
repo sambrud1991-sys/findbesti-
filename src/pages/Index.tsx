@@ -129,7 +129,7 @@ const HomePage = () => {
                   className="flex items-center gap-1 cursor-pointer hover:opacity-80 transition-all active:scale-95"
                 >
                   <Wallet size={18} className="text-accent" />
-                  <span className="text-sm font-bold text-foreground">₹{coins}</span>
+                  <span className="text-sm font-bold text-foreground">₹{earnings}</span>
                 </div>
                 <div className="w-px h-4 bg-border" />
                 <div
