@@ -41,13 +41,22 @@ const EarnCoinsPage = () => {
 
     const today = new Date().toISOString().split("T")[0];
 
-    const [profileRes, completionsRes, withdrawalsRes] = await Promise.all([
-    supabase.from("profiles").select("coins").eq("user_id", user.id).maybeSingle(),
-    supabase.from("task_completions").select("task_id").eq("user_id", user.id).eq("completed_date", today),
-    supabase.from("withdrawal_requests").select("*").eq("user_id", user.id).order("created_at", { ascending: false }).limit(20)]
-    );
+    const [giftsRes, tasksRes, referralsRes, completionsRes, withdrawalsRes] = await Promise.all([
+      supabase.from("gift_transactions").select("coins_spent").eq("receiver_id", user.id),
+      supabase.from("task_completions").select("coins_earned").eq("user_id", user.id),
+      supabase.from("referrals").select("coins_awarded").eq("referrer_id", user.id),
+      supabase.from("task_completions").select("task_id").eq("user_id", user.id).eq("completed_date", today),
+      supabase.from("withdrawal_requests").select("*").eq("user_id", user.id).order("created_at", { ascending: false }).limit(20),
+    ]);
 
-    if (profileRes.data) setCoins(profileRes.data.coins ?? 0);
+    const giftEarnings = (giftsRes.data ?? []).reduce((s, g) => s + (g.coins_spent ?? 0), 0);
+    const taskEarnings = (tasksRes.data ?? []).reduce((s, t) => s + (t.coins_earned ?? 0), 0);
+    const referralEarnings = (referralsRes.data ?? []).reduce((s, r) => s + (r.coins_awarded ?? 0), 0);
+    const totalWithdrawn = (withdrawalsRes.data ?? [])
+      .filter((w: any) => w.status === "completed" || w.status === "pending")
+      .reduce((s: number, w: any) => s + (w.amount ?? 0), 0);
+
+    setEarnedCoins(Math.max(0, giftEarnings + taskEarnings + referralEarnings - totalWithdrawn));
     if (completionsRes.data) setCompletedTasks(completionsRes.data.map((t: any) => t.task_id));
     if (withdrawalsRes.data) setWithdrawals(withdrawalsRes.data);
     setLoading(false);
@@ -55,7 +64,7 @@ const EarnCoinsPage = () => {
 
   const handleCompleteTask = async (taskId: string, taskCoins: number) => {
     if (!user) {
-      toast.error("पहले login करें");
+      toast.error("Please login first");
       return;
     }
     setTaskLoading(taskId);
@@ -65,17 +74,17 @@ const EarnCoinsPage = () => {
       });
       if (error) {
         if (error.message?.includes("duplicate") || error.code === "23505") {
-          toast.error("यह task आज पहले ही complete हो चुका है!");
+          toast.error("This task is already completed today!");
         } else {
           throw error;
         }
       } else {
-        setCoins((prev) => prev + taskCoins);
+        setEarnedCoins((prev) => prev + taskCoins);
         setCompletedTasks((prev) => [...prev, taskId]);
         toast.success(`+${taskCoins} coins earned! 🎉`);
       }
     } catch (error: any) {
-      toast.error(error.message || "Task complete नहीं हो पाया");
+      toast.error(error.message || "Task could not be completed");
     } finally {
       setTaskLoading(null);
     }
@@ -84,25 +93,25 @@ const EarnCoinsPage = () => {
   const handleWithdraw = async () => {
     if (!user) return;
     if (!upiId || !upiId.includes("@")) {
-      toast.error("सही UPI ID डालें (e.g. name@upi)");
+      toast.error("Enter valid UPI ID (e.g. name@upi)");
       return;
     }
-    if (coins < 100) {
-      toast.error("Minimum 100 coins चाहिए withdrawal के लिए");
+    if (earnedCoins < 100) {
+      toast.error("Minimum 100 coins required for withdrawal");
       return;
     }
     setWithdrawLoading(true);
     try {
       const { data, error } = await supabase.functions.invoke("process-withdrawal", {
-        body: { upi_id: upiId, amount: coins },
+        body: { upi_id: upiId, amount: earnedCoins },
       });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
       
       if (data?.status === 'completed') {
-        toast.success(`₹${coins} आपके UPI ${upiId} पर भेज दिया गया! 🎉`);
+        toast.success(`₹${earnedCoins} sent to your UPI ${upiId}! 🎉`);
       } else {
-        toast.success(data?.message || `₹${coins} withdrawal request भेजा गया!`);
+        toast.success(data?.message || `₹${earnedCoins} withdrawal request submitted!`);
       }
       setShowWithdraw(false);
       setUpiId("");
@@ -119,7 +128,6 @@ const EarnCoinsPage = () => {
       <div className="h-[100dvh] flex items-center justify-center bg-background">
         <Loader2 className="w-8 h-8 animate-spin text-primary" />
       </div>);
-
   }
 
   return (
@@ -130,7 +138,7 @@ const EarnCoinsPage = () => {
           <button onClick={() => navigate(-1)} className="w-9 h-9 rounded-full bg-primary-foreground/10 flex items-center justify-center">
             <ArrowLeft size={18} className="text-primary-foreground" />
           </button>
-          <h1 className="text-xl font-extrabold text-primary-foreground">Gift Coins</h1>
+          <h1 className="text-xl font-extrabold text-primary-foreground">Earnings</h1>
         </div>
 
         {/* Balance Card */}
@@ -138,23 +146,20 @@ const EarnCoinsPage = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-full bg-accent/20 flex items-center justify-center">
-                <Gift size={24} className="text-accent" />
+                <Wallet size={24} className="text-accent" />
               </div>
               <div>
-                <p className="text-primary-foreground/60 text-xs font-medium">Your Balance</p>
-                <p className="text-2xl font-extrabold text-primary-foreground">{coins} <span className="text-xs font-normal">coins</span></p>
+                <p className="text-primary-foreground/60 text-xs font-medium">Your Earnings</p>
+                <div className="flex items-center gap-1">
+                  <IndianRupee size={20} className="text-primary-foreground" />
+                  <p className="text-2xl font-extrabold text-primary-foreground">{rupees}</p>
+                </div>
               </div>
             </div>
             <div className="text-right">
-              <p className="text-primary-foreground/60 text-xs font-medium">Value</p>
-              <div className="flex items-center gap-0.5">
-                <IndianRupee size={16} className="text-accent" />
-                <span className="text-xl font-extrabold text-accent">{rupees}</span>
-              </div>
+              <p className="text-primary-foreground/60 text-xs font-medium">From</p>
+              <p className="text-xs text-primary-foreground/80">Gifts, Tasks &amp; Referrals</p>
             </div>
-          </div>
-          <div className="mt-3 flex items-center justify-center gap-1.5 bg-primary-foreground/10 rounded-full py-1.5 px-3">
-            <span className="text-[10px] font-bold text-primary-foreground/80">10Coin = ₹1</span>
           </div>
         </div>
 
@@ -162,7 +167,6 @@ const EarnCoinsPage = () => {
           <Button
             onClick={() => setShowWithdraw(!showWithdraw)}
             className="w-full h-11 rounded-xl bg-accent text-accent-foreground font-bold text-sm gap-2 hover:bg-accent/90">
-
             <Wallet size={16} />
             Withdraw
           </Button>
@@ -178,7 +182,7 @@ const EarnCoinsPage = () => {
               <h3 className="font-bold text-sm text-foreground">UPI Withdrawal</h3>
             </div>
             <p className="text-xs text-muted-foreground">
-              Minimum withdrawal: <span className="font-bold text-foreground">100 coins (₹100)</span>
+              Minimum withdrawal: <span className="font-bold text-foreground">₹100</span>
             </p>
             <Input
             type="text"
@@ -190,9 +194,8 @@ const EarnCoinsPage = () => {
             <div className="flex gap-2">
               <Button
               onClick={handleWithdraw}
-              disabled={coins < 100 || withdrawLoading}
+              disabled={earnedCoins < 100 || withdrawLoading}
               className="flex-1 h-10 rounded-xl gradient-primary text-primary-foreground font-bold text-sm">
-
                 {withdrawLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : `Withdraw ₹${rupees}`}
               </Button>
               <Button onClick={() => setShowWithdraw(false)} variant="outline" className="h-10 rounded-xl border-border/60 text-sm">
@@ -215,11 +218,9 @@ const EarnCoinsPage = () => {
                 className={`w-full flex items-center gap-3 py-3 px-3 rounded-xl transition-all ${
                 isDone ? "bg-muted/30 opacity-60" : "bg-card hover:bg-muted/50 active:scale-[0.98]"} border border-border/50`
                 }>
-
                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${isDone ? "bg-online/10" : "bg-primary/10"}`}>
                   {isLoading ?
                   <Loader2 size={18} className="text-primary animate-spin" /> :
-
                   <task.icon size={18} className={isDone ? "text-online" : "text-primary"} />
                   }
                 </div>
@@ -231,13 +232,12 @@ const EarnCoinsPage = () => {
                   {isDone ? "✓ Done" : `+${task.coins}`}
                 </div>
               </button>);
-
           })}
         </div>
 
         <div className="mt-4 bg-muted/30 rounded-xl p-3 border border-border/30">
           <p className="text-[10px] text-muted-foreground text-center leading-relaxed">
-            Coins turant आपके UPI account में transfer हो जाएंगे। Minimum withdrawal ₹100 है।
+            Coins will be transferred to your UPI account instantly. Minimum withdrawal ₹100.
           </p>
         </div>
 
@@ -272,14 +272,12 @@ const EarnCoinsPage = () => {
                       </div>
                     </div>
                   </div>);
-
             })}
             </div>
           </div>
         }
       </div>
     </div>);
-
 };
 
 export default EarnCoinsPage;
