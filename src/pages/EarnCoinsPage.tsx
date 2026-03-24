@@ -151,22 +151,23 @@ const EarnCoinsPage = () => {
 
         {/* Balance Card */}
         <div className="bg-primary-foreground/10 backdrop-blur-sm rounded-2xl p-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-accent/20 flex items-center justify-center">
-                <Wallet size={24} className="text-accent" />
-              </div>
-              <div>
-                <p className="text-primary-foreground/60 text-xs font-medium">Your Earnings</p>
-                <div className="flex items-center gap-1">
-                  <IndianRupee size={20} className="text-primary-foreground" />
-                  <p className="text-2xl font-extrabold text-primary-foreground">{rupees}</p>
-                </div>
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-full bg-accent/20 flex items-center justify-center">
+              <Wallet size={24} className="text-accent" />
+            </div>
+            <div className="flex-1">
+              <p className="text-primary-foreground/60 text-xs font-medium">Your Earnings</p>
+              <div className="flex items-center gap-1">
+                <IndianRupee size={20} className="text-primary-foreground" />
+                <p className="text-2xl font-extrabold text-primary-foreground">{rupees}</p>
               </div>
             </div>
-            <div className="text-right">
-              <p className="text-primary-foreground/60 text-xs font-medium">From</p>
-              <p className="text-xs text-primary-foreground/80">Gifts, Tasks &amp; Referrals</p>
+            <div className="text-right border-l border-primary-foreground/20 pl-3">
+              <p className="text-primary-foreground/60 text-xs font-medium">Recharge</p>
+              <div className="flex items-center gap-1 justify-end">
+                <span className="text-base">🪙</span>
+                <p className="text-lg font-extrabold text-primary-foreground">{rechargeCoins}</p>
+              </div>
             </div>
           </div>
         </div>
