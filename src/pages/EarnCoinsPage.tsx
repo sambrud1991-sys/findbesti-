@@ -17,7 +17,9 @@ const TASKS = [
 
 const EarnCoinsPage = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { user } = useAuth();
+  const withdrawRef = useRef<HTMLDivElement>(null);
   const [upiId, setUpiId] = useState("");
   const [earnedCoins, setEarnedCoins] = useState(0);
   const [completedTasks, setCompletedTasks] = useState<string[]>([]);
