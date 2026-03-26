@@ -5,7 +5,11 @@ import { useQuery } from "@tanstack/react-query";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
 import { useMemo } from "react";
-import { format, subDays, parseISO, startOfDay } from "date-fns";
+import { format, subDays, parseISO } from "date-fns";
+import GenderDistributionChart from "@/components/admin/charts/GenderDistributionChart";
+import GiftAnalyticsChart from "@/components/admin/charts/GiftAnalyticsChart";
+import ActiveUsersTrendChart from "@/components/admin/charts/ActiveUsersTrendChart";
+import WithdrawalStatsChart from "@/components/admin/charts/WithdrawalStatsChart";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
