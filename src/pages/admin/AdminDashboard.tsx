@@ -11,6 +11,7 @@ import GiftAnalyticsChart from "@/components/admin/charts/GiftAnalyticsChart";
 import ActiveUsersTrendChart from "@/components/admin/charts/ActiveUsersTrendChart";
 import WithdrawalStatsChart from "@/components/admin/charts/WithdrawalStatsChart";
 import TopGiftersTable from "@/components/admin/charts/TopGiftersTable";
+import TopReceiversTable from "@/components/admin/charts/TopReceiversTable";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -210,6 +211,7 @@ const AdminDashboard = () => {
         <GiftAnalyticsChart />
         <WithdrawalStatsChart />
         <TopGiftersTable />
+        <TopReceiversTable />
       </div>
     </div>
   );
