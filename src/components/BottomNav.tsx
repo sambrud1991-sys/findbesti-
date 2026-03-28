@@ -6,6 +6,7 @@ import NotificationBell from "./NotificationBell";
 const BottomNav = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const { t } = useLanguage();
 
   const tabs = [
