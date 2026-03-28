@@ -1,11 +1,13 @@
 import { Home, MessageCircle, Video, User } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
 import NotificationBell from "./NotificationBell";
 
 const BottomNav = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const { t } = useLanguage();
 
   const tabs = [
@@ -15,7 +17,7 @@ const BottomNav = () => {
     { icon: User, label: t("nav.profile"), path: "/profile" },
   ];
 
-  if (location.pathname.startsWith("/video-call") || location.pathname.startsWith("/audio-call") || location.pathname === "/auth" || location.pathname.startsWith("/x-panel")) return null;
+  if (!user || location.pathname.startsWith("/video-call") || location.pathname.startsWith("/audio-call") || location.pathname === "/auth" || location.pathname.startsWith("/x-panel")) return null;
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 glass-card border-t border-border/50 safe-bottom">
