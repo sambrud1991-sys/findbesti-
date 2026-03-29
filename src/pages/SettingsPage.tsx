@@ -248,6 +248,11 @@ const SettingsPage = () => {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Version Info */}
+      <div className="text-center py-4">
+        <p className="text-xs text-muted-foreground">FindBesti v{APP_VERSION}</p>
+      </div>
     </div>
   );
 };
