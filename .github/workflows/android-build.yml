@@ -19,16 +19,13 @@ jobs:
           node-version: 18
 
       - name: Install dependencies
-        run: npm install || true
+        run: npm install
 
       - name: Build web app
-        run: npm run build || true
+        run: npm run build
 
       - name: Install Capacitor
         run: npm install @capacitor/core @capacitor/cli @capacitor/android
-
-      - name: Add Android platform
-        run: npx cap add android
 
       - name: Sync Capacitor
         run: npx cap sync android
@@ -40,7 +37,7 @@ jobs:
           ./gradlew assembleDebug
 
       - name: Upload APK
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
-          name: app-debug.apk
+          name: app-debug
           path: android/app/build/outputs/apk/debug/app-debug.apk
