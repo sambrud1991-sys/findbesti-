@@ -21,6 +21,7 @@ import CoinPackPage from "./pages/CoinPackPage";
 import SettingsPage from "./pages/SettingsPage";
 import ReferralPage from "./pages/ReferralPage";
 import LeaderboardPage from "./pages/LeaderboardPage";
+import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
 import AuthPage from "./pages/AuthPage";
 import NotFound from "./pages/NotFound";
 import AdminLayout from "./components/admin/AdminLayout";
