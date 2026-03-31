@@ -11,6 +11,7 @@ import { initFirebase, setupRecaptcha, sendFirebaseOtp, type ConfirmationResult,
 import { countryCodes, type CountryCode } from "@/data/countryCodes";
 
 const AuthPage = () => {
+  const navigate = useNavigate();
   const { t } = useLanguage();
   const [phone, setPhone] = useState("");
   const [otp, setOtp] = useState("");
