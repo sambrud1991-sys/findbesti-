@@ -147,7 +147,7 @@ const SettingsPage = () => {
                     } else if ("action" in item && item.action === "language") {
                       setShowLangPicker(true);
                     } else if (item.label === t("settings.privacyPolicy")) {
-                      toast(t("common.comingSoon"));
+                      navigate("/privacy-policy");
                     } else if (item.label === t("settings.helpSupport")) {
                       toast(t("common.comingSoon"));
                     }
