@@ -21,6 +21,7 @@ import CoinPackPage from "./pages/CoinPackPage";
 import SettingsPage from "./pages/SettingsPage";
 import ReferralPage from "./pages/ReferralPage";
 import LeaderboardPage from "./pages/LeaderboardPage";
+import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
 import AuthPage from "./pages/AuthPage";
 import NotFound from "./pages/NotFound";
 import AdminLayout from "./components/admin/AdminLayout";
@@ -139,6 +140,7 @@ const App = () => (
               <Route path="/settings" element={<ProtectedRoute><MaintenanceScreen><SettingsPage /></MaintenanceScreen></ProtectedRoute>} />
               <Route path="/referral" element={<ProtectedRoute><MaintenanceScreen><ReferralPage /></MaintenanceScreen></ProtectedRoute>} />
               <Route path="/leaderboard" element={<ProtectedRoute><MaintenanceScreen><LeaderboardPage /></MaintenanceScreen></ProtectedRoute>} />
+              <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <BottomNav />
