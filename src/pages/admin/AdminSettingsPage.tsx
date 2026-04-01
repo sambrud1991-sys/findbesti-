@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { Settings, Wrench, Megaphone, Smartphone, Save, Phone, Video, Crown, Plus, Trash2 } from "lucide-react";
+import { Settings, Wrench, Megaphone, Smartphone, Save, Phone, Video, Crown, Plus, Trash2, Shield, FileText } from "lucide-react";
 import { toast } from "sonner";
 
 interface SubscriptionPlan {
