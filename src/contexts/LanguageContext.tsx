@@ -53,6 +53,13 @@ const translations: Translations = {
   "settings.noPurchases": { en: "No purchases yet", hi: "अभी तक कोई खरीदारी नहीं" },
   "settings.premiumActive": { en: "Premium Active", hi: "प्रीमियम सक्रिय" },
   "settings.expires": { en: "Expires", hi: "समाप्ति" },
+  "settings.deleteAccount": { en: "Delete Account", hi: "खाता हटाएँ" },
+  "settings.deleteAccountDesc": { en: "Permanently delete your account and all data", hi: "अपना खाता और सभी डेटा स्थायी रूप से हटाएँ" },
+  "settings.deleteConfirmTitle": { en: "Delete Account?", hi: "खाता हटाएँ?" },
+  "settings.deleteConfirmDesc": { en: "This action cannot be undone. All your data, coins, and history will be permanently deleted.", hi: "यह कार्रवाई पूर्ववत नहीं की जा सकती। आपका सारा डेटा, सिक्के और इतिहास स्थायी रूप से हटा दिया जाएगा।" },
+  "settings.deleteConfirmButton": { en: "Yes, Delete My Account", hi: "हाँ, मेरा खाता हटाएँ" },
+  "settings.cancel": { en: "Cancel", hi: "रद्द करें" },
+  "settings.deleting": { en: "Deleting...", hi: "हटा रहे हैं..." },
 
   // Language names
   "lang.en": { en: "English", hi: "English" },

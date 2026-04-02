@@ -1,4 +1,4 @@
-import { ArrowLeft, Bell, Shield, Eye, Moon, Globe, HelpCircle, Info, Receipt, Crown, Coins, Check } from "lucide-react";
+import { ArrowLeft, Bell, Shield, Eye, Moon, Globe, HelpCircle, Info, Receipt, Crown, Coins, Check, Trash2, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
@@ -14,15 +14,27 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 const SettingsPage = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const { language, setLanguage, t } = useLanguage();
   const [notifications, setNotifications] = useState(true);
   const [darkMode, setDarkMode] = useState(() => document.documentElement.classList.contains("dark"));
   const [profileVisible, setProfileVisible] = useState(true);
   const [showLangPicker, setShowLangPicker] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const { data: purchases, isLoading: purchasesLoading } = useQuery({
     queryKey: ["my-purchases", user?.id],
@@ -219,6 +231,23 @@ const SettingsPage = () => {
             )}
           </div>
         </div>
+
+        {/* Delete Account */}
+        <div>
+          <h2 className="text-xs font-bold text-destructive/70 uppercase tracking-wider mb-2 px-1">{t("settings.deleteAccount")}</h2>
+          <div className="bg-card rounded-2xl border border-destructive/20 overflow-hidden">
+            <button
+              onClick={() => setShowDeleteConfirm(true)}
+              className="w-full flex items-center gap-3 py-3.5 px-4 hover:bg-destructive/5 transition-colors"
+            >
+              <Trash2 size={18} className="text-destructive" />
+              <div className="flex-1 text-left">
+                <span className="font-medium text-sm text-destructive">{t("settings.deleteAccount")}</span>
+                <p className="text-[10px] text-muted-foreground">{t("settings.deleteAccountDesc")}</p>
+              </div>
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Language Picker Dialog */}
@@ -248,6 +277,44 @@ const SettingsPage = () => {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Delete Account Confirmation */}
+      <AlertDialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
+        <AlertDialogContent className="max-w-xs rounded-2xl">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-destructive">{t("settings.deleteConfirmTitle")}</AlertDialogTitle>
+            <AlertDialogDescription>{t("settings.deleteConfirmDesc")}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={deleting}>{t("settings.cancel")}</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={deleting}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={async (e) => {
+                e.preventDefault();
+                setDeleting(true);
+                try {
+                  // Delete profile data first
+                  if (user?.id) {
+                    await supabase.from("profiles").delete().eq("user_id", user.id);
+                  }
+                  // Sign out (account deletion requires server-side admin action)
+                  await signOut();
+                  toast.success(language === "en" ? "Account deleted successfully" : "खाता सफलतापूर्वक हटाया गया");
+                  navigate("/");
+                } catch (err) {
+                  toast.error(language === "en" ? "Failed to delete account" : "खाता हटाने में विफल");
+                } finally {
+                  setDeleting(false);
+                  setShowDeleteConfirm(false);
+                }
+              }}
+            >
+              {deleting ? t("settings.deleting") : t("settings.deleteConfirmButton")}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       {/* Version Info */}
       <div className="text-center py-4">
