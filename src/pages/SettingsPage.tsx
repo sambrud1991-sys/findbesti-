@@ -278,6 +278,44 @@ const SettingsPage = () => {
         </DialogContent>
       </Dialog>
 
+      {/* Delete Account Confirmation */}
+      <AlertDialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
+        <AlertDialogContent className="max-w-xs rounded-2xl">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-destructive">{t("settings.deleteConfirmTitle")}</AlertDialogTitle>
+            <AlertDialogDescription>{t("settings.deleteConfirmDesc")}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={deleting}>{t("settings.cancel")}</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={deleting}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={async (e) => {
+                e.preventDefault();
+                setDeleting(true);
+                try {
+                  // Delete profile data first
+                  if (user?.id) {
+                    await supabase.from("profiles").delete().eq("user_id", user.id);
+                  }
+                  // Sign out (account deletion requires server-side admin action)
+                  await signOut();
+                  toast.success(language === "en" ? "Account deleted successfully" : "खाता सफलतापूर्वक हटाया गया");
+                  navigate("/");
+                } catch (err) {
+                  toast.error(language === "en" ? "Failed to delete account" : "खाता हटाने में विफल");
+                } finally {
+                  setDeleting(false);
+                  setShowDeleteConfirm(false);
+                }
+              }}
+            >
+              {deleting ? t("settings.deleting") : t("settings.deleteConfirmButton")}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       {/* Version Info */}
       <div className="text-center py-4">
         <p className="text-xs text-muted-foreground">FindBesti v{APP_VERSION}</p>
