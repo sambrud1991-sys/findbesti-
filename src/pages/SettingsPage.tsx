@@ -33,6 +33,8 @@ const SettingsPage = () => {
   const [darkMode, setDarkMode] = useState(() => document.documentElement.classList.contains("dark"));
   const [profileVisible, setProfileVisible] = useState(true);
   const [showLangPicker, setShowLangPicker] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const { data: purchases, isLoading: purchasesLoading } = useQuery({
     queryKey: ["my-purchases", user?.id],
