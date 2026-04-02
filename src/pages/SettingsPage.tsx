@@ -27,7 +27,7 @@ import {
 
 const SettingsPage = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const { language, setLanguage, t } = useLanguage();
   const [notifications, setNotifications] = useState(true);
   const [darkMode, setDarkMode] = useState(() => document.documentElement.classList.contains("dark"));
