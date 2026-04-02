@@ -1,4 +1,4 @@
-import { ArrowLeft, Bell, Shield, Eye, Moon, Globe, HelpCircle, Info, Receipt, Crown, Coins, Check } from "lucide-react";
+import { ArrowLeft, Bell, Shield, Eye, Moon, Globe, HelpCircle, Info, Receipt, Crown, Coins, Check, Trash2, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
@@ -14,6 +14,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 const SettingsPage = () => {
   const navigate = useNavigate();
