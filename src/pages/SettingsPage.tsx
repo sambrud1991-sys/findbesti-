@@ -231,6 +231,23 @@ const SettingsPage = () => {
             )}
           </div>
         </div>
+
+        {/* Delete Account */}
+        <div>
+          <h2 className="text-xs font-bold text-destructive/70 uppercase tracking-wider mb-2 px-1">{t("settings.deleteAccount")}</h2>
+          <div className="bg-card rounded-2xl border border-destructive/20 overflow-hidden">
+            <button
+              onClick={() => setShowDeleteConfirm(true)}
+              className="w-full flex items-center gap-3 py-3.5 px-4 hover:bg-destructive/5 transition-colors"
+            >
+              <Trash2 size={18} className="text-destructive" />
+              <div className="flex-1 text-left">
+                <span className="font-medium text-sm text-destructive">{t("settings.deleteAccount")}</span>
+                <p className="text-[10px] text-muted-foreground">{t("settings.deleteAccountDesc")}</p>
+              </div>
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Language Picker Dialog */}
