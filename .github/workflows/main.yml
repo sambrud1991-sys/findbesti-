@@ -25,17 +25,26 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
       - name: Install dependencies
-        run: npm install
+        run: bun install
 
       - name: Build web app
-        run: npm run build
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+          VITE_SUPABASE_PROJECT_ID: ${{ secrets.VITE_SUPABASE_PROJECT_ID }}
+        run: bun run build
 
       - name: Add Android platform
-        run: npx cap add android
+        run: bunx cap add android
 
       - name: Sync Capacitor
-        run: npx cap sync android
+        run: bunx cap sync android
 
       # Debug APK (unsigned, for testing)
       - name: Build Debug APK
