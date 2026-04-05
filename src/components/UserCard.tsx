@@ -232,6 +232,13 @@ const UserCard = ({ user, isBlocked = false, onBlockChange }: UserCardProps) => 
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <ReportDialog
+        open={showReport}
+        onOpenChange={setShowReport}
+        reportedUserId={user.id}
+        reportedUserName={user.name}
+      />
     </>
   );
 };
