@@ -29,6 +29,7 @@ const UserCard = ({ user, isBlocked = false, onBlockChange }: UserCardProps) => 
   const [liked, setLiked] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [showBlockConfirm, setShowBlockConfirm] = useState(false);
+  const [showReport, setShowReport] = useState(false);
   const [blocking, setBlocking] = useState(false);
 
   const handleBlock = async () => {
