@@ -1,10 +1,11 @@
 import { UserProfile } from "@/data/mockData";
-import { Video, Phone, Heart, Ban, MoreVertical } from "lucide-react";
+import { Video, Phone, Heart, Ban, MoreVertical, Flag } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
+import ReportDialog from "@/components/ReportDialog";
 import {
   AlertDialog,
   AlertDialogAction,
