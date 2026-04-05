@@ -1,10 +1,11 @@
 import { UserProfile } from "@/data/mockData";
-import { Video, Phone, Heart, Ban, MoreVertical } from "lucide-react";
+import { Video, Phone, Heart, Ban, MoreVertical, Flag } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
+import ReportDialog from "@/components/ReportDialog";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -28,6 +29,7 @@ const UserCard = ({ user, isBlocked = false, onBlockChange }: UserCardProps) => 
   const [liked, setLiked] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [showBlockConfirm, setShowBlockConfirm] = useState(false);
+  const [showReport, setShowReport] = useState(false);
   const [blocking, setBlocking] = useState(false);
 
   const handleBlock = async () => {
@@ -122,16 +124,28 @@ const UserCard = ({ user, isBlocked = false, onBlockChange }: UserCardProps) => 
                 {blocking ? "..." : "Unblock"}
               </button>
             ) : (
-              <button
-                onClick={() => {
-                  setShowMenu(false);
-                  setShowBlockConfirm(true);
-                }}
-                className="w-full flex items-center gap-2 px-3 py-2.5 text-xs font-medium text-destructive hover:bg-destructive/10 transition-colors"
-              >
-                <Ban size={14} />
-                Block
-              </button>
+              <>
+                <button
+                  onClick={() => {
+                    setShowMenu(false);
+                    setShowReport(true);
+                  }}
+                  className="w-full flex items-center gap-2 px-3 py-2.5 text-xs font-medium text-foreground hover:bg-muted/50 transition-colors"
+                >
+                  <Flag size={14} />
+                  Report
+                </button>
+                <button
+                  onClick={() => {
+                    setShowMenu(false);
+                    setShowBlockConfirm(true);
+                  }}
+                  className="w-full flex items-center gap-2 px-3 py-2.5 text-xs font-medium text-destructive hover:bg-destructive/10 transition-colors"
+                >
+                  <Ban size={14} />
+                  Block
+                </button>
+              </>
             )}
           </div>
         )}
@@ -218,6 +232,13 @@ const UserCard = ({ user, isBlocked = false, onBlockChange }: UserCardProps) => 
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <ReportDialog
+        open={showReport}
+        onOpenChange={setShowReport}
+        reportedUserId={user.id}
+        reportedUserName={user.name}
+      />
     </>
   );
 };
