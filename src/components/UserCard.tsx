@@ -124,16 +124,28 @@ const UserCard = ({ user, isBlocked = false, onBlockChange }: UserCardProps) => 
                 {blocking ? "..." : "Unblock"}
               </button>
             ) : (
-              <button
-                onClick={() => {
-                  setShowMenu(false);
-                  setShowBlockConfirm(true);
-                }}
-                className="w-full flex items-center gap-2 px-3 py-2.5 text-xs font-medium text-destructive hover:bg-destructive/10 transition-colors"
-              >
-                <Ban size={14} />
-                Block
-              </button>
+              <>
+                <button
+                  onClick={() => {
+                    setShowMenu(false);
+                    setShowReport(true);
+                  }}
+                  className="w-full flex items-center gap-2 px-3 py-2.5 text-xs font-medium text-foreground hover:bg-muted/50 transition-colors"
+                >
+                  <Flag size={14} />
+                  Report
+                </button>
+                <button
+                  onClick={() => {
+                    setShowMenu(false);
+                    setShowBlockConfirm(true);
+                  }}
+                  className="w-full flex items-center gap-2 px-3 py-2.5 text-xs font-medium text-destructive hover:bg-destructive/10 transition-colors"
+                >
+                  <Ban size={14} />
+                  Block
+                </button>
+              </>
             )}
           </div>
         )}
