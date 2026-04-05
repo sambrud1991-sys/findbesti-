@@ -44,6 +44,8 @@ import { useAdminCheck } from "@/hooks/useAdminCheck";
 import { useScreenProtection } from "@/hooks/useScreenProtection";
 import { useVersionCheck } from "@/hooks/useVersionCheck";
 import SplashScreen from "@/components/SplashScreen";
+import OnboardingPage from "@/pages/OnboardingPage";
+import { useState } from "react";
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1 } },
@@ -59,8 +61,12 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 const RootRoute = () => {
   const { user, loading } = useAuth();
   const { needsUpdate, currentVersion, requiredVersion } = useVersionCheck();
+  const [onboardingDone, setOnboardingDone] = useState(
+    () => localStorage.getItem("findbesti_onboarding_done") === "true"
+  );
   if (loading) return <SplashScreen />;
   if (needsUpdate) return <ForceUpdateScreen currentVersion={currentVersion} requiredVersion={requiredVersion} />;
+  if (!onboardingDone) return <OnboardingPage onComplete={() => setOnboardingDone(true)} />;
   if (!user) return <AuthPage />;
   return <MaintenanceScreen><AnnouncementBanner /><Index /></MaintenanceScreen>;
 };
