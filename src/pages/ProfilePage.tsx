@@ -9,6 +9,7 @@ import avatar1 from "@/assets/avatar1.jpg";
 
 const menuItems = [
   { icon: Crown, label: "Premium", desc: "Unlock all features", color: "text-accent", path: "/premium" },
+  { icon: ShieldCheck, label: "Get Verified", desc: "Verify your identity", color: "text-blue-500", path: "/verification" },
   { icon: Heart, label: "My Favorites", desc: "12 people", color: "text-primary", path: "/favorites" },
   { icon: Star, label: "Who Liked Me", desc: "5 new", color: "text-accent", path: "/who-liked-me" },
   { icon: Gift, label: "Earn Coins", desc: "Watch & earn", color: "text-online", path: "/earn-coins" },
