@@ -24,7 +24,7 @@ interface UserCardProps {
   onBlockChange?: () => void;
 }
 
-const UserCard = ({ user, isBlocked = false, onBlockChange }: UserCardProps) => {
+const UserCard = ({ user, isBlocked = false, isVerified = false, onBlockChange }: UserCardProps) => {
   const navigate = useNavigate();
   const { user: authUser } = useAuth();
   const [liked, setLiked] = useState(false);
