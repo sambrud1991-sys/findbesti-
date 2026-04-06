@@ -1,4 +1,4 @@
-import { Settings, Edit3, Crown, Heart, Star, Gift, ChevronRight, LogOut, Shield, Users, Trophy } from "lucide-react";
+import { Settings, Edit3, Crown, Heart, Star, Gift, ChevronRight, LogOut, Shield, Users, Trophy, ShieldCheck } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useAdminCheck } from "@/hooks/useAdminCheck";
