@@ -337,6 +337,39 @@ export type Database = {
         }
         Relationships: []
       }
+      profile_verifications: {
+        Row: {
+          admin_notes: string | null
+          created_at: string
+          id: string
+          reviewed_by: string | null
+          selfie_url: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          created_at?: string
+          id?: string
+          reviewed_by?: string | null
+          selfie_url: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          admin_notes?: string | null
+          created_at?: string
+          id?: string
+          reviewed_by?: string | null
+          selfie_url?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -349,6 +382,7 @@ export type Database = {
           gender: string | null
           id: string
           is_blocked: boolean | null
+          is_verified: boolean | null
           phone: string | null
           referral_code: string | null
           referred_by: string | null
@@ -366,6 +400,7 @@ export type Database = {
           gender?: string | null
           id?: string
           is_blocked?: boolean | null
+          is_verified?: boolean | null
           phone?: string | null
           referral_code?: string | null
           referred_by?: string | null
@@ -383,6 +418,7 @@ export type Database = {
           gender?: string | null
           id?: string
           is_blocked?: boolean | null
+          is_verified?: boolean | null
           phone?: string | null
           referral_code?: string | null
           referred_by?: string | null

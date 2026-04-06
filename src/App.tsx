@@ -37,6 +37,8 @@ import AdminNotificationsPage from "./pages/admin/AdminNotificationsPage";
 import AdminSettingsPage from "./pages/admin/AdminSettingsPage";
 import AdminSecretsPage from "./pages/admin/AdminSecretsPage";
 import AdminCoinPacksPage from "./pages/admin/AdminCoinPacksPage";
+import AdminVerificationsPage from "./pages/admin/AdminVerificationsPage";
+import VerificationPage from "./pages/VerificationPage";
 import MaintenanceScreen from "./components/MaintenanceScreen";
 import AnnouncementBanner from "./components/AnnouncementBanner";
 import ForceUpdateScreen from "./components/ForceUpdateScreen";
@@ -110,6 +112,7 @@ const App = () => (
                 <Route path="settings" element={<AdminSettingsPage />} />
                 <Route path="secrets" element={<AdminSecretsPage />} />
                 <Route path="coin-packs" element={<AdminCoinPacksPage />} />
+                <Route path="verifications" element={<AdminVerificationsPage />} />
               </Route>
 
               {/* Root: auth if logged out, home if logged in */}
@@ -130,6 +133,7 @@ const App = () => (
               <Route path="/settings" element={<ProtectedRoute><MaintenanceScreen><SettingsPage /></MaintenanceScreen></ProtectedRoute>} />
               <Route path="/referral" element={<ProtectedRoute><MaintenanceScreen><ReferralPage /></MaintenanceScreen></ProtectedRoute>} />
               <Route path="/leaderboard" element={<ProtectedRoute><MaintenanceScreen><LeaderboardPage /></MaintenanceScreen></ProtectedRoute>} />
+              <Route path="/verification" element={<ProtectedRoute><MaintenanceScreen><VerificationPage /></MaintenanceScreen></ProtectedRoute>} />
               <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
               <Route path="/terms" element={<TermsPage />} />
               <Route path="*" element={<NotFound />} />

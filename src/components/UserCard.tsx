@@ -1,5 +1,5 @@
 import { UserProfile } from "@/data/mockData";
-import { Video, Phone, Heart, Ban, MoreVertical, Flag } from "lucide-react";
+import { Video, Phone, Heart, Ban, MoreVertical, Flag, CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -20,10 +20,11 @@ import {
 interface UserCardProps {
   user: UserProfile;
   isBlocked?: boolean;
+  isVerified?: boolean;
   onBlockChange?: () => void;
 }
 
-const UserCard = ({ user, isBlocked = false, onBlockChange }: UserCardProps) => {
+const UserCard = ({ user, isBlocked = false, isVerified = false, onBlockChange }: UserCardProps) => {
   const navigate = useNavigate();
   const { user: authUser } = useAuth();
   const [liked, setLiked] = useState(false);
@@ -179,7 +180,10 @@ const UserCard = ({ user, isBlocked = false, onBlockChange }: UserCardProps) => 
         <div className="absolute bottom-0 left-0 right-0 p-3">
           <div className="flex items-end justify-between">
             <div className="transform group-hover:translate-y-0 translate-y-1 transition-transform duration-300">
-              <h3 className="text-primary-foreground font-bold text-sm drop-shadow-md">{user.name}, {user.age}</h3>
+              <h3 className="text-primary-foreground font-bold text-sm drop-shadow-md flex items-center gap-1">
+                {user.name}, {user.age}
+                {isVerified && <CheckCircle size={12} className="text-blue-400 fill-blue-400/30" />}
+              </h3>
               <p className="text-primary-foreground/70 text-[10px] drop-shadow">{user.country}</p>
             </div>
             {!isBlocked && (

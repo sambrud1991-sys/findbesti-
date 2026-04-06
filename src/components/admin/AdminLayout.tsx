@@ -23,6 +23,7 @@ import { cn } from "@/lib/utils";
 const navItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/x-panel" },
   { icon: Users, label: "Users", path: "/x-panel/users" },
+  { icon: Shield, label: "Verifications", path: "/x-panel/verifications" },
   { icon: CreditCard, label: "Withdrawals", path: "/x-panel/withdrawals" },
   { icon: AlertTriangle, label: "Reports", path: "/x-panel/reports" },
   { icon: ShoppingBag, label: "Purchases", path: "/x-panel/purchases" },
