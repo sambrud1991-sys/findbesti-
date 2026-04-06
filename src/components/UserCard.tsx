@@ -20,6 +20,7 @@ import {
 interface UserCardProps {
   user: UserProfile;
   isBlocked?: boolean;
+  isVerified?: boolean;
   onBlockChange?: () => void;
 }
 
