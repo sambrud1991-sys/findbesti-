@@ -112,6 +112,7 @@ const App = () => (
                 <Route path="settings" element={<AdminSettingsPage />} />
                 <Route path="secrets" element={<AdminSecretsPage />} />
                 <Route path="coin-packs" element={<AdminCoinPacksPage />} />
+                <Route path="verifications" element={<AdminVerificationsPage />} />
               </Route>
 
               {/* Root: auth if logged out, home if logged in */}
