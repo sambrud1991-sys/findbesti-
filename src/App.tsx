@@ -37,6 +37,8 @@ import AdminNotificationsPage from "./pages/admin/AdminNotificationsPage";
 import AdminSettingsPage from "./pages/admin/AdminSettingsPage";
 import AdminSecretsPage from "./pages/admin/AdminSecretsPage";
 import AdminCoinPacksPage from "./pages/admin/AdminCoinPacksPage";
+import AdminVerificationsPage from "./pages/admin/AdminVerificationsPage";
+import VerificationPage from "./pages/VerificationPage";
 import MaintenanceScreen from "./components/MaintenanceScreen";
 import AnnouncementBanner from "./components/AnnouncementBanner";
 import ForceUpdateScreen from "./components/ForceUpdateScreen";
