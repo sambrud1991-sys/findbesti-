@@ -1,5 +1,5 @@
 import { UserProfile } from "@/data/mockData";
-import { Video, Phone, Heart, Ban, MoreVertical, Flag } from "lucide-react";
+import { Video, Phone, Heart, Ban, MoreVertical, Flag, CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
