@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Search, Sparkles, Flame, MapPin, Clock, TrendingUp, Wallet, Plus, X } from "lucide-react";
+import DailyRewardPopup from "@/components/DailyRewardPopup";
 import UserCard from "@/components/UserCard";
 import { mockUsers } from "@/data/mockData";
 import { useNavigate } from "react-router-dom";
@@ -118,7 +119,7 @@ const HomePage = () => {
 
   return (
     <div className="min-h-screen bg-background pb-20">
-      {/* Header */}
+      <DailyRewardPopup />
       <header className="sticky top-0 z-40 glass-card">
         <div className="px-4 pt-4 pb-2">
           <div className="flex items-center justify-between mb-3 animate-slide-up">
