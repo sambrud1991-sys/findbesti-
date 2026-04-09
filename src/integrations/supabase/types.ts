@@ -143,6 +143,33 @@ export type Database = {
         }
         Relationships: []
       }
+      daily_login_rewards: {
+        Row: {
+          coins_earned: number
+          created_at: string
+          id: string
+          login_date: string
+          streak: number
+          user_id: string
+        }
+        Insert: {
+          coins_earned?: number
+          created_at?: string
+          id?: string
+          login_date?: string
+          streak?: number
+          user_id: string
+        }
+        Update: {
+          coins_earned?: number
+          created_at?: string
+          id?: string
+          login_date?: string
+          streak?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       gift_transactions: {
         Row: {
           channel_name: string | null
@@ -650,6 +677,7 @@ export type Database = {
         Args: { _notification_id: string }
         Returns: undefined
       }
+      claim_daily_login_reward: { Args: never; Returns: Json }
       complete_task: { Args: { _task_id: string }; Returns: undefined }
       get_leaderboard_earners: {
         Args: { _time_filter?: string }
