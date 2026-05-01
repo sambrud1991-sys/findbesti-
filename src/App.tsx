@@ -38,6 +38,7 @@ import AdminSettingsPage from "./pages/admin/AdminSettingsPage";
 import AdminSecretsPage from "./pages/admin/AdminSecretsPage";
 import AdminCoinPacksPage from "./pages/admin/AdminCoinPacksPage";
 import AdminVerificationsPage from "./pages/admin/AdminVerificationsPage";
+import AdminRazorpayDiagnosticsPage from "./pages/admin/AdminRazorpayDiagnosticsPage";
 import VerificationPage from "./pages/VerificationPage";
 import InvitePage from "./pages/InvitePage";
 import MaintenanceScreen from "./components/MaintenanceScreen";
@@ -114,6 +115,7 @@ const App = () => (
                 <Route path="secrets" element={<AdminSecretsPage />} />
                 <Route path="coin-packs" element={<AdminCoinPacksPage />} />
                 <Route path="verifications" element={<AdminVerificationsPage />} />
+                <Route path="razorpay-diagnostics" element={<AdminRazorpayDiagnosticsPage />} />
               </Route>
 
               {/* Root: auth if logged out, home if logged in */}
