@@ -115,6 +115,7 @@ const App = () => (
                 <Route path="secrets" element={<AdminSecretsPage />} />
                 <Route path="coin-packs" element={<AdminCoinPacksPage />} />
                 <Route path="verifications" element={<AdminVerificationsPage />} />
+                <Route path="razorpay-diagnostics" element={<AdminRazorpayDiagnosticsPage />} />
               </Route>
 
               {/* Root: auth if logged out, home if logged in */}
