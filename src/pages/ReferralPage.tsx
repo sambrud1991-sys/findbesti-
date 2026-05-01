@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { ArrowLeft, Copy, Share2, Users, Coins, Gift, TicketCheck } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ArrowLeft, Copy, Share2, Users, Coins, Gift, TicketCheck, Link2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -10,6 +10,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 
 const REFERRAL_BONUS = 50;
+const PENDING_REFERRAL_KEY = "pending_referral_code";
+const APP_BASE_URL = "https://findbesti.online";
+const PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=app.lovable.80f205be8ffa4726a847d67024a67c51";
 
 const ReferralPage = () => {
   const { user } = useAuth();
@@ -47,24 +50,38 @@ const ReferralPage = () => {
   });
 
   const referralCode = profile?.referral_code || "";
+  const referralLink = referralCode ? `${APP_BASE_URL}/invite/${referralCode}` : "";
   const totalEarned = referrals?.reduce((sum, r) => sum + r.coins_awarded, 0) || 0;
   const totalReferred = referrals?.length || 0;
+
+  // Auto-fill code captured from /invite/:code deep link
+  useEffect(() => {
+    const pending = localStorage.getItem(PENDING_REFERRAL_KEY);
+    if (pending && !profile?.referred_by) {
+      setEnteredCode(pending);
+    }
+  }, [profile?.referred_by]);
 
   const copyCode = () => {
     navigator.clipboard.writeText(referralCode);
     toast.success("Referral code copied!");
   };
 
+  const copyLink = () => {
+    navigator.clipboard.writeText(referralLink);
+    toast.success("Invite link copied!");
+  };
+
   const shareCode = async () => {
-    const text = `Join FindBesti using my referral code: ${referralCode} and get started! 🎉`;
+    const text = `Hey! 👋 Main FIND BESTI use kar raha/rahi hoon — real logon se video chat karo aur rewards paao! 🎉\n\nMera referral code use karo: *${referralCode}*\n\nApp install karo: ${PLAY_STORE_URL}\nYa direct join karo: ${referralLink}`;
     if (navigator.share) {
       try {
-        await navigator.share({ title: "FindBesti Referral", text });
+        await navigator.share({ title: "Join me on FIND BESTI 💫", text, url: referralLink });
+        return;
       } catch {}
-    } else {
-      navigator.clipboard.writeText(text);
-      toast.success("Referral message copied!");
     }
+    navigator.clipboard.writeText(text);
+    toast.success("Invite message copied!");
   };
 
   const handleApplyCode = async () => {
@@ -78,6 +95,7 @@ const ReferralPage = () => {
       if (res.data?.error) throw new Error(res.data.error);
       toast.success(`Referral applied! Your friend earned ${REFERRAL_BONUS} coins 🎉`);
       queryClient.invalidateQueries({ queryKey: ["profile"] });
+      localStorage.removeItem(PENDING_REFERRAL_KEY);
       setEnteredCode("");
     } catch (err: any) {
       toast.error(err.message || "Failed to apply referral code");
@@ -133,13 +151,30 @@ const ReferralPage = () => {
         </div>
       </div>
 
+      {/* Invite Link */}
+      {referralLink && (
+        <div className="px-4 mt-6">
+          <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">Your Invite Link</p>
+          <div className="flex items-center gap-2 bg-muted/50 rounded-2xl p-3">
+            <Link2 size={16} className="text-primary shrink-0" />
+            <span className="text-xs text-foreground truncate flex-1">{referralLink}</span>
+            <button
+              onClick={copyLink}
+              className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center hover:bg-primary/20 transition-colors shrink-0"
+            >
+              <Copy size={14} className="text-primary" />
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Share Button */}
-      <div className="px-4 mt-6">
+      <div className="px-4 mt-4">
         <Button
           onClick={shareCode}
           className="w-full h-12 rounded-2xl gradient-primary text-primary-foreground font-extrabold text-base shadow-lg gap-2"
         >
-          <Share2 size={18} /> Share Referral Code
+          <Share2 size={18} /> Invite Friends
         </Button>
       </div>
 

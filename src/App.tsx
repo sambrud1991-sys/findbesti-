@@ -39,6 +39,7 @@ import AdminSecretsPage from "./pages/admin/AdminSecretsPage";
 import AdminCoinPacksPage from "./pages/admin/AdminCoinPacksPage";
 import AdminVerificationsPage from "./pages/admin/AdminVerificationsPage";
 import VerificationPage from "./pages/VerificationPage";
+import InvitePage from "./pages/InvitePage";
 import MaintenanceScreen from "./components/MaintenanceScreen";
 import AnnouncementBanner from "./components/AnnouncementBanner";
 import ForceUpdateScreen from "./components/ForceUpdateScreen";
@@ -136,6 +137,7 @@ const App = () => (
               <Route path="/verification" element={<ProtectedRoute><MaintenanceScreen><VerificationPage /></MaintenanceScreen></ProtectedRoute>} />
               <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
               <Route path="/terms" element={<TermsPage />} />
+              <Route path="/invite/:code" element={<InvitePage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <BottomNav />
