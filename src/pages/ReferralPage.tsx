@@ -95,6 +95,7 @@ const ReferralPage = () => {
       if (res.data?.error) throw new Error(res.data.error);
       toast.success(`Referral applied! Your friend earned ${REFERRAL_BONUS} coins 🎉`);
       queryClient.invalidateQueries({ queryKey: ["profile"] });
+      localStorage.removeItem(PENDING_REFERRAL_KEY);
       setEnteredCode("");
     } catch (err: any) {
       toast.error(err.message || "Failed to apply referral code");
