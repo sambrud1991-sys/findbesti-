@@ -151,13 +151,30 @@ const ReferralPage = () => {
         </div>
       </div>
 
+      {/* Invite Link */}
+      {referralLink && (
+        <div className="px-4 mt-6">
+          <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">Your Invite Link</p>
+          <div className="flex items-center gap-2 bg-muted/50 rounded-2xl p-3">
+            <Link2 size={16} className="text-primary shrink-0" />
+            <span className="text-xs text-foreground truncate flex-1">{referralLink}</span>
+            <button
+              onClick={copyLink}
+              className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center hover:bg-primary/20 transition-colors shrink-0"
+            >
+              <Copy size={14} className="text-primary" />
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Share Button */}
-      <div className="px-4 mt-6">
+      <div className="px-4 mt-4">
         <Button
           onClick={shareCode}
           className="w-full h-12 rounded-2xl gradient-primary text-primary-foreground font-extrabold text-base shadow-lg gap-2"
         >
-          <Share2 size={18} /> Share Referral Code
+          <Share2 size={18} /> Invite Friends
         </Button>
       </div>
 
