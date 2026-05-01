@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { ArrowLeft, Copy, Share2, Users, Coins, Gift, TicketCheck } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ArrowLeft, Copy, Share2, Users, Coins, Gift, TicketCheck, Link2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -10,6 +10,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 
 const REFERRAL_BONUS = 50;
+const PENDING_REFERRAL_KEY = "pending_referral_code";
+const APP_BASE_URL = "https://findbesti.online";
+const PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=app.lovable.80f205be8ffa4726a847d67024a67c51";
 
 const ReferralPage = () => {
   const { user } = useAuth();
