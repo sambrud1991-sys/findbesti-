@@ -137,6 +137,7 @@ const App = () => (
               <Route path="/verification" element={<ProtectedRoute><MaintenanceScreen><VerificationPage /></MaintenanceScreen></ProtectedRoute>} />
               <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
               <Route path="/terms" element={<TermsPage />} />
+              <Route path="/invite/:code" element={<InvitePage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <BottomNav />
