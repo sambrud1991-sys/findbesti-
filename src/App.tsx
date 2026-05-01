@@ -38,6 +38,7 @@ import AdminSettingsPage from "./pages/admin/AdminSettingsPage";
 import AdminSecretsPage from "./pages/admin/AdminSecretsPage";
 import AdminCoinPacksPage from "./pages/admin/AdminCoinPacksPage";
 import AdminVerificationsPage from "./pages/admin/AdminVerificationsPage";
+import AdminRazorpayDiagnosticsPage from "./pages/admin/AdminRazorpayDiagnosticsPage";
 import VerificationPage from "./pages/VerificationPage";
 import InvitePage from "./pages/InvitePage";
 import MaintenanceScreen from "./components/MaintenanceScreen";
