@@ -50,24 +50,38 @@ const ReferralPage = () => {
   });
 
   const referralCode = profile?.referral_code || "";
+  const referralLink = referralCode ? `${APP_BASE_URL}/invite/${referralCode}` : "";
   const totalEarned = referrals?.reduce((sum, r) => sum + r.coins_awarded, 0) || 0;
   const totalReferred = referrals?.length || 0;
+
+  // Auto-fill code captured from /invite/:code deep link
+  useEffect(() => {
+    const pending = localStorage.getItem(PENDING_REFERRAL_KEY);
+    if (pending && !profile?.referred_by) {
+      setEnteredCode(pending);
+    }
+  }, [profile?.referred_by]);
 
   const copyCode = () => {
     navigator.clipboard.writeText(referralCode);
     toast.success("Referral code copied!");
   };
 
+  const copyLink = () => {
+    navigator.clipboard.writeText(referralLink);
+    toast.success("Invite link copied!");
+  };
+
   const shareCode = async () => {
-    const text = `Join FindBesti using my referral code: ${referralCode} and get started! 🎉`;
+    const text = `Hey! 👋 Main FIND BESTI use kar raha/rahi hoon — real logon se video chat karo aur rewards paao! 🎉\n\nMera referral code use karo: *${referralCode}*\n\nApp install karo: ${PLAY_STORE_URL}\nYa direct join karo: ${referralLink}`;
     if (navigator.share) {
       try {
-        await navigator.share({ title: "FindBesti Referral", text });
+        await navigator.share({ title: "Join me on FIND BESTI 💫", text, url: referralLink });
+        return;
       } catch {}
-    } else {
-      navigator.clipboard.writeText(text);
-      toast.success("Referral message copied!");
     }
+    navigator.clipboard.writeText(text);
+    toast.success("Invite message copied!");
   };
 
   const handleApplyCode = async () => {
