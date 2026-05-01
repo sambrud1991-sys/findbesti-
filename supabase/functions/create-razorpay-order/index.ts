@@ -42,6 +42,9 @@ serve(async (req) => {
       throw new Error("Razorpay credentials not configured");
     }
 
+    // Safe diagnostic — logs only key prefix, never full secret
+    console.log("[Razorpay] key_id prefix:", razorpayKeyId.substring(0, 8), "| secret prefix:", razorpayKeySecret.substring(0, 8), "| key_id len:", razorpayKeyId.length, "| secret len:", razorpayKeySecret.length);
+
     const userClient = createClient(supabaseUrl, supabaseAnonKey, {
       global: { headers: { Authorization: authHeader } },
     });
