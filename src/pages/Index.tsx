@@ -121,6 +121,7 @@ const HomePage = () => {
   return (
     <div className="min-h-screen bg-background pb-20">
       <DailyRewardPopup />
+      <RatingPrompt />
       <header className="sticky top-0 z-40 glass-card">
         <div className="px-4 pt-4 pb-2">
           <div className="flex items-center justify-between mb-3 animate-slide-up">
