@@ -33,6 +33,7 @@ const navItems = [
   { icon: Bell, label: "Notifications", path: "/x-panel/notifications" },
   { icon: Settings, label: "App Settings", path: "/x-panel/settings" },
   { icon: KeyRound, label: "Secrets", path: "/x-panel/secrets" },
+  { icon: Activity, label: "Razorpay Diagnostics", path: "/x-panel/razorpay-diagnostics" },
 ];
 
 const AdminLayout = () => {
