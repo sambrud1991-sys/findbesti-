@@ -1,19 +1,11 @@
 import { useState, useEffect, useRef } from "react";
-import { ArrowLeft, Gift, Play, Share2, Users, CheckCircle, Wallet, IndianRupee, Loader2, Clock, CircleDot } from "lucide-react";
+import { ArrowLeft, Wallet, IndianRupee, Loader2, Clock } from "lucide-react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-
-const TASKS = [
-{ id: "watch_video", icon: Play, label: "Watch a Video", coins: 10, desc: "Watch a 30s ad", daily: true },
-{ id: "share_app", icon: Share2, label: "Share App", coins: 50, desc: "Share with a friend", daily: false },
-{ id: "invite_friends", icon: Users, label: "Invite Friends", coins: 100, desc: "Invite 3 friends", daily: false },
-{ id: "daily_login", icon: CheckCircle, label: "Daily Login", coins: 5, desc: "Login everyday", daily: true },
-{ id: "watch_ad", icon: Play, label: "Watch Ad", coins: 10, desc: "Watch another ad", daily: true }];
-
 
 const EarnCoinsPage = () => {
   const navigate = useNavigate();
