@@ -35,8 +35,6 @@ const EarnCoinsPage = () => {
     if (!user) return;
     setLoading(true);
 
-    const today = new Date().toISOString().split("T")[0];
-
     const [giftsRes, tasksRes, referralsRes, withdrawalsRes, profileRes] = await Promise.all([
       supabase.from("gift_transactions").select("coins_spent").eq("receiver_id", user.id),
       supabase.from("task_completions").select("coins_earned").eq("user_id", user.id),
