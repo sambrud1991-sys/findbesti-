@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { ArrowLeft, Loader2 } from "lucide-react";
+import { ArrowLeft, Loader2, CheckCircle, XCircle, Clock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
@@ -32,6 +32,7 @@ const loadRazorpayScript = (): Promise<boolean> => {
 const CoinPackPage = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const qc = useQueryClient();
   const [loadingPack, setLoadingPack] = useState<string | null>(null);
 
   const { data: coinPacks = [], isLoading } = useQuery({
@@ -44,6 +45,21 @@ const CoinPackPage = () => {
         .order("sort_order", { ascending: true });
       if (error) throw error;
       return data as CoinPack[];
+    },
+  });
+
+  const { data: purchases = [] } = useQuery({
+    queryKey: ["recharge-history", user?.id],
+    enabled: !!user,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("purchases")
+        .select("*")
+        .eq("user_id", user!.id)
+        .order("created_at", { ascending: false })
+        .limit(20);
+      if (error) throw error;
+      return data ?? [];
     },
   });
 
@@ -99,6 +115,7 @@ const CoinPackPage = () => {
             }
 
             toast.success(`🎉 ${pack.coins.toLocaleString()} coins added to your wallet!`);
+            qc.invalidateQueries({ queryKey: ["recharge-history", user?.id] });
           } catch (verificationError: any) {
             toast.error(verificationError?.message || "Payment verify nahi ho paya");
           }
@@ -177,8 +194,42 @@ const CoinPackPage = () => {
         )}
       </div>
 
-      {/* Benefits */}
+      {/* Recharge History */}
       <div className="px-4 mt-6">
+        <div className="bg-card rounded-2xl p-4 border border-border/50">
+          <h2 className="font-extrabold text-foreground mb-3">Recharge History</h2>
+          {purchases.length === 0 ? (
+            <p className="text-xs text-muted-foreground text-center py-4">Abhi tak koi recharge nahi</p>
+          ) : (
+            <div className="space-y-2">
+              {purchases.map((p: any) => {
+                const ok = p.status === "completed" || p.status === "success";
+                const fail = p.status === "failed" || p.status === "rejected";
+                return (
+                  <div key={p.id} className="flex items-center justify-between p-3 rounded-xl bg-muted/40">
+                    <div className="min-w-0">
+                      <p className="font-bold text-sm truncate">{p.plan_name}</p>
+                      <p className="text-[10px] text-muted-foreground">
+                        {new Date(p.created_at).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" })}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-extrabold text-sm">₹{p.amount}</p>
+                      <span className="flex items-center justify-end gap-1 text-[10px] font-bold capitalize">
+                        {ok ? <CheckCircle size={11} className="text-online" /> : fail ? <XCircle size={11} className="text-destructive" /> : <Clock size={11} className="text-accent" />}
+                        {p.status}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Benefits */}
+      <div className="px-4 mt-4">
         <div className="bg-card rounded-2xl p-4 border border-border/50">
           <h2 className="font-extrabold text-foreground text-center mb-3">Benefits of Coins</h2>
           <ul className="space-y-2 text-sm text-muted-foreground">
