@@ -1,19 +1,11 @@
 import { useState, useEffect, useRef } from "react";
-import { ArrowLeft, Gift, Play, Share2, Users, CheckCircle, Wallet, IndianRupee, Loader2, Clock, CircleDot } from "lucide-react";
+import { ArrowLeft, Wallet, IndianRupee, Loader2, Clock } from "lucide-react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-
-const TASKS = [
-{ id: "watch_video", icon: Play, label: "Watch a Video", coins: 10, desc: "Watch a 30s ad", daily: true },
-{ id: "share_app", icon: Share2, label: "Share App", coins: 50, desc: "Share with a friend", daily: false },
-{ id: "invite_friends", icon: Users, label: "Invite Friends", coins: 100, desc: "Invite 3 friends", daily: false },
-{ id: "daily_login", icon: CheckCircle, label: "Daily Login", coins: 5, desc: "Login everyday", daily: true },
-{ id: "watch_ad", icon: Play, label: "Watch Ad", coins: 10, desc: "Watch another ad", daily: true }];
-
 
 const EarnCoinsPage = () => {
   const navigate = useNavigate();
@@ -23,9 +15,7 @@ const EarnCoinsPage = () => {
   const [upiId, setUpiId] = useState("");
   const [earnedCoins, setEarnedCoins] = useState(0);
   const [rechargeCoins, setRechargeCoins] = useState(0);
-  const [completedTasks, setCompletedTasks] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
-  const [taskLoading, setTaskLoading] = useState<string | null>(null);
   const [withdrawLoading, setWithdrawLoading] = useState(false);
   const [withdrawals, setWithdrawals] = useState<any[]>([]);
 
@@ -45,13 +35,10 @@ const EarnCoinsPage = () => {
     if (!user) return;
     setLoading(true);
 
-    const today = new Date().toISOString().split("T")[0];
-
-    const [giftsRes, tasksRes, referralsRes, completionsRes, withdrawalsRes, profileRes] = await Promise.all([
+    const [giftsRes, tasksRes, referralsRes, withdrawalsRes, profileRes] = await Promise.all([
       supabase.from("gift_transactions").select("coins_spent").eq("receiver_id", user.id),
       supabase.from("task_completions").select("coins_earned").eq("user_id", user.id),
       supabase.from("referrals").select("coins_awarded").eq("referrer_id", user.id),
-      supabase.from("task_completions").select("task_id").eq("user_id", user.id).eq("completed_date", today),
       supabase.from("withdrawal_requests").select("*").eq("user_id", user.id).order("created_at", { ascending: false }).limit(20),
       supabase.from("profiles").select("coins").eq("user_id", user.id).maybeSingle(),
     ]);
@@ -65,37 +52,8 @@ const EarnCoinsPage = () => {
 
     setEarnedCoins(Math.max(0, giftEarnings + taskEarnings + referralEarnings - totalWithdrawn));
     setRechargeCoins(profileRes.data?.coins ?? 0);
-    if (completionsRes.data) setCompletedTasks(completionsRes.data.map((t: any) => t.task_id));
     if (withdrawalsRes.data) setWithdrawals(withdrawalsRes.data);
     setLoading(false);
-  };
-
-  const handleCompleteTask = async (taskId: string, taskCoins: number) => {
-    if (!user) {
-      toast.error("Please login first");
-      return;
-    }
-    setTaskLoading(taskId);
-    try {
-      const { error } = await supabase.rpc("complete_task", {
-        _task_id: taskId
-      });
-      if (error) {
-        if (error.message?.includes("duplicate") || error.code === "23505") {
-          toast.error("This task is already completed today!");
-        } else {
-          throw error;
-        }
-      } else {
-        setEarnedCoins((prev) => prev + taskCoins);
-        setCompletedTasks((prev) => [...prev, taskId]);
-        toast.success(`+${taskCoins} coins earned! 🎉`);
-      }
-    } catch (error: any) {
-      toast.error(error.message || "Task could not be completed");
-    } finally {
-      setTaskLoading(null);
-    }
   };
 
   const handleWithdraw = async () => {
@@ -198,42 +156,6 @@ const EarnCoinsPage = () => {
               {withdrawLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : `Withdraw ₹${rupees}`}
             </Button>
           </div>
-
-        <h2 className="font-bold text-foreground mb-3">Complete Tasks to Earn</h2>
-        <div className="space-y-2">
-          {TASKS.map((task) => {
-            const isDone = completedTasks.includes(task.id);
-            const isLoading = taskLoading === task.id;
-            return (
-              <button
-                key={task.id}
-                onClick={() => !isDone && !isLoading && handleCompleteTask(task.id, task.coins)}
-                disabled={isDone || isLoading}
-                className={`w-full flex items-center gap-3 py-3 px-3 rounded-xl transition-all ${
-                isDone ? "bg-muted/30 opacity-60" : "bg-card hover:bg-muted/50 active:scale-[0.98]"} border border-border/50`
-                }>
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${isDone ? "bg-online/10" : "bg-primary/10"}`}>
-                  {isLoading ?
-                  <Loader2 size={18} className="text-primary animate-spin" /> :
-                  <task.icon size={18} className={isDone ? "text-online" : "text-primary"} />
-                  }
-                </div>
-                <div className="flex-1 text-left">
-                  <h3 className="font-bold text-sm text-foreground">{task.label}</h3>
-                  <p className="text-[10px] text-muted-foreground">{task.desc}</p>
-                </div>
-                <div className={`text-sm font-extrabold ${isDone ? "text-online" : "text-accent"}`}>
-                  {isDone ? "✓ Done" : `+${task.coins}`}
-                </div>
-              </button>);
-          })}
-        </div>
-
-        <div className="mt-4 bg-muted/30 rounded-xl p-3 border border-border/30">
-          <p className="text-[10px] text-muted-foreground text-center leading-relaxed">
-            Coins will be transferred to your UPI account instantly. Minimum withdrawal ₹100.
-          </p>
-        </div>
 
         {/* Withdrawal History */}
         {withdrawals.length > 0 &&
