@@ -17,6 +17,7 @@ import PremiumPage from "./pages/PremiumPage";
 import FavoritesPage from "./pages/FavoritesPage";
 import WhoLikedMePage from "./pages/WhoLikedMePage";
 import EarnCoinsPage from "./pages/EarnCoinsPage";
+import WithdrawPage from "./pages/WithdrawPage";
 import CoinPackPage from "./pages/CoinPackPage";
 import SettingsPage from "./pages/SettingsPage";
 import ReferralPage from "./pages/ReferralPage";
@@ -132,6 +133,7 @@ const App = () => (
               <Route path="/favorites" element={<ProtectedRoute><MaintenanceScreen><FavoritesPage /></MaintenanceScreen></ProtectedRoute>} />
               <Route path="/who-liked-me" element={<ProtectedRoute><MaintenanceScreen><WhoLikedMePage /></MaintenanceScreen></ProtectedRoute>} />
               <Route path="/earn-coins" element={<ProtectedRoute><MaintenanceScreen><EarnCoinsPage /></MaintenanceScreen></ProtectedRoute>} />
+              <Route path="/withdraw" element={<ProtectedRoute><MaintenanceScreen><WithdrawPage /></MaintenanceScreen></ProtectedRoute>} />
               <Route path="/coin-pack" element={<ProtectedRoute><MaintenanceScreen><CoinPackPage /></MaintenanceScreen></ProtectedRoute>} />
               <Route path="/settings" element={<ProtectedRoute><MaintenanceScreen><SettingsPage /></MaintenanceScreen></ProtectedRoute>} />
               <Route path="/referral" element={<ProtectedRoute><MaintenanceScreen><ReferralPage /></MaintenanceScreen></ProtectedRoute>} />
