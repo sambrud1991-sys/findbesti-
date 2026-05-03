@@ -37,11 +37,10 @@ const EarnCoinsPage = () => {
 
     const today = new Date().toISOString().split("T")[0];
 
-    const [giftsRes, tasksRes, referralsRes, completionsRes, withdrawalsRes, profileRes] = await Promise.all([
+    const [giftsRes, tasksRes, referralsRes, withdrawalsRes, profileRes] = await Promise.all([
       supabase.from("gift_transactions").select("coins_spent").eq("receiver_id", user.id),
       supabase.from("task_completions").select("coins_earned").eq("user_id", user.id),
       supabase.from("referrals").select("coins_awarded").eq("referrer_id", user.id),
-      supabase.from("task_completions").select("task_id").eq("user_id", user.id).eq("completed_date", today),
       supabase.from("withdrawal_requests").select("*").eq("user_id", user.id).order("created_at", { ascending: false }).limit(20),
       supabase.from("profiles").select("coins").eq("user_id", user.id).maybeSingle(),
     ]);
@@ -55,37 +54,8 @@ const EarnCoinsPage = () => {
 
     setEarnedCoins(Math.max(0, giftEarnings + taskEarnings + referralEarnings - totalWithdrawn));
     setRechargeCoins(profileRes.data?.coins ?? 0);
-    if (completionsRes.data) setCompletedTasks(completionsRes.data.map((t: any) => t.task_id));
     if (withdrawalsRes.data) setWithdrawals(withdrawalsRes.data);
     setLoading(false);
-  };
-
-  const handleCompleteTask = async (taskId: string, taskCoins: number) => {
-    if (!user) {
-      toast.error("Please login first");
-      return;
-    }
-    setTaskLoading(taskId);
-    try {
-      const { error } = await supabase.rpc("complete_task", {
-        _task_id: taskId
-      });
-      if (error) {
-        if (error.message?.includes("duplicate") || error.code === "23505") {
-          toast.error("This task is already completed today!");
-        } else {
-          throw error;
-        }
-      } else {
-        setEarnedCoins((prev) => prev + taskCoins);
-        setCompletedTasks((prev) => [...prev, taskId]);
-        toast.success(`+${taskCoins} coins earned! 🎉`);
-      }
-    } catch (error: any) {
-      toast.error(error.message || "Task could not be completed");
-    } finally {
-      setTaskLoading(null);
-    }
   };
 
   const handleWithdraw = async () => {
