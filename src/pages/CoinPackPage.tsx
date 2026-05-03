@@ -115,6 +115,7 @@ const CoinPackPage = () => {
             }
 
             toast.success(`🎉 ${pack.coins.toLocaleString()} coins added to your wallet!`);
+            qc.invalidateQueries({ queryKey: ["recharge-history", user?.id] });
           } catch (verificationError: any) {
             toast.error(verificationError?.message || "Payment verify nahi ho paya");
           }
