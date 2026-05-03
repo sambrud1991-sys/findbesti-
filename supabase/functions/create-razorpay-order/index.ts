@@ -32,8 +32,10 @@ serve(async (req) => {
     const supabaseUrl = Deno.env.get("SUPABASE_URL");
     const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY");
     const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
-    const razorpayKeyId = Deno.env.get("RAZORPAY_KEY_ID");
-    const razorpayKeySecret = Deno.env.get("RAZORPAY_KEY_SECRET");
+    const razorpayKeyIdRaw = Deno.env.get("RAZORPAY_KEY_ID");
+    const razorpayKeySecretRaw = Deno.env.get("RAZORPAY_KEY_SECRET");
+    const razorpayKeyId = razorpayKeyIdRaw?.trim();
+    const razorpayKeySecret = razorpayKeySecretRaw?.trim();
 
     if (!supabaseUrl || !supabaseAnonKey || !serviceRoleKey) {
       throw new Error("Backend configuration missing");
@@ -41,9 +43,14 @@ serve(async (req) => {
     if (!razorpayKeyId || !razorpayKeySecret) {
       throw new Error("Razorpay credentials not configured");
     }
+    if (!/^rzp_(test|live)_[A-Za-z0-9]+$/.test(razorpayKeyId)) {
+      throw new Error("Invalid Razorpay Key ID format. Use a key that starts with rzp_test_ or rzp_live_.");
+    }
+    if (razorpayKeySecret.length < 16) {
+      throw new Error("Invalid Razorpay Key Secret format. Re-save the full secret key without spaces.");
+    }
 
-    // Safe diagnostic — logs only key prefix, never full secret
-    console.log("[Razorpay] key_id prefix:", razorpayKeyId.substring(0, 8), "| secret prefix:", razorpayKeySecret.substring(0, 8), "| key_id len:", razorpayKeyId.length, "| secret len:", razorpayKeySecret.length);
+    console.log("[Razorpay] mode:", razorpayKeyId.startsWith("rzp_live_") ? "live" : "test", "| key_id len:", razorpayKeyId.length, "| secret len:", razorpayKeySecret.length);
 
     const userClient = createClient(supabaseUrl, supabaseAnonKey, {
       global: { headers: { Authorization: authHeader } },
@@ -142,6 +149,12 @@ serve(async (req) => {
     const data = await response.json();
 
     if (!response.ok) {
+      const razorpayError = data?.error;
+      const description = typeof razorpayError?.description === "string" ? razorpayError.description : "Unknown Razorpay error";
+      const code = typeof razorpayError?.code === "string" ? razorpayError.code : "UNKNOWN";
+      if (response.status === 401 || /authentication failed/i.test(description)) {
+        throw new Error("Razorpay authentication failed. Re-save matching RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET from the same Razorpay test/live mode, without extra spaces.");
+      }
       throw new Error(`Razorpay order creation failed: ${JSON.stringify(data)}`);
     }
 
