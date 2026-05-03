@@ -120,13 +120,6 @@ const EarnCoinsPage = () => {
                 <p className="text-2xl font-extrabold text-primary-foreground">{rupees}</p>
               </div>
             </div>
-            <div className="text-right border-l border-primary-foreground/20 pl-3">
-              <p className="text-primary-foreground/60 text-xs font-medium">Recharge</p>
-              <div className="flex items-center gap-1 justify-end">
-                <span className="text-base">🪙</span>
-                <p className="text-lg font-extrabold text-primary-foreground">{rechargeCoins}</p>
-              </div>
-            </div>
           </div>
         </div>
       </div>
