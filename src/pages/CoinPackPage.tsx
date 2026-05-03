@@ -32,6 +32,7 @@ const loadRazorpayScript = (): Promise<boolean> => {
 const CoinPackPage = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const qc = useQueryClient();
   const [loadingPack, setLoadingPack] = useState<string | null>(null);
 
   const { data: coinPacks = [], isLoading } = useQuery({
@@ -44,6 +45,21 @@ const CoinPackPage = () => {
         .order("sort_order", { ascending: true });
       if (error) throw error;
       return data as CoinPack[];
+    },
+  });
+
+  const { data: purchases = [] } = useQuery({
+    queryKey: ["recharge-history", user?.id],
+    enabled: !!user,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("purchases")
+        .select("*")
+        .eq("user_id", user!.id)
+        .order("created_at", { ascending: false })
+        .limit(20);
+      if (error) throw error;
+      return data ?? [];
     },
   });
 
