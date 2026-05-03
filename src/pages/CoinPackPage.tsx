@@ -194,8 +194,42 @@ const CoinPackPage = () => {
         )}
       </div>
 
-      {/* Benefits */}
+      {/* Recharge History */}
       <div className="px-4 mt-6">
+        <div className="bg-card rounded-2xl p-4 border border-border/50">
+          <h2 className="font-extrabold text-foreground mb-3">Recharge History</h2>
+          {purchases.length === 0 ? (
+            <p className="text-xs text-muted-foreground text-center py-4">Abhi tak koi recharge nahi</p>
+          ) : (
+            <div className="space-y-2">
+              {purchases.map((p: any) => {
+                const ok = p.status === "completed" || p.status === "success";
+                const fail = p.status === "failed" || p.status === "rejected";
+                return (
+                  <div key={p.id} className="flex items-center justify-between p-3 rounded-xl bg-muted/40">
+                    <div className="min-w-0">
+                      <p className="font-bold text-sm truncate">{p.plan_name}</p>
+                      <p className="text-[10px] text-muted-foreground">
+                        {new Date(p.created_at).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" })}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-extrabold text-sm">₹{p.amount}</p>
+                      <span className="flex items-center justify-end gap-1 text-[10px] font-bold capitalize">
+                        {ok ? <CheckCircle size={11} className="text-online" /> : fail ? <XCircle size={11} className="text-destructive" /> : <Clock size={11} className="text-accent" />}
+                        {p.status}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Benefits */}
+      <div className="px-4 mt-4">
         <div className="bg-card rounded-2xl p-4 border border-border/50">
           <h2 className="font-extrabold text-foreground text-center mb-3">Benefits of Coins</h2>
           <ul className="space-y-2 text-sm text-muted-foreground">
