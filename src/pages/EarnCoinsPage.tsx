@@ -199,42 +199,6 @@ const EarnCoinsPage = () => {
             </Button>
           </div>
 
-        <h2 className="font-bold text-foreground mb-3">Complete Tasks to Earn</h2>
-        <div className="space-y-2">
-          {TASKS.map((task) => {
-            const isDone = completedTasks.includes(task.id);
-            const isLoading = taskLoading === task.id;
-            return (
-              <button
-                key={task.id}
-                onClick={() => !isDone && !isLoading && handleCompleteTask(task.id, task.coins)}
-                disabled={isDone || isLoading}
-                className={`w-full flex items-center gap-3 py-3 px-3 rounded-xl transition-all ${
-                isDone ? "bg-muted/30 opacity-60" : "bg-card hover:bg-muted/50 active:scale-[0.98]"} border border-border/50`
-                }>
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${isDone ? "bg-online/10" : "bg-primary/10"}`}>
-                  {isLoading ?
-                  <Loader2 size={18} className="text-primary animate-spin" /> :
-                  <task.icon size={18} className={isDone ? "text-online" : "text-primary"} />
-                  }
-                </div>
-                <div className="flex-1 text-left">
-                  <h3 className="font-bold text-sm text-foreground">{task.label}</h3>
-                  <p className="text-[10px] text-muted-foreground">{task.desc}</p>
-                </div>
-                <div className={`text-sm font-extrabold ${isDone ? "text-online" : "text-accent"}`}>
-                  {isDone ? "✓ Done" : `+${task.coins}`}
-                </div>
-              </button>);
-          })}
-        </div>
-
-        <div className="mt-4 bg-muted/30 rounded-xl p-3 border border-border/30">
-          <p className="text-[10px] text-muted-foreground text-center leading-relaxed">
-            Coins will be transferred to your UPI account instantly. Minimum withdrawal ₹100.
-          </p>
-        </div>
-
         {/* Withdrawal History */}
         {withdrawals.length > 0 &&
         <div className="mt-5">
