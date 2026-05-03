@@ -151,7 +151,6 @@ serve(async (req) => {
     if (!response.ok) {
       const razorpayError = data?.error;
       const description = typeof razorpayError?.description === "string" ? razorpayError.description : "Unknown Razorpay error";
-      const code = typeof razorpayError?.code === "string" ? razorpayError.code : "UNKNOWN";
       if (response.status === 401 || /authentication failed/i.test(description)) {
         throw new Error("Razorpay authentication failed. Re-save matching RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET from the same Razorpay test/live mode, without extra spaces.");
       }
