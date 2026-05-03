@@ -15,9 +15,7 @@ const EarnCoinsPage = () => {
   const [upiId, setUpiId] = useState("");
   const [earnedCoins, setEarnedCoins] = useState(0);
   const [rechargeCoins, setRechargeCoins] = useState(0);
-  const [completedTasks, setCompletedTasks] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
-  const [taskLoading, setTaskLoading] = useState<string | null>(null);
   const [withdrawLoading, setWithdrawLoading] = useState(false);
   const [withdrawals, setWithdrawals] = useState<any[]>([]);
 
