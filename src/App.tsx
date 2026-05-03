@@ -17,6 +17,7 @@ import PremiumPage from "./pages/PremiumPage";
 import FavoritesPage from "./pages/FavoritesPage";
 import WhoLikedMePage from "./pages/WhoLikedMePage";
 import EarnCoinsPage from "./pages/EarnCoinsPage";
+import WithdrawPage from "./pages/WithdrawPage";
 import CoinPackPage from "./pages/CoinPackPage";
 import SettingsPage from "./pages/SettingsPage";
 import ReferralPage from "./pages/ReferralPage";
