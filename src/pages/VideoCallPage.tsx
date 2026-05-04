@@ -139,23 +139,8 @@ const VideoCallPage = () => {
       {/* Gift Animation Overlay */}
       <GiftAnimation incomingGift={incomingGift} />
 
-      {/* Self video (small) */}
-      <div className="absolute top-12 right-4 w-28 h-40 rounded-2xl overflow-hidden border-2 border-primary-foreground/30 shadow-xl z-20">
-        <div ref={localVideoRef} className="w-full h-full bg-foreground/80">
-          {(isCameraOff || joining) && (
-            <div className="w-full h-full flex items-center justify-center">
-              {joining ? (
-                <Loader2 className="text-primary-foreground/50 animate-spin" size={24} />
-              ) : (
-                <CameraOff className="text-primary-foreground/50" size={24} />
-              )}
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Top info */}
-      <div className="absolute top-12 left-4 z-10">
+      {/* Top info — WhatsApp style centered name + timer */}
+      <div className="absolute top-10 left-0 right-0 z-10 flex flex-col items-center safe-top">
         <h2 className="text-primary-foreground font-extrabold text-lg drop-shadow-lg">{user2.name}</h2>
         <p className="text-primary-foreground/80 text-sm font-semibold drop-shadow">
           {joining ? "Connecting..." : error ? "Connection failed" : formatTime(callTime)}
@@ -169,6 +154,21 @@ const VideoCallPage = () => {
         </div>
       )}
 
+      {/* Self video (small) — WhatsApp style bottom-right, above controls */}
+      <div className="absolute bottom-28 right-4 w-28 h-40 rounded-2xl overflow-hidden border border-primary-foreground/20 shadow-2xl z-20">
+        <div ref={localVideoRef} className="w-full h-full bg-foreground/80">
+          {(isCameraOff || joining) && (
+            <div className="w-full h-full flex items-center justify-center">
+              {joining ? (
+                <Loader2 className="text-primary-foreground/50 animate-spin" size={24} />
+              ) : (
+                <CameraOff className="text-primary-foreground/50" size={24} />
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+
       {/* Gift Panel */}
       <GiftPanel
         open={giftPanelOpen}
@@ -180,57 +180,61 @@ const VideoCallPage = () => {
         onCoinsDeducted={handleCoinsDeducted}
       />
 
-      {/* Bottom controls */}
-      <div className="absolute bottom-10 left-0 right-0 z-10 safe-bottom">
-        <div className="flex items-center justify-center gap-4 px-6">
+      {/* Bottom controls — WhatsApp style pill bar */}
+      <div className="absolute bottom-6 left-0 right-0 z-30 safe-bottom flex justify-center px-4">
+        <div className="flex items-center justify-between gap-2 px-3 py-3 rounded-full bg-foreground/70 backdrop-blur-xl shadow-2xl border border-primary-foreground/10 w-full max-w-sm">
+          {/* Gift */}
           <button
-            onClick={toggleMute}
-            className={`w-14 h-14 rounded-full flex items-center justify-center transition-colors ${
-              isMuted ? "bg-destructive" : "bg-primary-foreground/20 backdrop-blur-sm"
+            onClick={() => setGiftPanelOpen((v) => !v)}
+            className={`w-12 h-12 rounded-full flex items-center justify-center transition-colors ${
+              giftPanelOpen ? "bg-primary" : "bg-primary-foreground/15"
             }`}
           >
-            {isMuted ? (
-              <MicOff size={22} className="text-primary-foreground" />
-            ) : (
-              <Mic size={22} className="text-primary-foreground" />
-            )}
+            <Gift size={20} className="text-primary-foreground" />
           </button>
 
+          {/* Camera toggle */}
           <button
             onClick={toggleCamera}
-            className={`w-14 h-14 rounded-full flex items-center justify-center transition-colors ${
-              isCameraOff ? "bg-destructive" : "bg-primary-foreground/20 backdrop-blur-sm"
+            className={`w-12 h-12 rounded-full flex items-center justify-center transition-colors ${
+              isCameraOff ? "bg-destructive" : "bg-primary-foreground/15"
             }`}
           >
             {isCameraOff ? (
-              <CameraOff size={22} className="text-primary-foreground" />
+              <CameraOff size={20} className="text-primary-foreground" />
             ) : (
-              <Camera size={22} className="text-primary-foreground" />
+              <Camera size={20} className="text-primary-foreground" />
             )}
           </button>
 
+          {/* Switch camera */}
           <button
             onClick={switchCamera}
-            className="w-14 h-14 rounded-full bg-primary-foreground/20 backdrop-blur-sm flex items-center justify-center"
+            className="w-12 h-12 rounded-full bg-primary-foreground/15 flex items-center justify-center"
           >
-            <RotateCcw size={22} className="text-primary-foreground" />
+            <RotateCcw size={20} className="text-primary-foreground" />
           </button>
 
-          {/* Gift Button */}
+          {/* Mute */}
           <button
-            onClick={() => setGiftPanelOpen((v) => !v)}
-            className={`w-14 h-14 rounded-full flex items-center justify-center transition-colors ${
-              giftPanelOpen ? "bg-primary" : "bg-primary-foreground/20 backdrop-blur-sm"
+            onClick={toggleMute}
+            className={`w-12 h-12 rounded-full flex items-center justify-center transition-colors ${
+              isMuted ? "bg-destructive" : "bg-primary-foreground/15"
             }`}
           >
-            <Gift size={22} className="text-primary-foreground" />
+            {isMuted ? (
+              <MicOff size={20} className="text-primary-foreground" />
+            ) : (
+              <Mic size={20} className="text-primary-foreground" />
+            )}
           </button>
 
+          {/* End call */}
           <button
             onClick={handleEndCall}
-            className="w-16 h-16 rounded-full bg-destructive flex items-center justify-center shadow-xl hover:scale-105 transition-transform"
+            className="w-12 h-12 rounded-full bg-destructive flex items-center justify-center shadow-xl hover:scale-105 transition-transform"
           >
-            <PhoneOff size={24} className="text-primary-foreground" />
+            <PhoneOff size={20} className="text-primary-foreground" />
           </button>
         </div>
       </div>
