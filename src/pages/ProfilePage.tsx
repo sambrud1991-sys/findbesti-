@@ -12,7 +12,6 @@ const menuItems = [
   { icon: ShieldCheck, label: "Get Verified", desc: "Verify your identity", color: "text-blue-500", path: "/verification" },
   { icon: Heart, label: "My Favorites", desc: "12 people", color: "text-primary", path: "/favorites" },
   { icon: Star, label: "Who Liked Me", desc: "5 new", color: "text-accent", path: "/who-liked-me" },
-  { icon: Gift, label: "Earn Coins", desc: "Watch & earn", color: "text-online", path: "/earn-coins" },
   { icon: Users, label: "Refer & Earn", desc: "Invite friends, get coins", color: "text-primary", path: "/referral" },
   { icon: Trophy, label: "Leaderboard", desc: "Top earners & referrers", color: "text-accent", path: "/leaderboard" },
   { icon: Settings, label: "Settings", desc: "Privacy, notifications", color: "text-muted-foreground", path: "/settings" },
@@ -84,7 +83,6 @@ const ProfilePage = () => {
           {[
             { label: "Following", value: String(following) },
             { label: "Followers", value: String(followers) },
-            { label: "Coins", value: coins >= 1000 ? `${(coins / 1000).toFixed(1)}K` : String(coins) },
           ].map((stat) => (
             <div key={stat.label} className="text-center">
               <p className="text-lg font-extrabold text-primary-foreground">{stat.value}</p>
