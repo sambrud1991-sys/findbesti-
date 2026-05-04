@@ -1,4 +1,4 @@
-import { ArrowLeft, Bell, Shield, Eye, Moon, Globe, HelpCircle, Info, Receipt, Crown, Coins, Check, Trash2, LogOut } from "lucide-react";
+import { ArrowLeft, Bell, Shield, Eye, Moon, Globe, HelpCircle, Info, Crown, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
@@ -35,21 +35,6 @@ const SettingsPage = () => {
   const [showLangPicker, setShowLangPicker] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleting, setDeleting] = useState(false);
-
-  const { data: purchases, isLoading: purchasesLoading } = useQuery({
-    queryKey: ["my-purchases", user?.id],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("purchases")
-        .select("*")
-        .eq("user_id", user!.id)
-        .order("created_at", { ascending: false })
-        .limit(50);
-      if (error) throw error;
-      return data;
-    },
-    enabled: !!user?.id,
-  });
 
   const { data: subscriptions } = useQuery({
     queryKey: ["my-subscriptions", user?.id],
@@ -178,59 +163,6 @@ const SettingsPage = () => {
             </div>
           </div>
         ))}
-
-        {/* Purchase History */}
-        <div>
-          <h2 className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2 px-1 flex items-center gap-1.5">
-            <Receipt size={12} /> {t("settings.purchaseHistory")}
-          </h2>
-          <div className="bg-card rounded-2xl border border-border/50 overflow-hidden">
-            {purchasesLoading ? (
-              <div className="p-4 space-y-3">
-                {[1, 2, 3].map(i => (
-                  <div key={i} className="flex items-center gap-3">
-                    <Skeleton className="w-9 h-9 rounded-lg" />
-                    <div className="flex-1 space-y-1.5">
-                      <Skeleton className="h-3.5 w-32" />
-                      <Skeleton className="h-2.5 w-20" />
-                    </div>
-                    <Skeleton className="h-4 w-14" />
-                  </div>
-                ))}
-              </div>
-            ) : !purchases?.length ? (
-              <div className="py-8 text-center">
-                <Coins size={28} className="mx-auto text-muted-foreground/40 mb-2" />
-                <p className="text-sm text-muted-foreground">{t("settings.noPurchases")}</p>
-              </div>
-            ) : (
-              <div className="divide-y divide-border/30">
-                {purchases.map((p) => {
-                  const isPremium = isPremiumPurchase(p.plan_name);
-                  return (
-                    <div key={p.id} className="flex items-center gap-3 py-3 px-4">
-                      <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${isPremium ? "bg-accent/15" : "bg-primary/15"}`}>
-                        {isPremium ? <Crown size={16} className="text-accent" /> : <Coins size={16} className="text-primary" />}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-foreground truncate">{p.plan_name}</p>
-                        <p className="text-[10px] text-muted-foreground">{formatDate(p.created_at)}</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-sm font-bold text-foreground">{formatAmount(p.amount)}</p>
-                        <span className={`text-[9px] font-medium px-1.5 py-0.5 rounded-full ${
-                          p.status === "completed" ? "bg-online/15 text-online" : "bg-muted text-muted-foreground"
-                        }`}>
-                          {p.status}
-                        </span>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-        </div>
 
         {/* Delete Account */}
         <div>
