@@ -126,7 +126,7 @@ const HomePage = () => {
         <div className="px-4 pt-4 pb-2">
           <div className="flex items-center justify-between mb-3 animate-slide-up">
             <h1 className="text-2xl font-extrabold">
-              <span className="text-gradient">FIND BESTI 💫</span>
+              <span className="text-gradient"></span>
             </h1>
             <div className="flex items-center gap-2">
               {/* Wallet & Coins Bar */}
