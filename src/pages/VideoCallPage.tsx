@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import GiftPanel, { GiftItem } from "@/components/GiftPanel";
 import GiftAnimation from "@/components/GiftAnimation";
+import DraggableSelfVideo from "@/components/DraggableSelfVideo";
 
 const VideoCallPage = () => {
   const { userId } = useParams();
