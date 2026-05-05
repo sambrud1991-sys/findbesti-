@@ -61,15 +61,16 @@ export const useAgoraCall = ({ targetUserId, callType }: UseAgoraCallOptions) =>
       setJoining(true);
       setError(null);
 
-      // Get token from edge function
+      // Get token + server-derived channel name from edge function
       const { data, error: fnError } = await supabase.functions.invoke(
         "generate-agora-token",
-        { body: { channelName, uid: 0 } }
+        { body: { targetUserId, uid: 0 } }
       );
 
-      if (fnError || !data?.token) {
+      if (fnError || !data?.token || !data?.channelName) {
         throw new Error(fnError?.message || "Token generation failed");
       }
+      setChannelName(data.channelName);
 
       const client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
       clientRef.current = client;
