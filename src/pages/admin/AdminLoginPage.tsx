@@ -1,15 +1,31 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Shield, Mail, Lock } from "lucide-react";
 import { toast } from "sonner";
+import { useAuth } from "@/contexts/AuthContext";
+import { useAdminCheck } from "@/hooks/useAdminCheck";
 
 const AdminLoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const { isAdmin, isLoading: adminLoading } = useAdminCheck();
+
+  // Auto-redirect once user is signed in and admin check resolves
+  useEffect(() => {
+    if (!user || adminLoading) return;
+    if (isAdmin) {
+      navigate("/control-room", { replace: true });
+    } else {
+      toast.error("This account doesn't have admin access");
+    }
+  }, [user, isAdmin, adminLoading, navigate]);
 
   const handleAuth = async () => {
     if (!email || !password) {
@@ -22,7 +38,7 @@ const AdminLoginPage = () => {
         const { error } = await supabase.auth.signUp({
           email,
           password,
-          options: { emailRedirectTo: window.location.origin },
+          options: { emailRedirectTo: `${window.location.origin}/control-room/login` },
         });
         if (error) throw error;
         toast.success("Check your email to confirm signup!");
@@ -30,6 +46,7 @@ const AdminLoginPage = () => {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         toast.success("Login successful!");
+        // Redirect happens in useEffect after admin check
       }
     } catch (error: any) {
       toast.error(error.message);
