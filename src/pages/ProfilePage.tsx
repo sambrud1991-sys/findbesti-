@@ -92,25 +92,6 @@ const ProfilePage = () => {
         </div>
       </div>
 
-      {/* Admin Panel Shortcut */}
-      {isAdmin && (
-        <div className="px-4 mt-6">
-          <button
-            onClick={() => navigate("/control-room")}
-            className="w-full flex items-center gap-3 py-3.5 px-3 rounded-xl bg-primary/10 hover:bg-primary/20 transition-colors"
-          >
-            <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center">
-              <Shield size={18} className="text-primary" />
-            </div>
-            <div className="flex-1 text-left">
-              <h3 className="font-bold text-sm text-primary">Admin Panel</h3>
-              <p className="text-[10px] text-muted-foreground">Manage users, reports & more</p>
-            </div>
-            <ChevronRight size={16} className="text-primary" />
-          </button>
-        </div>
-      )}
-
       {/* Menu */}
       <div className="px-4 mt-6 space-y-1">
         {menuItems.map((item) => (
