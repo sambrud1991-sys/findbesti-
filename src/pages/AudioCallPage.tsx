@@ -8,8 +8,6 @@ const AudioCallPage = () => {
   const navigate = useNavigate();
   const user = mockUsers.find((u) => u.id === userId) || mockUsers[0];
 
-  const channelName = `call_${[userId, "me"].sort().join("_")}`;
-
   const {
     joined,
     joining,
@@ -20,7 +18,7 @@ const AudioCallPage = () => {
     formatTime,
     toggleMute,
     leave,
-  } = useAgoraCall({ channelName, callType: "audio" });
+  } = useAgoraCall({ targetUserId: userId || "", callType: "audio" });
 
   const handleEndCall = async () => {
     await leave();

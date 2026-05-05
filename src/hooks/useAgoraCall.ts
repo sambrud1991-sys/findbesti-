@@ -10,11 +10,12 @@ import { supabase } from "@/integrations/supabase/client";
 type CallType = "video" | "audio";
 
 interface UseAgoraCallOptions {
-  channelName: string;
+  targetUserId: string;
   callType: CallType;
 }
 
-export const useAgoraCall = ({ channelName, callType }: UseAgoraCallOptions) => {
+export const useAgoraCall = ({ targetUserId, callType }: UseAgoraCallOptions) => {
+  const [channelName, setChannelName] = useState<string>("");
   const clientRef = useRef<IAgoraRTCClient | null>(null);
   const localAudioTrackRef = useRef<IMicrophoneAudioTrack | null>(null);
   const localVideoTrackRef = useRef<ICameraVideoTrack | null>(null);
@@ -60,15 +61,16 @@ export const useAgoraCall = ({ channelName, callType }: UseAgoraCallOptions) => 
       setJoining(true);
       setError(null);
 
-      // Get token from edge function
+      // Get token + server-derived channel name from edge function
       const { data, error: fnError } = await supabase.functions.invoke(
         "generate-agora-token",
-        { body: { channelName, uid: 0 } }
+        { body: { targetUserId, uid: 0 } }
       );
 
-      if (fnError || !data?.token) {
+      if (fnError || !data?.token || !data?.channelName) {
         throw new Error(fnError?.message || "Token generation failed");
       }
+      setChannelName(data.channelName);
 
       const client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
       clientRef.current = client;
@@ -95,7 +97,7 @@ export const useAgoraCall = ({ channelName, callType }: UseAgoraCallOptions) => 
         setRemoteUsers((prev) => prev.filter((u) => u.uid !== user.uid));
       });
 
-      await client.join(data.appId, channelName, data.token, data.uid);
+      await client.join(data.appId, data.channelName, data.token, data.uid);
 
       // Create local tracks
       if (callType === "video") {
@@ -116,7 +118,7 @@ export const useAgoraCall = ({ channelName, callType }: UseAgoraCallOptions) => 
     } finally {
       setJoining(false);
     }
-  }, [channelName, callType]);
+  }, [targetUserId, callType]);
 
   const leave = useCallback(async () => {
     localAudioTrackRef.current?.close();
@@ -178,6 +180,7 @@ export const useAgoraCall = ({ channelName, callType }: UseAgoraCallOptions) => 
     isCameraOff,
     remoteUsers,
     callTime,
+    channelName,
     formatTime,
     toggleMute,
     toggleCamera,

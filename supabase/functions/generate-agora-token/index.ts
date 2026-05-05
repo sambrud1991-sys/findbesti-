@@ -168,7 +168,7 @@ async function buildToken(
   return VERSION + appID + b64;
 }
 
-const CHANNEL_NAME_REGEX = /^[a-zA-Z0-9_-]{3,64}$/;
+const CHANNEL_NAME_REGEX = /^[a-zA-Z0-9_-]{3,128}$/;
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -213,12 +213,31 @@ serve(async (req) => {
     }
 
     const body = await req.json();
-    const channelName = typeof body?.channelName === "string" ? body.channelName.trim() : "";
+    const targetUserId = typeof body?.targetUserId === "string" ? body.targetUserId.trim() : "";
     const parsedUid = Number(body?.uid ?? 0);
+
+    const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (!UUID_REGEX.test(targetUserId)) {
+      return new Response(
+        JSON.stringify({ error: "targetUserId must be a valid UUID" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+    if (targetUserId === user.id) {
+      return new Response(
+        JSON.stringify({ error: "Cannot start a call with yourself" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // Server-side channel naming bound to BOTH participants' real UUIDs.
+    // Prevents any authenticated user from joining an arbitrary call by guessing names.
+    const sortedIds = [user.id, targetUserId].sort();
+    const channelName = `call_${sortedIds[0]}_${sortedIds[1]}`;
 
     if (!CHANNEL_NAME_REGEX.test(channelName)) {
       return new Response(
-        JSON.stringify({ error: "channelName must be 3-64 chars (letters, numbers, _ or -)" }),
+        JSON.stringify({ error: "Invalid channel" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }

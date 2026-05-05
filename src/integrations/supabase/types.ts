@@ -759,10 +759,10 @@ export type Database = {
       send_gift: {
         Args: {
           _channel_name?: string
-          _coins_spent: number
-          _gift_emoji: string
+          _coins_spent?: number
+          _gift_emoji?: string
           _gift_id: string
-          _gift_name: string
+          _gift_name?: string
           _receiver_id: string
         }
         Returns: undefined

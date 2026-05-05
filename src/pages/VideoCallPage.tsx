@@ -21,8 +21,6 @@ const VideoCallPage = () => {
   const [userCoins, setUserCoins] = useState(0);
   const [incomingGift, setIncomingGift] = useState<{ gift: GiftItem; senderName: string } | null>(null);
 
-  const channelName = `call_${[userId, "me"].sort().join("_")}`;
-
   const {
     joined,
     joining,
@@ -31,13 +29,14 @@ const VideoCallPage = () => {
     isCameraOff,
     remoteUsers,
     callTime,
+    channelName,
     formatTime,
     toggleMute,
     toggleCamera,
     switchCamera,
     leave,
     localVideoTrack,
-  } = useAgoraCall({ channelName, callType: "video" });
+  } = useAgoraCall({ targetUserId: userId || "", callType: "video" });
 
   // Fetch user coins
   useEffect(() => {
