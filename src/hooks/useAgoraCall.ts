@@ -97,7 +97,7 @@ export const useAgoraCall = ({ targetUserId, callType }: UseAgoraCallOptions) =>
         setRemoteUsers((prev) => prev.filter((u) => u.uid !== user.uid));
       });
 
-      await client.join(data.appId, channelName, data.token, data.uid);
+      await client.join(data.appId, data.channelName, data.token, data.uid);
 
       // Create local tracks
       if (callType === "video") {
