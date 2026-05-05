@@ -38,7 +38,23 @@ const AdminVerificationsPage = () => {
           profiles[p.user_id] = p.display_name || "User";
         });
       }
-      return (data || []).map((r: any) => ({ ...r, display_name: profiles[r.user_id] || "User" }));
+
+      // selfie_url may be a storage path (new) or a legacy public URL (old).
+      // Generate a short-lived signed URL for paths so the private bucket can be read by admins.
+      const withUrls = await Promise.all(
+        (data || []).map(async (r: any) => {
+          let displayUrl = r.selfie_url;
+          if (r.selfie_url && !r.selfie_url.startsWith("http")) {
+            const { data: signed } = await supabase
+              .storage
+              .from("verification-selfies")
+              .createSignedUrl(r.selfie_url, 60 * 60);
+            displayUrl = signed?.signedUrl || r.selfie_url;
+          }
+          return { ...r, display_name: profiles[r.user_id] || "User", selfie_url: displayUrl };
+        })
+      );
+      return withUrls;
     },
   });
 
