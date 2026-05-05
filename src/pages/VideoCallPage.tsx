@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import GiftPanel, { GiftItem } from "@/components/GiftPanel";
 import GiftAnimation from "@/components/GiftAnimation";
+import DraggableSelfVideo from "@/components/DraggableSelfVideo";
 
 const VideoCallPage = () => {
   const { userId } = useParams();
@@ -154,20 +155,12 @@ const VideoCallPage = () => {
         </div>
       )}
 
-      {/* Self video (small) — WhatsApp style bottom-right, above controls */}
-      <div className="absolute bottom-28 right-4 w-28 h-40 rounded-2xl overflow-hidden border border-primary-foreground/20 shadow-2xl z-20">
-        <div ref={localVideoRef} className="w-full h-full bg-foreground/80">
-          {(isCameraOff || joining) && (
-            <div className="w-full h-full flex items-center justify-center">
-              {joining ? (
-                <Loader2 className="text-primary-foreground/50 animate-spin" size={24} />
-              ) : (
-                <CameraOff className="text-primary-foreground/50" size={24} />
-              )}
-            </div>
-          )}
-        </div>
-      </div>
+      {/* Self video (small) — draggable, default bottom-right above controls */}
+      <DraggableSelfVideo
+        localVideoRef={localVideoRef}
+        isCameraOff={isCameraOff}
+        joining={joining}
+      />
 
       {/* Gift Panel */}
       <GiftPanel
