@@ -80,7 +80,7 @@ const AdminRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, loading } = useAuth();
   const { isAdmin, isLoading } = useAdminCheck();
   if (loading || isLoading) return <SplashScreen />;
-  if (!user) return <Navigate to="/x-panel/login" replace />;
+  if (!user) return <Navigate to="/control-room/login" replace />;
   if (!isAdmin) return <Navigate to="/" replace />;
   return <>{children}</>;
 };
@@ -101,10 +101,10 @@ const App = () => (
           <AuthProvider>
             <Routes>
               {/* Admin login - standalone */}
-              <Route path="/x-panel/login" element={<AdminLoginPage />} />
+              <Route path="/control-room/login" element={<AdminLoginPage />} />
 
               {/* Admin routes - with sidebar layout */}
-              <Route path="/x-panel" element={<AdminRoute><AdminLayout /></AdminRoute>}>
+              <Route path="/control-room" element={<AdminRoute><AdminLayout /></AdminRoute>}>
                 <Route index element={<AdminDashboard />} />
                 <Route path="users" element={<AdminUsersPage />} />
                 <Route path="withdrawals" element={<AdminWithdrawalsPage />} />

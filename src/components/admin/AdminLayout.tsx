@@ -22,18 +22,18 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
-  { icon: LayoutDashboard, label: "Dashboard", path: "/x-panel" },
-  { icon: Users, label: "Users", path: "/x-panel/users" },
-  { icon: Shield, label: "Verifications", path: "/x-panel/verifications" },
-  { icon: CreditCard, label: "Withdrawals", path: "/x-panel/withdrawals" },
-  { icon: AlertTriangle, label: "Reports", path: "/x-panel/reports" },
-  { icon: ShoppingBag, label: "Purchases", path: "/x-panel/purchases" },
-  { icon: Coins, label: "Coin Packs", path: "/x-panel/coin-packs" },
-  { icon: ShieldCheck, label: "Manage Admins", path: "/x-panel/manage" },
-  { icon: Bell, label: "Notifications", path: "/x-panel/notifications" },
-  { icon: Settings, label: "App Settings", path: "/x-panel/settings" },
-  { icon: KeyRound, label: "Secrets", path: "/x-panel/secrets" },
-  { icon: Activity, label: "Razorpay Diagnostics", path: "/x-panel/razorpay-diagnostics" },
+  { icon: LayoutDashboard, label: "Dashboard", path: "/control-room" },
+  { icon: Users, label: "Users", path: "/control-room/users" },
+  { icon: Shield, label: "Verifications", path: "/control-room/verifications" },
+  { icon: CreditCard, label: "Withdrawals", path: "/control-room/withdrawals" },
+  { icon: AlertTriangle, label: "Reports", path: "/control-room/reports" },
+  { icon: ShoppingBag, label: "Purchases", path: "/control-room/purchases" },
+  { icon: Coins, label: "Coin Packs", path: "/control-room/coin-packs" },
+  { icon: ShieldCheck, label: "Manage Admins", path: "/control-room/manage" },
+  { icon: Bell, label: "Notifications", path: "/control-room/notifications" },
+  { icon: Settings, label: "App Settings", path: "/control-room/settings" },
+  { icon: KeyRound, label: "Secrets", path: "/control-room/secrets" },
+  { icon: Activity, label: "Razorpay Diagnostics", path: "/control-room/razorpay-diagnostics" },
 ];
 
 const AdminLayout = () => {
@@ -44,7 +44,7 @@ const AdminLayout = () => {
 
   const handleLogout = async () => {
     await signOut();
-    navigate("/x-panel/login");
+    navigate("/control-room/login");
   };
 
   return (
