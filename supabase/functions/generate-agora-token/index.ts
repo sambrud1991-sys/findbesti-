@@ -168,7 +168,7 @@ async function buildToken(
   return VERSION + appID + b64;
 }
 
-const CHANNEL_NAME_REGEX = /^[a-zA-Z0-9_-]{3,64}$/;
+const CHANNEL_NAME_REGEX = /^[a-zA-Z0-9_-]{3,128}$/;
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
