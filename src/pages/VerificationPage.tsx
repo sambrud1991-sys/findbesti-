@@ -66,11 +66,10 @@ const VerificationPage = () => {
         .upload(path, selectedFile, { upsert: true });
       if (uploadErr) throw uploadErr;
 
-      const { data: urlData } = supabase.storage.from("verification-selfies").getPublicUrl(path);
-
+      // Bucket is private — store the storage path; signed URLs are generated on read.
       const { error: insertErr } = await supabase.from("profile_verifications").insert({
         user_id: user.id,
-        selfie_url: urlData.publicUrl,
+        selfie_url: path,
         status: "pending",
       });
       if (insertErr) throw insertErr;
