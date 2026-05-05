@@ -118,7 +118,7 @@ export const useAgoraCall = ({ targetUserId, callType }: UseAgoraCallOptions) =>
     } finally {
       setJoining(false);
     }
-  }, [channelName, callType]);
+  }, [targetUserId, callType]);
 
   const leave = useCallback(async () => {
     localAudioTrackRef.current?.close();
@@ -180,6 +180,7 @@ export const useAgoraCall = ({ targetUserId, callType }: UseAgoraCallOptions) =>
     isCameraOff,
     remoteUsers,
     callTime,
+    channelName,
     formatTime,
     toggleMute,
     toggleCamera,
