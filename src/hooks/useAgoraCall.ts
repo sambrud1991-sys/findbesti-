@@ -10,11 +10,12 @@ import { supabase } from "@/integrations/supabase/client";
 type CallType = "video" | "audio";
 
 interface UseAgoraCallOptions {
-  channelName: string;
+  targetUserId: string;
   callType: CallType;
 }
 
-export const useAgoraCall = ({ channelName, callType }: UseAgoraCallOptions) => {
+export const useAgoraCall = ({ targetUserId, callType }: UseAgoraCallOptions) => {
+  const [channelName, setChannelName] = useState<string>("");
   const clientRef = useRef<IAgoraRTCClient | null>(null);
   const localAudioTrackRef = useRef<IMicrophoneAudioTrack | null>(null);
   const localVideoTrackRef = useRef<ICameraVideoTrack | null>(null);
