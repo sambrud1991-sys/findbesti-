@@ -32,6 +32,7 @@ import AdminUsersPage from "./pages/admin/AdminUsersPage";
 import AdminWithdrawalsPage from "./pages/admin/AdminWithdrawalsPage";
 import AdminReportsPage from "./pages/admin/AdminReportsPage";
 import AdminLoginPage from "./pages/admin/AdminLoginPage";
+import AdminResetPasswordPage from "./pages/admin/AdminResetPasswordPage";
 import AdminPurchasesPage from "./pages/admin/AdminPurchasesPage";
 import AdminManagePage from "./pages/admin/AdminManagePage";
 import AdminNotificationsPage from "./pages/admin/AdminNotificationsPage";
@@ -102,6 +103,7 @@ const App = () => (
             <Routes>
               {/* Admin login - standalone */}
               <Route path="/control-room/login" element={<AdminLoginPage />} />
+              <Route path="/control-room/reset-password" element={<AdminResetPasswordPage />} />
 
               {/* Admin routes - with sidebar layout */}
               <Route path="/control-room" element={<AdminRoute><AdminLayout /></AdminRoute>}>

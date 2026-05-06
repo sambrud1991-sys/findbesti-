@@ -13,6 +13,7 @@ const AdminLoginPage = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
+  const [isForgot, setIsForgot] = useState(false);
   const navigate = useNavigate();
   const { user } = useAuth();
   const { isAdmin, isLoading: adminLoading } = useAdminCheck();
@@ -28,13 +29,24 @@ const AdminLoginPage = () => {
   }, [user, isAdmin, adminLoading, navigate]);
 
   const handleAuth = async () => {
-    if (!email || !password) {
-      toast.error("Please enter email and password");
+    if (!email) {
+      toast.error("Please enter email");
+      return;
+    }
+    if (!isForgot && !password) {
+      toast.error("Please enter password");
       return;
     }
     setLoading(true);
     try {
-      if (isSignUp) {
+      if (isForgot) {
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: `${window.location.origin}/control-room/reset-password`,
+        });
+        if (error) throw error;
+        toast.success("Password reset link sent! Check your email.");
+        setIsForgot(false);
+      } else if (isSignUp) {
         const { error } = await supabase.auth.signUp({
           email,
           password,
@@ -46,7 +58,6 @@ const AdminLoginPage = () => {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         toast.success("Login successful!");
-        // Redirect happens in useEffect after admin check
       }
     } catch (error: any) {
       toast.error(error.message);
@@ -64,7 +75,7 @@ const AdminLoginPage = () => {
           </div>
           <h1 className="text-2xl font-extrabold text-foreground">Admin Panel</h1>
           <p className="text-sm text-muted-foreground mt-1">
-            {isSignUp ? "Create admin account" : "Sign in to continue"}
+            {isForgot ? "Reset your password" : isSignUp ? "Create admin account" : "Sign in to continue"}
           </p>
         </div>
 
@@ -79,30 +90,48 @@ const AdminLoginPage = () => {
               className="pl-10 h-12 rounded-xl"
             />
           </div>
-          <div className="relative">
-            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <Input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="pl-10 h-12 rounded-xl"
-            />
-          </div>
+          {!isForgot && (
+            <div className="relative">
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="pl-10 h-12 rounded-xl"
+              />
+            </div>
+          )}
           <Button
             onClick={handleAuth}
             disabled={loading}
             className="w-full h-12 rounded-xl gradient-primary text-primary-foreground font-bold"
           >
-            {loading ? "Please wait..." : isSignUp ? "Sign Up" : "Sign In"}
+            {loading ? "Please wait..." : isForgot ? "Send Reset Link" : isSignUp ? "Sign Up" : "Sign In"}
           </Button>
+          {!isForgot && !isSignUp && (
+            <button
+              onClick={() => setIsForgot(true)}
+              className="w-full text-center text-sm text-primary font-semibold"
+            >
+              Forgot password?
+            </button>
+          )}
         </div>
 
         <p className="text-center text-sm text-muted-foreground">
-          {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
-          <button onClick={() => setIsSignUp(!isSignUp)} className="font-bold text-primary">
-            {isSignUp ? "Sign In" : "Sign Up"}
-          </button>
+          {isForgot ? (
+            <button onClick={() => setIsForgot(false)} className="font-bold text-primary">
+              Back to Sign In
+            </button>
+          ) : (
+            <>
+              {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
+              <button onClick={() => setIsSignUp(!isSignUp)} className="font-bold text-primary">
+                {isSignUp ? "Sign In" : "Sign Up"}
+              </button>
+            </>
+          )}
         </p>
       </div>
     </div>
