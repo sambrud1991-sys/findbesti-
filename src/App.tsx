@@ -103,6 +103,7 @@ const App = () => (
             <Routes>
               {/* Admin login - standalone */}
               <Route path="/control-room/login" element={<AdminLoginPage />} />
+              <Route path="/control-room/reset-password" element={<AdminResetPasswordPage />} />
 
               {/* Admin routes - with sidebar layout */}
               <Route path="/control-room" element={<AdminRoute><AdminLayout /></AdminRoute>}>
