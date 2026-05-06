@@ -29,13 +29,24 @@ const AdminLoginPage = () => {
   }, [user, isAdmin, adminLoading, navigate]);
 
   const handleAuth = async () => {
-    if (!email || !password) {
-      toast.error("Please enter email and password");
+    if (!email) {
+      toast.error("Please enter email");
+      return;
+    }
+    if (!isForgot && !password) {
+      toast.error("Please enter password");
       return;
     }
     setLoading(true);
     try {
-      if (isSignUp) {
+      if (isForgot) {
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: `${window.location.origin}/control-room/reset-password`,
+        });
+        if (error) throw error;
+        toast.success("Password reset link sent! Check your email.");
+        setIsForgot(false);
+      } else if (isSignUp) {
         const { error } = await supabase.auth.signUp({
           email,
           password,
@@ -47,7 +58,6 @@ const AdminLoginPage = () => {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         toast.success("Login successful!");
-        // Redirect happens in useEffect after admin check
       }
     } catch (error: any) {
       toast.error(error.message);
