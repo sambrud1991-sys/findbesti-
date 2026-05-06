@@ -40,10 +40,28 @@ const AdminLoginPage = () => {
     setLoading(true);
     try {
       if (isForgot) {
+        // Client-side rate limit: 60s cooldown, max 3/hour
+        const RL_KEY = "admin_forgot_pw_rl";
+        const now = Date.now();
+        const stored = JSON.parse(localStorage.getItem(RL_KEY) || "[]") as number[];
+        const recent = stored.filter((t) => now - t < 60 * 60 * 1000);
+        const last = recent[recent.length - 1];
+        if (last && now - last < 60 * 1000) {
+          const wait = Math.ceil((60 * 1000 - (now - last)) / 1000);
+          toast.error(`Please wait ${wait}s before requesting again`);
+          setLoading(false);
+          return;
+        }
+        if (recent.length >= 3) {
+          toast.error("Too many requests. Try again later.");
+          setLoading(false);
+          return;
+        }
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
           redirectTo: `${window.location.origin}/control-room/reset-password`,
         });
         if (error) throw error;
+        localStorage.setItem(RL_KEY, JSON.stringify([...recent, now]));
         toast.success("Password reset link sent! Check your email.");
         setIsForgot(false);
       } else if (isSignUp) {
