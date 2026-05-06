@@ -13,6 +13,7 @@ const AdminLoginPage = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
+  const [isForgot, setIsForgot] = useState(false);
   const navigate = useNavigate();
   const { user } = useAuth();
   const { isAdmin, isLoading: adminLoading } = useAdminCheck();
