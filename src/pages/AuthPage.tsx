@@ -147,37 +147,90 @@ const AuthPage = () => {
     <div className="h-[100dvh] flex flex-col bg-background overflow-hidden">
 
       {/* Hero Section */}
-      <div className="gradient-primary relative flex-1 flex flex-col px-6 pt-12 pb-8 overflow-hidden">
+      <div className="gradient-primary relative flex-1 flex flex-col px-6 pt-10 pb-8 overflow-hidden">
+        {/* Ambient glows */}
+        <div className="absolute -top-20 -left-16 w-72 h-72 rounded-full bg-white/10 blur-3xl" />
+        <div className="absolute top-40 -right-20 w-80 h-80 rounded-full bg-fuchsia-300/20 blur-3xl" />
+        <div className="absolute bottom-10 left-1/3 w-56 h-56 rounded-full bg-purple-400/15 blur-3xl" />
+
+        {/* Floating sparkle dots */}
+        <div className="absolute top-24 left-8 w-2 h-2 rounded-full bg-white/60 animate-float" />
+        <div className="absolute top-44 right-10 w-1.5 h-1.5 rounded-full bg-white/50 animate-float" style={{ animationDelay: "0.6s" }} />
+        <div className="absolute bottom-32 left-10 w-2.5 h-2.5 rounded-full bg-white/40 animate-float" style={{ animationDelay: "1.2s" }} />
+        <div className="absolute bottom-48 right-20 w-1.5 h-1.5 rounded-full bg-white/60 animate-float" style={{ animationDelay: "0.9s" }} />
+
+        {/* Heart badge top right */}
         <div className="absolute top-8 right-6 animate-bounce-in" style={{ animationDelay: "0.3s" }}>
-          <div className="w-14 h-14 rounded-2xl bg-primary-foreground/15 backdrop-blur-sm flex items-center justify-center rotate-12">
-            <Heart className="w-7 h-7 text-primary-foreground fill-primary-foreground/50" />
+          <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center rotate-12 shadow-xl border border-white/30">
+            <Heart className="w-7 h-7 text-white fill-white/60" />
           </div>
         </div>
         <div className="absolute top-32 right-14 animate-bounce-in" style={{ animationDelay: "0.5s" }}>
-          <div className="w-8 h-8 rounded-xl bg-primary-foreground/10 backdrop-blur-sm flex items-center justify-center -rotate-12">
-            <Sparkles className="w-4 h-4 text-primary-foreground" />
+          <div className="w-9 h-9 rounded-xl bg-white/15 backdrop-blur-md flex items-center justify-center -rotate-12 border border-white/20">
+            <Sparkles className="w-4 h-4 text-white" />
           </div>
         </div>
-        <div className="absolute bottom-16 left-6 w-20 h-20 rounded-full bg-primary-foreground/5 blur-xl" />
-        <div className="absolute top-20 left-1/2 w-32 h-32 rounded-full bg-primary-foreground/5 blur-2xl" />
 
-        <div className="animate-slide-up">
-          <h1 className="text-5xl font-black text-primary-foreground italic tracking-tight leading-none">FIND</h1>
-          <h1 className="text-5xl font-black text-primary-foreground italic tracking-tight leading-none mt-1">BESTI</h1>
+        {/* Brand */}
+        <div className="animate-slide-up relative z-10">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/25 mb-3">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-300 animate-pulse" />
+            <span className="text-[11px] font-bold text-white tracking-wider uppercase">12,438 online now</span>
+          </div>
+          <h1 className="text-[3.5rem] font-black text-white italic tracking-tight leading-[0.95] drop-shadow-lg">FIND</h1>
+          <h1 className="text-[3.5rem] font-black text-white italic tracking-tight leading-[0.95] mt-1 drop-shadow-lg">
+            BESTI<span className="text-yellow-300">.</span>
+          </h1>
+          <p className="mt-3 text-white/85 text-base font-semibold max-w-[18rem] leading-snug">
+            Real people. Real chats. <br />Find your vibe in seconds ✨
+          </p>
         </div>
 
-        <div className="mt-8 space-y-2 animate-slide-up" style={{ animationDelay: "0.15s" }}>
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-primary-foreground/20 flex items-center justify-center">
-              <Shield className="w-4 h-4 text-primary-foreground" />
+        {/* Live avatars row */}
+        <div className="mt-6 flex items-center gap-3 animate-slide-up relative z-10" style={{ animationDelay: "0.1s" }}>
+          <div className="flex -space-x-3">
+            {[
+              "https://i.pravatar.cc/80?img=47",
+              "https://i.pravatar.cc/80?img=32",
+              "https://i.pravatar.cc/80?img=68",
+              "https://i.pravatar.cc/80?img=25",
+            ].map((src, i) => (
+              <img
+                key={i}
+                src={src}
+                alt=""
+                className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-md"
+              />
+            ))}
+            <div className="w-10 h-10 rounded-full border-2 border-white bg-white/25 backdrop-blur-md flex items-center justify-center text-[10px] font-black text-white">
+              +5K
             </div>
-            <p className="text-lg font-bold text-primary-foreground/90">{t("auth.safe")}</p>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-primary-foreground/20 flex items-center justify-center">
-              <Sparkles className="w-4 h-4 text-primary-foreground" />
+          <div className="flex flex-col leading-tight">
+            <span className="text-white text-sm font-extrabold">Join the besti club</span>
+            <span className="text-white/75 text-[11px] font-semibold">⭐ 4.8 · trusted by 1M+</span>
+          </div>
+        </div>
+
+        {/* Feature pills */}
+        <div className="mt-5 flex flex-wrap gap-2 animate-slide-up relative z-10" style={{ animationDelay: "0.18s" }}>
+          <div className="flex items-center gap-1.5 pl-1.5 pr-3 py-1.5 rounded-full bg-white/15 backdrop-blur-md border border-white/25">
+            <div className="w-6 h-6 rounded-full bg-white/25 flex items-center justify-center">
+              <Shield className="w-3.5 h-3.5 text-white" />
             </div>
-            <p className="text-lg font-bold text-primary-foreground/80">{t("auth.noFake")}</p>
+            <span className="text-xs font-extrabold text-white">{t("auth.safe")}</span>
+          </div>
+          <div className="flex items-center gap-1.5 pl-1.5 pr-3 py-1.5 rounded-full bg-white/15 backdrop-blur-md border border-white/25">
+            <div className="w-6 h-6 rounded-full bg-white/25 flex items-center justify-center">
+              <Sparkles className="w-3.5 h-3.5 text-white" />
+            </div>
+            <span className="text-xs font-extrabold text-white">{t("auth.noFake")}</span>
+          </div>
+          <div className="flex items-center gap-1.5 pl-1.5 pr-3 py-1.5 rounded-full bg-white/15 backdrop-blur-md border border-white/25">
+            <div className="w-6 h-6 rounded-full bg-white/25 flex items-center justify-center">
+              <Heart className="w-3.5 h-3.5 text-white fill-white" />
+            </div>
+            <span className="text-xs font-extrabold text-white">Free to join</span>
           </div>
         </div>
 
