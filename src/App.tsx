@@ -32,6 +32,7 @@ import AdminUsersPage from "./pages/admin/AdminUsersPage";
 import AdminWithdrawalsPage from "./pages/admin/AdminWithdrawalsPage";
 import AdminReportsPage from "./pages/admin/AdminReportsPage";
 import AdminLoginPage from "./pages/admin/AdminLoginPage";
+import AdminResetPasswordPage from "./pages/admin/AdminResetPasswordPage";
 import AdminPurchasesPage from "./pages/admin/AdminPurchasesPage";
 import AdminManagePage from "./pages/admin/AdminManagePage";
 import AdminNotificationsPage from "./pages/admin/AdminNotificationsPage";
