@@ -111,6 +111,22 @@ const ProfilePage = () => {
           </button>
         ))}
 
+        {isAdmin && (
+          <button
+            onClick={() => navigate("/control-room")}
+            className="w-full flex items-center gap-3 py-3.5 px-3 rounded-xl hover:bg-primary/10 transition-colors"
+          >
+            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+              <Shield size={18} className="text-primary" />
+            </div>
+            <div className="flex-1 text-left">
+              <h3 className="font-bold text-sm text-foreground">Admin Panel</h3>
+              <p className="text-[10px] text-muted-foreground">Control room access</p>
+            </div>
+            <ChevronRight size={16} className="text-muted-foreground" />
+          </button>
+        )}
+
         <button
           onClick={async () => {
             await signOut();
