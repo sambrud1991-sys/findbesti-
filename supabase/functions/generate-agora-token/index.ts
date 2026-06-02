@@ -216,10 +216,10 @@ serve(async (req) => {
     const targetUserId = typeof body?.targetUserId === "string" ? body.targetUserId.trim() : "";
     const parsedUid = Number(body?.uid ?? 0);
 
-    const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-    if (!UUID_REGEX.test(targetUserId)) {
+    const TARGET_ID_REGEX = /^[a-zA-Z0-9_-]{1,64}$/;
+    if (!TARGET_ID_REGEX.test(targetUserId)) {
       return new Response(
-        JSON.stringify({ error: "targetUserId must be a valid UUID" }),
+        JSON.stringify({ error: "Invalid targetUserId" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
