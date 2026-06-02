@@ -128,11 +128,7 @@ const ChatPage = () => {
                 onClick={() => handleStartChat(u.user_id)}
                 className="w-full flex items-center gap-3 py-3 border-b border-border/50 hover:bg-muted/30 transition-colors rounded-lg px-2"
               >
-                <img
-                  src={u.avatar_url || "/placeholder.svg"}
-                  alt={u.display_name || "User"}
-                  className="w-12 h-12 rounded-full object-cover bg-muted"
-                />
+                <Avatar url={u.avatar_url} name={u.display_name} />
                 <h3 className="font-bold text-sm text-foreground">{u.display_name || "User"}</h3>
               </button>
             ))
