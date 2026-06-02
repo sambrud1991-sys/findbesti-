@@ -71,6 +71,37 @@ const ChatPage = () => {
     }
   };
 
+  const getInitials = (name?: string | null) => {
+    if (!name) return "U";
+    return name
+      .trim()
+      .split(/\s+/)
+      .slice(0, 2)
+      .map((w) => w[0]?.toUpperCase())
+      .join("");
+  };
+
+  const Avatar = ({ url, name, size = 48 }: { url?: string | null; name?: string | null; size?: number }) => {
+    if (url) {
+      return (
+        <img
+          src={url}
+          alt={name || "User"}
+          className="rounded-full object-cover bg-muted ring-1 ring-border"
+          style={{ width: size, height: size }}
+        />
+      );
+    }
+    return (
+      <div
+        className="rounded-full gradient-primary flex items-center justify-center text-primary-foreground font-bold shadow-md ring-1 ring-border"
+        style={{ width: size, height: size, fontSize: size * 0.38 }}
+      >
+        {getInitials(name)}
+      </div>
+    );
+  };
+
   // New chat user picker
   if (showNewChat) {
     return (
