@@ -192,11 +192,7 @@ const ChatPage = () => {
               style={{ animationDelay: `${index * 80}ms` }}
             >
               <div className="relative">
-                <img
-                  src={conv.other_user?.avatar_url || "/placeholder.svg"}
-                  alt={conv.other_user?.display_name || "User"}
-                  className="w-12 h-12 rounded-full object-cover bg-muted"
-                />
+                <Avatar url={conv.other_user?.avatar_url} name={conv.other_user?.display_name} />
               </div>
               <div className="flex-1 text-left">
                 <div className="flex items-center justify-between">
