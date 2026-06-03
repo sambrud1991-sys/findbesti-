@@ -136,7 +136,7 @@ const AdminLoginPage = () => {
           >
             {loading ? "Please wait..." : isForgot ? "Send Reset Link" : isSignUp ? "Sign Up" : "Sign In"}
           </Button>
-          {!isForgot && !isSignUp && (
+          {!isForgot && (
             <button
               onClick={() => setIsForgot(true)}
               className="w-full text-center text-sm text-primary font-semibold"
