@@ -238,7 +238,7 @@ const AuthPage = () => {
       </div>
 
       {/* Bottom Auth Card */}
-      <div className="bg-card rounded-t-[2rem] -mt-8 relative z-10 px-5 pt-6 pb-5 shadow-[0_-12px_40px_rgba(0,0,0,0.1)] animate-slide-up" style={{ animationDelay: "0.25s" }}>
+      <div className="bg-card rounded-t-[2rem] -mt-24 relative z-10 px-5 pt-6 pb-5 shadow-[0_-12px_40px_rgba(0,0,0,0.15)] animate-slide-up" style={{ animationDelay: "0.25s" }}>
         {!otpSent ? (
           <div className="space-y-3.5">
             <div className="flex items-center gap-0 h-14 rounded-2xl bg-muted/40 border-2 border-border/40 overflow-visible relative focus-within:border-primary/40 transition-colors">
