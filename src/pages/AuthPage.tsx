@@ -241,7 +241,11 @@ const AuthPage = () => {
       <div className="bg-card rounded-t-[2rem] -mt-24 relative z-10 px-5 pt-6 pb-5 shadow-[0_-12px_40px_rgba(0,0,0,0.15)] animate-slide-up" style={{ animationDelay: "0.25s" }}>
         {!otpSent ? (
           <div className="space-y-3.5">
-            <div className="flex items-center gap-0 h-14 rounded-2xl bg-muted/40 border-2 border-border/40 overflow-visible relative focus-within:border-primary/40 transition-colors">
+            <div className="relative pt-1">
+              <span className="absolute left-6 -top-1 px-1.5 bg-card text-xs font-semibold text-foreground z-10">
+                Phone number
+              </span>
+            <div className="flex items-center gap-0 h-14 rounded-full bg-card border border-foreground/60 overflow-visible relative focus-within:border-primary transition-colors">
               {/* Country Code Picker Button */}
               <div className="relative" ref={pickerRef}>
                 <button
