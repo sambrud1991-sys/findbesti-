@@ -19,7 +19,6 @@ const menuItems = [
 
 const ProfilePage = () => {
   const { user, signOut } = useAuth();
-  const { isAdmin } = useAdminCheck();
   const navigate = useNavigate();
 
   const { data: profile, isLoading } = useQuery({
