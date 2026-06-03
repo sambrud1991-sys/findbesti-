@@ -311,17 +311,17 @@ const AuthPage = () => {
                 )}
               </div>
 
-              <div className="w-px h-7 bg-border/50" />
               <Input
                 type="tel"
-                placeholder={t("auth.enterMobile")}
+                placeholder="Enter your number"
                 value={phone}
                 onChange={(e) => {
                   const val = e.target.value.replace(/\D/g, "").slice(0, selectedCountry.maxDigits);
                   setPhone(val);
                 }}
-                className="border-0 bg-transparent h-full text-base font-semibold focus-visible:ring-0 shadow-none pl-3"
+                className="border-0 bg-transparent h-full text-base font-semibold focus-visible:ring-0 shadow-none pl-2"
               />
+            </div>
             </div>
             <Button
               onClick={() => {
