@@ -12,8 +12,8 @@ const BottomNav = () => {
 
   const tabs = [
     { icon: Home, label: t("nav.home"), path: "/" },
-    { icon: MessageCircle, label: t("nav.chat"), path: "/chat" },
     { icon: Video, label: t("nav.call"), path: "/call" },
+    { icon: MessageCircle, label: t("nav.chat"), path: "/chat" },
     { icon: User, label: t("nav.profile"), path: "/profile" },
   ];
 
