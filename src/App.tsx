@@ -43,6 +43,7 @@ import AdminVerificationsPage from "./pages/admin/AdminVerificationsPage";
 import AdminRazorpayDiagnosticsPage from "./pages/admin/AdminRazorpayDiagnosticsPage";
 import VerificationPage from "./pages/VerificationPage";
 import InvitePage from "./pages/InvitePage";
+import AboutWebsite from "./pages/AboutWebsite";
 import MaintenanceScreen from "./components/MaintenanceScreen";
 import AnnouncementBanner from "./components/AnnouncementBanner";
 import ForceUpdateScreen from "./components/ForceUpdateScreen";
@@ -144,6 +145,8 @@ const App = () => (
               <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
               <Route path="/terms" element={<TermsPage />} />
               <Route path="/invite/:code" element={<InvitePage />} />
+              <Route path="/about" element={<AboutWebsite />} />
+              <Route path="/website" element={<AboutWebsite />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <BottomNav />
