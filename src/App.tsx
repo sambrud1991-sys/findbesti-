@@ -43,6 +43,7 @@ import AdminVerificationsPage from "./pages/admin/AdminVerificationsPage";
 import AdminRazorpayDiagnosticsPage from "./pages/admin/AdminRazorpayDiagnosticsPage";
 import VerificationPage from "./pages/VerificationPage";
 import InvitePage from "./pages/InvitePage";
+import AboutWebsite from "./pages/AboutWebsite";
 import MaintenanceScreen from "./components/MaintenanceScreen";
 import AnnouncementBanner from "./components/AnnouncementBanner";
 import ForceUpdateScreen from "./components/ForceUpdateScreen";
