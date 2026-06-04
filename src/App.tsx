@@ -145,6 +145,8 @@ const App = () => (
               <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
               <Route path="/terms" element={<TermsPage />} />
               <Route path="/invite/:code" element={<InvitePage />} />
+              <Route path="/about" element={<AboutWebsite />} />
+              <Route path="/website" element={<AboutWebsite />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <BottomNav />
