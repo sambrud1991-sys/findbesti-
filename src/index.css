@@ -132,6 +132,18 @@
   }
 }
 
+/* Safety: if the user's device disables animations (common on Android),
+   force animated elements to their final visible state instead of staying invisible. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-stagger-in,
+  .animate-slide-up,
+  .animate-bounce-in {
+    opacity: 1 !important;
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
 @keyframes stagger-fade-in {
   from {
     opacity: 0;
