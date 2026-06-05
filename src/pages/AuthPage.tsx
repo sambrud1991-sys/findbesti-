@@ -173,7 +173,7 @@ const AuthPage = () => {
 
         {/* Brand */}
         <div className="animate-slide-up relative z-10">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/25 mb-3">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/25 border border-white/25 mb-3">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-300 animate-pulse" />
             <span className="text-[11px] font-bold text-white tracking-wider uppercase">12,438 online now</span>
           </div>
@@ -202,7 +202,7 @@ const AuthPage = () => {
                 className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-md"
               />
             ))}
-            <div className="w-10 h-10 rounded-full border-2 border-white bg-white/25 backdrop-blur-md flex items-center justify-center text-[10px] font-black text-white">
+            <div className="w-10 h-10 rounded-full border-2 border-white bg-white/35 flex items-center justify-center text-[10px] font-black text-white">
               +5K
             </div>
           </div>
@@ -214,19 +214,19 @@ const AuthPage = () => {
 
         {/* Feature pills */}
         <div className="mt-5 flex flex-wrap gap-2 animate-slide-up relative z-10" style={{ animationDelay: "0.18s" }}>
-          <div className="flex items-center gap-1.5 pl-1.5 pr-3 py-1.5 rounded-full bg-white/15 backdrop-blur-md border border-white/25">
+          <div className="flex items-center gap-1.5 pl-1.5 pr-3 py-1.5 rounded-full bg-white/25 border border-white/25">
             <div className="w-6 h-6 rounded-full bg-white/25 flex items-center justify-center">
               <Shield className="w-3.5 h-3.5 text-white" />
             </div>
             <span className="text-xs font-extrabold text-white">{t("auth.safe")}</span>
           </div>
-          <div className="flex items-center gap-1.5 pl-1.5 pr-3 py-1.5 rounded-full bg-white/15 backdrop-blur-md border border-white/25">
+          <div className="flex items-center gap-1.5 pl-1.5 pr-3 py-1.5 rounded-full bg-white/25 border border-white/25">
             <div className="w-6 h-6 rounded-full bg-white/25 flex items-center justify-center">
               <Sparkles className="w-3.5 h-3.5 text-white" />
             </div>
             <span className="text-xs font-extrabold text-white">{t("auth.noFake")}</span>
           </div>
-          <div className="flex items-center gap-1.5 pl-1.5 pr-3 py-1.5 rounded-full bg-white/15 backdrop-blur-md border border-white/25">
+          <div className="flex items-center gap-1.5 pl-1.5 pr-3 py-1.5 rounded-full bg-white/25 border border-white/25">
             <div className="w-6 h-6 rounded-full bg-white/25 flex items-center justify-center">
               <Heart className="w-3.5 h-3.5 text-white fill-white" />
             </div>
