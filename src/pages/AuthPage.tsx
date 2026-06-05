@@ -148,10 +148,10 @@ const AuthPage = () => {
 
       {/* Hero Section */}
       <div className="gradient-primary relative flex-1 flex flex-col px-6 pt-10 pb-8 overflow-hidden">
-        {/* Ambient glows */}
-        <div className="absolute -top-20 -left-16 w-72 h-72 rounded-full bg-white/10 blur-3xl" />
-        <div className="absolute top-40 -right-20 w-80 h-80 rounded-full bg-fuchsia-300/20 blur-3xl" />
-        <div className="absolute bottom-10 left-1/3 w-56 h-56 rounded-full bg-purple-400/15 blur-3xl" />
+        {/* Soft ambient highlights (no blur — keeps mobile GPU happy) */}
+        <div className="absolute -top-20 -left-16 w-72 h-72 rounded-full bg-white/10 pointer-events-none" />
+        <div className="absolute top-40 -right-20 w-80 h-80 rounded-full bg-fuchsia-300/15 pointer-events-none" />
+        <div className="absolute bottom-10 left-1/3 w-56 h-56 rounded-full bg-purple-400/10 pointer-events-none" />
 
         {/* Floating sparkle dots */}
         <div className="absolute top-24 left-8 w-2 h-2 rounded-full bg-white/60 animate-float" />
@@ -160,13 +160,13 @@ const AuthPage = () => {
         <div className="absolute bottom-48 right-20 w-1.5 h-1.5 rounded-full bg-white/60 animate-float" style={{ animationDelay: "0.9s" }} />
 
         {/* Heart badge top right */}
-        <div className="absolute top-8 right-6 animate-bounce-in" style={{ animationDelay: "0.3s" }}>
-          <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center rotate-12 shadow-xl border border-white/30">
+        <div className="absolute top-8 right-6 animate-bounce-in z-10" style={{ animationDelay: "0.3s" }}>
+          <div className="w-14 h-14 rounded-2xl bg-white/25 flex items-center justify-center rotate-12 shadow-xl border border-white/30">
             <Heart className="w-7 h-7 text-white fill-white/60" />
           </div>
         </div>
-        <div className="absolute top-32 right-14 animate-bounce-in" style={{ animationDelay: "0.5s" }}>
-          <div className="w-9 h-9 rounded-xl bg-white/15 backdrop-blur-md flex items-center justify-center -rotate-12 border border-white/20">
+        <div className="absolute top-32 right-14 animate-bounce-in z-10" style={{ animationDelay: "0.5s" }}>
+          <div className="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center -rotate-12 border border-white/20">
             <Sparkles className="w-4 h-4 text-white" />
           </div>
         </div>
