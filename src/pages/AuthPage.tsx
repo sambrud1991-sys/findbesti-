@@ -362,8 +362,14 @@ const AuthPage = () => {
                 placeholder={t("auth.enterOtp")}
                 value={otp}
                 onChange={(e) => setOtp(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleVerifyOtp();
+                  }
+                }}
                 maxLength={6}
-                className="pl-10 h-14 rounded-2xl border-2 border-border/40 bg-muted/40 text-center tracking-[0.5em] font-extrabold text-lg focus-visible:border-primary/40"
+                className="pl-10 h-14 rounded-2xl border-2 border-border/40 bg-muted/40 text-center tracking-[0.5em] font-extrabold text-lg focus:border-primary focus:ring-2 focus:ring-primary/30"
               />
             </div>
             <Button
