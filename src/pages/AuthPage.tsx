@@ -245,7 +245,7 @@ const AuthPage = () => {
               <span className="absolute left-6 -top-1 px-1.5 bg-card text-xs font-semibold text-foreground z-10">
                 Phone number
               </span>
-            <div className="flex items-center gap-0 h-14 rounded-full bg-card border border-foreground/60 overflow-visible relative focus-within:border-primary transition-colors">
+            <div className="flex items-center gap-0 h-14 rounded-full bg-card border-2 border-foreground overflow-visible relative focus-within:border-primary transition-colors">
               {/* Country Code Picker Button */}
               <div className="relative" ref={pickerRef}>
                 <button
