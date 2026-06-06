@@ -319,6 +319,13 @@ const AuthPage = () => {
                   const val = e.target.value.replace(/\D/g, "").slice(0, selectedCountry.maxDigits);
                   setPhone(val);
                 }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    if (phone.length >= 7) handleSendOtp();
+                    else toast.error(t("toast.invalidMobile"));
+                  }
+                }}
                 className="border-0 bg-transparent h-full text-base font-semibold focus-visible:ring-0 shadow-none pl-2"
               />
             </div>
