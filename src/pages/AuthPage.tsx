@@ -245,7 +245,7 @@ const AuthPage = () => {
               <span className="absolute left-6 -top-1 px-1.5 bg-card text-xs font-semibold text-foreground z-10">
                 Phone number
               </span>
-            <div className="flex items-center gap-0 h-14 rounded-full bg-card border-2 border-foreground overflow-visible relative focus-within:border-primary transition-colors">
+            <div className="flex items-center gap-0 h-14 rounded-full bg-card border-2 border-foreground overflow-visible relative focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/30 transition-all">
               {/* Country Code Picker Button */}
               <div className="relative" ref={pickerRef}>
                 <button
@@ -319,6 +319,13 @@ const AuthPage = () => {
                   const val = e.target.value.replace(/\D/g, "").slice(0, selectedCountry.maxDigits);
                   setPhone(val);
                 }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    if (phone.length >= 7) handleSendOtp();
+                    else toast.error(t("toast.invalidMobile"));
+                  }
+                }}
                 className="border-0 bg-transparent h-full text-base font-semibold focus-visible:ring-0 shadow-none pl-2"
               />
             </div>
@@ -355,8 +362,14 @@ const AuthPage = () => {
                 placeholder={t("auth.enterOtp")}
                 value={otp}
                 onChange={(e) => setOtp(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleVerifyOtp();
+                  }
+                }}
                 maxLength={6}
-                className="pl-10 h-14 rounded-2xl border-2 border-border/40 bg-muted/40 text-center tracking-[0.5em] font-extrabold text-lg focus-visible:border-primary/40"
+                className="pl-10 h-14 rounded-2xl border-2 border-border/40 bg-muted/40 text-center tracking-[0.5em] font-extrabold text-lg focus:border-primary focus:ring-2 focus:ring-primary/30"
               />
             </div>
             <Button
