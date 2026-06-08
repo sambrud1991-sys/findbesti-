@@ -21,6 +21,8 @@ const AuthPage = () => {
   const [selectedCountry, setSelectedCountry] = useState<CountryCode>(countryCodes[0]); // India default
   const [showCountryPicker, setShowCountryPicker] = useState(false);
   const [countrySearch, setCountrySearch] = useState("");
+  const [phoneFlash, setPhoneFlash] = useState(false);
+  const [otpFlash, setOtpFlash] = useState(false);
   const confirmationResultRef = useRef<ConfirmationResult | null>(null);
   const recaptchaVerifierRef = useRef<any>(null);
   const firebaseAuthRef = useRef<Auth | null>(null);
@@ -245,7 +247,7 @@ const AuthPage = () => {
               <span className="absolute left-6 -top-1 px-1.5 bg-card text-xs font-semibold text-foreground z-10">
                 Phone number
               </span>
-            <div className="flex items-center gap-0 h-14 rounded-full bg-card border-2 border-foreground overflow-visible relative focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/30 transition-all">
+            <div className={`flex items-center gap-0 h-14 rounded-full bg-card border-2 overflow-visible relative focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/30 transition-all duration-200 ${phoneFlash ? "border-primary ring-4 ring-primary/40 shadow-[0_0_20px_hsl(var(--primary)/0.5)]" : "border-foreground"}`}>
               {/* Country Code Picker Button */}
               <div className="relative" ref={pickerRef}>
                 <button
@@ -322,6 +324,8 @@ const AuthPage = () => {
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     e.preventDefault();
+                    setPhoneFlash(true);
+                    setTimeout(() => setPhoneFlash(false), 450);
                     if (phone.length >= 7) handleSendOtp();
                     else toast.error(t("toast.invalidMobile"));
                   }
@@ -365,11 +369,13 @@ const AuthPage = () => {
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     e.preventDefault();
+                    setOtpFlash(true);
+                    setTimeout(() => setOtpFlash(false), 450);
                     handleVerifyOtp();
                   }
                 }}
                 maxLength={6}
-                className="pl-10 h-14 rounded-2xl border-2 border-border/40 bg-muted/40 text-center tracking-[0.5em] font-extrabold text-lg focus:border-primary focus:ring-2 focus:ring-primary/30"
+                className={`pl-10 h-14 rounded-2xl border-2 bg-muted/40 text-center tracking-[0.5em] font-extrabold text-lg focus:border-primary focus:ring-2 focus:ring-primary/30 transition-all duration-200 ${otpFlash ? "border-primary ring-4 ring-primary/40 shadow-[0_0_20px_hsl(var(--primary)/0.5)]" : "border-border/40"}`}
               />
             </div>
             <Button
