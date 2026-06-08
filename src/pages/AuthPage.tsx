@@ -324,6 +324,8 @@ const AuthPage = () => {
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     e.preventDefault();
+                    setPhoneFlash(true);
+                    setTimeout(() => setPhoneFlash(false), 450);
                     if (phone.length >= 7) handleSendOtp();
                     else toast.error(t("toast.invalidMobile"));
                   }
