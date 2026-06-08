@@ -247,7 +247,7 @@ const AuthPage = () => {
               <span className="absolute left-6 -top-1 px-1.5 bg-card text-xs font-semibold text-foreground z-10">
                 Phone number
               </span>
-            <div className="flex items-center gap-0 h-14 rounded-full bg-card border-2 border-foreground overflow-visible relative focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/30 transition-all">
+            <div className={`flex items-center gap-0 h-14 rounded-full bg-card border-2 overflow-visible relative focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/30 transition-all duration-200 ${phoneFlash ? "border-primary ring-4 ring-primary/40 shadow-[0_0_20px_hsl(var(--primary)/0.5)]" : "border-foreground"}`}>
               {/* Country Code Picker Button */}
               <div className="relative" ref={pickerRef}>
                 <button
