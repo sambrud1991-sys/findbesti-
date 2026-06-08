@@ -322,8 +322,6 @@ const AuthPage = () => {
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     e.preventDefault();
-                    setPhoneFlash(true);
-                    setTimeout(() => setPhoneFlash(false), 450);
                     if (phone.length >= 7) handleSendOtp();
                     else toast.error(t("toast.invalidMobile"));
                   }
@@ -367,13 +365,11 @@ const AuthPage = () => {
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     e.preventDefault();
-                    setOtpFlash(true);
-                    setTimeout(() => setOtpFlash(false), 450);
                     handleVerifyOtp();
                   }
                 }}
                 maxLength={6}
-                className={`pl-10 h-14 rounded-2xl border-2 bg-muted/40 text-center tracking-[0.5em] font-extrabold text-lg focus:border-primary focus:ring-2 focus:ring-primary/30 transition-all duration-200 ${otpFlash ? "border-primary ring-4 ring-primary/40 shadow-[0_0_20px_hsl(var(--primary)/0.5)]" : "border-border/40"}`}
+                className="pl-10 h-14 rounded-2xl border-2 border-border/40 bg-muted/40 text-center tracking-[0.5em] font-extrabold text-lg focus:border-primary focus:ring-2 focus:ring-primary/30 transition-all duration-200"
               />
             </div>
             <Button
