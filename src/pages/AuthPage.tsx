@@ -21,8 +21,6 @@ const AuthPage = () => {
   const [selectedCountry, setSelectedCountry] = useState<CountryCode>(countryCodes[0]); // India default
   const [showCountryPicker, setShowCountryPicker] = useState(false);
   const [countrySearch, setCountrySearch] = useState("");
-  const [phoneFlash, setPhoneFlash] = useState(false);
-  const [otpFlash, setOtpFlash] = useState(false);
   const confirmationResultRef = useRef<ConfirmationResult | null>(null);
   const recaptchaVerifierRef = useRef<any>(null);
   const firebaseAuthRef = useRef<Auth | null>(null);
@@ -247,7 +245,7 @@ const AuthPage = () => {
               <span className="absolute left-6 -top-1 px-1.5 bg-card text-xs font-semibold text-foreground z-10">
                 Phone number
               </span>
-            <div className={`flex items-center gap-0 h-14 rounded-full bg-card border-2 overflow-visible relative focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/50 focus-within:shadow-[0_0_20px_hsl(var(--primary)/0.5)] transition-all duration-200 ${phoneFlash ? "border-primary ring-4 ring-primary/60 shadow-[0_0_28px_hsl(var(--primary)/0.7)] scale-[1.02]" : "border-foreground"}`}>
+            <div className="flex items-center gap-0 h-14 rounded-full bg-card border-2 border-foreground overflow-visible relative focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/50 focus-within:shadow-[0_0_20px_hsl(var(--primary)/0.5)] transition-all duration-200">
               {/* Country Code Picker Button */}
               <div className="relative" ref={pickerRef}>
                 <button
