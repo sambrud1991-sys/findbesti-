@@ -21,6 +21,8 @@ const AuthPage = () => {
   const [selectedCountry, setSelectedCountry] = useState<CountryCode>(countryCodes[0]); // India default
   const [showCountryPicker, setShowCountryPicker] = useState(false);
   const [countrySearch, setCountrySearch] = useState("");
+  const [phoneFlash, setPhoneFlash] = useState(false);
+  const [otpFlash, setOtpFlash] = useState(false);
   const confirmationResultRef = useRef<ConfirmationResult | null>(null);
   const recaptchaVerifierRef = useRef<any>(null);
   const firebaseAuthRef = useRef<Auth | null>(null);
