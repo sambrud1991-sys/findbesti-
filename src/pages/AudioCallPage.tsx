@@ -2,8 +2,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import { mockUsers } from "@/data/mockData";
 import { PhoneOff, Mic, MicOff, Volume2, VolumeX, Loader2 } from "lucide-react";
 import { useAgoraCall } from "@/hooks/useAgoraCall";
+import PreCallPermissionGate from "@/components/PreCallPermissionGate";
 
-const AudioCallPage = () => {
+const AudioCallInner = () => {
   const { userId } = useParams();
   const navigate = useNavigate();
   const user = mockUsers.find((u) => u.id === userId) || mockUsers[0];
@@ -111,5 +112,11 @@ const AudioCallPage = () => {
     </div>
   );
 };
+
+const AudioCallPage = () => (
+  <PreCallPermissionGate callType="audio">
+    <AudioCallInner />
+  </PreCallPermissionGate>
+);
 
 export default AudioCallPage;
