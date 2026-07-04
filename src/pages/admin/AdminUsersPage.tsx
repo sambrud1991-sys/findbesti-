@@ -20,7 +20,15 @@ const AdminUsersPage = () => {
         .select("*")
         .order("created_at", { ascending: false });
       if (error) throw error;
-      return data;
+
+      const userIds = (data ?? []).map((u) => u.user_id);
+      const { data: phones } = await supabase
+        .from("user_phones")
+        .select("user_id, phone")
+        .in("user_id", userIds);
+      const phoneMap = new Map((phones ?? []).map((p) => [p.user_id, p.phone]));
+
+      return (data ?? []).map((u) => ({ ...u, phone: phoneMap.get(u.user_id) ?? null }));
     },
   });
 

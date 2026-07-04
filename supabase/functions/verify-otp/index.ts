@@ -88,19 +88,19 @@ Deno.serve(async (req) => {
     // Use getUserByEmail-like approach: search by generated email
     let existingUser = null;
     try {
-      // Try direct lookup - search users with the email
-      const { data: lookupData, error: lookupError } = await supabase
-        .from('profiles')
+      // Look up by phone in the protected user_phones table
+      const { data: lookupData } = await supabase
+        .from('user_phones')
         .select('user_id')
         .eq('phone', phone)
         .maybeSingle();
-      
+
       if (lookupData?.user_id) {
         const { data: userData } = await supabase.auth.admin.getUserById(lookupData.user_id);
         existingUser = userData?.user;
       }
     } catch (e) {
-      console.log("Profile lookup failed, will try to create user:", e);
+      console.log("Phone lookup failed, will try to create user:", e);
     }
 
     if (existingUser) {
@@ -164,6 +164,13 @@ Deno.serve(async (req) => {
         }
         session = newLoginData.session;
       }
+    }
+
+    // Ensure the phone number is recorded in the protected user_phones table
+    if (session?.user?.id) {
+      await supabase
+        .from('user_phones')
+        .upsert({ user_id: session.user.id, phone }, { onConflict: 'user_id' });
     }
 
     console.log("Login successful, session created");

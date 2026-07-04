@@ -22,15 +22,16 @@ const AdminManagePage = () => {
 
       // Get profile info for each admin
       const userIds = roles.map((r) => r.user_id);
-      const { data: profiles } = await supabase
-        .from("profiles")
-        .select("user_id, display_name, phone")
-        .in("user_id", userIds);
+      const [{ data: profiles }, { data: phones }] = await Promise.all([
+        supabase.from("profiles").select("user_id, display_name").in("user_id", userIds),
+        supabase.from("user_phones").select("user_id, phone").in("user_id", userIds),
+      ]);
 
-      return roles.map((r) => ({
-        ...r,
-        profile: profiles?.find((p) => p.user_id === r.user_id),
-      }));
+      return roles.map((r) => {
+        const profile = profiles?.find((p) => p.user_id === r.user_id);
+        const phone = phones?.find((p) => p.user_id === r.user_id)?.phone ?? null;
+        return { ...r, profile: profile ? { ...profile, phone } : undefined };
+      });
     },
   });
 

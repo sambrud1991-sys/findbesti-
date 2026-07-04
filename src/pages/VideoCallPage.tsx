@@ -54,7 +54,7 @@ const VideoCallPage = () => {
     if (!user) return;
 
     const channel = supabase
-      .channel(`gifts_${channelName}`)
+      .channel(`gifts_user_${user.id}`)
       .on(
         "postgres_changes",
         {

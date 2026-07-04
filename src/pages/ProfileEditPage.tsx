@@ -31,13 +31,12 @@ const ProfileEditPage = () => {
   const { data: profile, isLoading } = useQuery({
     queryKey: ["profile", user?.id],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("user_id", user!.id)
-        .maybeSingle();
+      const [{ data, error }, { data: phoneRow }] = await Promise.all([
+        supabase.from("profiles").select("*").eq("user_id", user!.id).maybeSingle(),
+        supabase.from("user_phones").select("phone").eq("user_id", user!.id).maybeSingle(),
+      ]);
       if (error) throw error;
-      return data;
+      return data ? { ...data, phone: phoneRow?.phone ?? "" } : null;
     },
     enabled: !!user?.id,
   });
@@ -47,7 +46,7 @@ const ProfileEditPage = () => {
       setDisplayName(profile.display_name || "");
       setBio(profile.bio || "");
       setGender(profile.gender || "");
-      setPhone(profile.phone || "");
+      setPhone((profile as any).phone || "");
       setAvatarUrl(profile.avatar_url || null);
     }
   }, [profile]);
@@ -114,9 +113,13 @@ const ProfileEditPage = () => {
           display_name: trimmedName,
           bio: trimmedBio || null,
           gender: gender || null,
-          phone: trimmedPhone || null,
         }, { onConflict: "user_id" });
       if (error) throw error;
+
+      const { error: phoneErr } = await supabase
+        .from("user_phones")
+        .upsert({ user_id: user!.id, phone: trimmedPhone || null }, { onConflict: "user_id" });
+      if (phoneErr) throw phoneErr;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["profile", user?.id] });
