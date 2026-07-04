@@ -235,4 +235,10 @@ const VideoCallInner = () => {
   );
 };
 
+const VideoCallPage = () => (
+  <PreCallPermissionGate callType="video">
+    <VideoCallInner />
+  </PreCallPermissionGate>
+);
+
 export default VideoCallPage;
