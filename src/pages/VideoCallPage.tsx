@@ -8,8 +8,9 @@ import { useAuth } from "@/contexts/AuthContext";
 import GiftPanel, { GiftItem } from "@/components/GiftPanel";
 import GiftAnimation from "@/components/GiftAnimation";
 import DraggableSelfVideo from "@/components/DraggableSelfVideo";
+import PreCallPermissionGate from "@/components/PreCallPermissionGate";
 
-const VideoCallPage = () => {
+const VideoCallInner = () => {
   const { userId } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
