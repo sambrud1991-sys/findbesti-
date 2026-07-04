@@ -22,7 +22,7 @@ const AdminPurchasesPage = () => {
       const userIds = [...new Set(data.map((p) => p.user_id))];
       const { data: profiles } = await supabase
         .from("profiles")
-        .select("user_id, display_name, avatar_url, phone")
+        .select("user_id, display_name, avatar_url")
         .in("user_id", userIds);
 
       const profileMap = new Map(profiles?.map((p) => [p.user_id, p]) ?? []);
