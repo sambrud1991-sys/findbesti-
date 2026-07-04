@@ -113,4 +113,10 @@ const AudioCallInner = () => {
   );
 };
 
+const AudioCallPage = () => (
+  <PreCallPermissionGate callType="audio">
+    <AudioCallInner />
+  </PreCallPermissionGate>
+);
+
 export default AudioCallPage;
