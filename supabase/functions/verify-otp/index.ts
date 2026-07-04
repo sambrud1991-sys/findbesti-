@@ -166,6 +166,13 @@ Deno.serve(async (req) => {
       }
     }
 
+    // Ensure the phone number is recorded in the protected user_phones table
+    if (session?.user?.id) {
+      await supabase
+        .from('user_phones')
+        .upsert({ user_id: session.user.id, phone }, { onConflict: 'user_id' });
+    }
+
     console.log("Login successful, session created");
     return new Response(
       JSON.stringify({ success: true, session }),
