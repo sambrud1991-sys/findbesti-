@@ -51,7 +51,21 @@ const SettingsPage = () => {
     enabled: !!user?.id,
   });
 
+  const { data: consent } = useQuery({
+    queryKey: ["my-consent", user?.id],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("profiles")
+        .select("age_verified_at, terms_accepted_at, terms_version")
+        .eq("user_id", user!.id)
+        .maybeSingle();
+      return data;
+    },
+    enabled: !!user?.id,
+  });
+
   const activeSub = subscriptions?.find(s => s.status === "active" && new Date(s.ends_at) > new Date());
+
 
   useEffect(() => {
     if (darkMode) {
