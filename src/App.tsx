@@ -52,6 +52,7 @@ import { useScreenProtection } from "@/hooks/useScreenProtection";
 import { useVersionCheck } from "@/hooks/useVersionCheck";
 import SplashScreen from "@/components/SplashScreen";
 import OnboardingPage from "@/pages/OnboardingPage";
+import AgeGate from "@/components/AgeGate";
 import { useState } from "react";
 
 const queryClient = new QueryClient({
@@ -71,8 +72,12 @@ const RootRoute = () => {
   const [onboardingDone, setOnboardingDone] = useState(
     () => localStorage.getItem("findbesti_onboarding_done") === "true"
   );
+  const [ageVerified, setAgeVerified] = useState(
+    () => localStorage.getItem("findbesti_age_verified") === "true"
+  );
   if (loading) return <SplashScreen />;
   if (needsUpdate) return <ForceUpdateScreen currentVersion={currentVersion} requiredVersion={requiredVersion} />;
+  if (!ageVerified) return <AgeGate onConfirm={() => setAgeVerified(true)} />;
   if (!onboardingDone) return <OnboardingPage onComplete={() => setOnboardingDone(true)} />;
   if (!user) return <AuthPage />;
   return <MaintenanceScreen><AnnouncementBanner /><Index /></MaintenanceScreen>;

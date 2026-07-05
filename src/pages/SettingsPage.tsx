@@ -89,6 +89,7 @@ const SettingsPage = () => {
       items: [
         { icon: Globe, label: t("settings.language"), desc: t(`lang.${language}`), action: "language" },
         { icon: Shield, label: t("settings.privacyPolicy") },
+        { icon: Shield, label: "Terms of Service" },
         { icon: HelpCircle, label: t("settings.helpSupport") },
         { icon: Info, label: t("settings.about"), desc: "v1.0.0" },
       ],
@@ -145,6 +146,8 @@ const SettingsPage = () => {
                       setShowLangPicker(true);
                     } else if (item.label === t("settings.privacyPolicy")) {
                       navigate("/privacy-policy");
+                    } else if (item.label === "Terms of Service") {
+                      navigate("/terms");
                     } else if (item.label === t("settings.helpSupport")) {
                       toast(t("common.comingSoon"));
                     }
