@@ -399,6 +399,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          age_verified_at: string | null
           avatar_url: string | null
           bio: string | null
           coins: number | null
@@ -412,10 +413,13 @@ export type Database = {
           is_verified: boolean | null
           referral_code: string | null
           referred_by: string | null
+          terms_accepted_at: string | null
+          terms_version: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
+          age_verified_at?: string | null
           avatar_url?: string | null
           bio?: string | null
           coins?: number | null
@@ -429,10 +433,13 @@ export type Database = {
           is_verified?: boolean | null
           referral_code?: string | null
           referred_by?: string | null
+          terms_accepted_at?: string | null
+          terms_version?: string | null
           updated_at?: string
           user_id: string
         }
         Update: {
+          age_verified_at?: string | null
           avatar_url?: string | null
           bio?: string | null
           coins?: number | null
@@ -446,6 +453,8 @@ export type Database = {
           is_verified?: boolean | null
           referral_code?: string | null
           referred_by?: string | null
+          terms_accepted_at?: string | null
+          terms_version?: string | null
           updated_at?: string
           user_id?: string
         }

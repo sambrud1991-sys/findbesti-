@@ -12,8 +12,10 @@ const AgeGate = ({ onConfirm }: AgeGateProps) => {
   const [denied, setDenied] = useState(false);
 
   const handleConfirm = () => {
+    const now = new Date().toISOString();
     localStorage.setItem("findbesti_age_verified", "true");
-    localStorage.setItem("findbesti_age_verified_at", new Date().toISOString());
+    localStorage.setItem("findbesti_age_verified_at", now);
+    localStorage.setItem("findbesti_terms_accepted_at", now);
     onConfirm();
   };
 

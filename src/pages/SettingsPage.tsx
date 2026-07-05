@@ -1,4 +1,4 @@
-import { ArrowLeft, Bell, Shield, Eye, Moon, Globe, HelpCircle, Info, Crown, Trash2, Check } from "lucide-react";
+import { ArrowLeft, Bell, Shield, Eye, Moon, Globe, HelpCircle, Info, Crown, Trash2, Check, Calendar } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
@@ -51,7 +51,21 @@ const SettingsPage = () => {
     enabled: !!user?.id,
   });
 
+  const { data: consent } = useQuery({
+    queryKey: ["my-consent", user?.id],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("profiles")
+        .select("age_verified_at, terms_accepted_at, terms_version")
+        .eq("user_id", user!.id)
+        .maybeSingle();
+      return data;
+    },
+    enabled: !!user?.id,
+  });
+
   const activeSub = subscriptions?.find(s => s.status === "active" && new Date(s.ends_at) > new Date());
+
 
   useEffect(() => {
     if (darkMode) {
@@ -183,7 +197,50 @@ const SettingsPage = () => {
             </button>
           </div>
         </div>
+
+        {/* Age & Consent */}
+        <div>
+          <h2 className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2 px-1">Age & Consent</h2>
+          <div className="bg-card rounded-2xl border border-border/50 overflow-hidden p-4 space-y-3">
+            <div className="flex items-start gap-3">
+              <Calendar size={18} className="text-primary mt-0.5" />
+              <div className="flex-1 text-xs">
+                <p className="font-semibold text-foreground">18+ verified</p>
+                <p className="text-muted-foreground">
+                  {consent?.age_verified_at
+                    ? `Confirmed on ${formatDate(consent.age_verified_at)}`
+                    : "Not recorded"}
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <Shield size={18} className="text-primary mt-0.5" />
+              <div className="flex-1 text-xs">
+                <p className="font-semibold text-foreground">Terms & Privacy accepted</p>
+                <p className="text-muted-foreground">
+                  {consent?.terms_accepted_at
+                    ? `${formatDate(consent.terms_accepted_at)}${consent.terms_version ? ` · v${consent.terms_version}` : ""}`
+                    : "Not recorded"}
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => {
+                localStorage.removeItem("findbesti_age_verified");
+                localStorage.removeItem("findbesti_age_verified_at");
+                localStorage.removeItem("findbesti_terms_accepted_at");
+                if (user?.id) sessionStorage.removeItem(`findbesti_consent_synced_${user.id}`);
+                toast.success("Please re-confirm to continue");
+                window.location.href = "/";
+              }}
+              className="w-full h-10 rounded-xl border border-border/60 text-xs font-bold text-foreground hover:bg-muted/50 transition-colors"
+            >
+              Re-verify age & re-accept Terms
+            </button>
+          </div>
+        </div>
       </div>
+
 
       {/* Language Picker Dialog */}
       <Dialog open={showLangPicker} onOpenChange={setShowLangPicker}>
