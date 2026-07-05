@@ -53,6 +53,7 @@ import { useVersionCheck } from "@/hooks/useVersionCheck";
 import SplashScreen from "@/components/SplashScreen";
 import OnboardingPage from "@/pages/OnboardingPage";
 import AgeGate from "@/components/AgeGate";
+import { useConsentSync } from "@/hooks/useConsentSync";
 import { useState } from "react";
 
 const queryClient = new QueryClient({
@@ -68,6 +69,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
 const RootRoute = () => {
   const { user, loading } = useAuth();
+  useConsentSync();
   const { needsUpdate, currentVersion, requiredVersion } = useVersionCheck();
   const [onboardingDone, setOnboardingDone] = useState(
     () => localStorage.getItem("findbesti_onboarding_done") === "true"
