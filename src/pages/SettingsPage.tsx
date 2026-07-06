@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { APP_VERSION } from "@/config/appVersion";
 import { useQuery } from "@tanstack/react-query";
 import { Skeleton } from "@/components/ui/skeleton";
+import { clearLocalConsent } from "@/lib/consent";
 import {
   Dialog,
   DialogContent,
