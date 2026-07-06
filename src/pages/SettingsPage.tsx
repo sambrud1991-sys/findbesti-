@@ -226,10 +226,7 @@ const SettingsPage = () => {
             </div>
             <button
               onClick={() => {
-                localStorage.removeItem("findbesti_age_verified");
-                localStorage.removeItem("findbesti_age_verified_at");
-                localStorage.removeItem("findbesti_terms_accepted_at");
-                if (user?.id) sessionStorage.removeItem(`findbesti_consent_synced_${user.id}`);
+                clearLocalConsent(user?.id);
                 toast.success("Please re-confirm to continue");
                 window.location.href = "/";
               }}
