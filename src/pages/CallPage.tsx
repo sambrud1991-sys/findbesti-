@@ -1,6 +1,8 @@
 import { mockUsers } from "@/data/mockData";
-import { Video, Phone, Clock, PhoneIncoming, PhoneOutgoing, PhoneMissed } from "lucide-react";
+import { Video, Phone, Clock, PhoneIncoming, PhoneOutgoing, PhoneMissed, Coins } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 const callHistory = [
   { user: mockUsers[0], type: "incoming" as const, duration: "5:32", time: "2 min ago" },
@@ -20,6 +22,21 @@ const callIcons = {
 const CallPage = () => {
   const navigate = useNavigate();
 
+  const { data: rates } = useQuery({
+    queryKey: ["call-rates"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("app_settings")
+        .select("audio_call_rate, video_call_rate")
+        .maybeSingle();
+      return data;
+    },
+    staleTime: 60_000,
+  });
+
+  const audioRate = rates?.audio_call_rate ?? 3;
+  const videoRate = rates?.video_call_rate ?? 5;
+
   return (
     <div className="min-h-screen bg-background pb-20">
       <header className="sticky top-0 z-40 glass-card px-4 pt-4 pb-3 animate-slide-up">
@@ -30,20 +47,32 @@ const CallPage = () => {
               const randomUser = mockUsers[Math.floor(Math.random() * mockUsers.length)];
               navigate(`/video-call/${randomUser.id}`);
             }}
-            className="flex-1 gradient-primary text-primary-foreground py-3 rounded-xl flex items-center justify-center gap-2 font-bold text-sm shadow-lg hover:scale-[1.02] transition-transform"
+            className="flex-1 gradient-primary text-primary-foreground py-3 rounded-xl flex flex-col items-center justify-center gap-0.5 font-bold text-sm shadow-lg hover:scale-[1.02] transition-transform"
           >
-            <Video size={18} />
-            Random Video Call
+            <span className="flex items-center gap-2">
+              <Video size={18} />
+              Random Video Call
+            </span>
+            <span className="flex items-center gap-1 text-[10px] font-semibold opacity-90">
+              <Coins size={10} />
+              {videoRate} coins / min
+            </span>
           </button>
           <button
             onClick={() => {
               const randomUser = mockUsers[Math.floor(Math.random() * mockUsers.length)];
               navigate(`/audio-call/${randomUser.id}`);
             }}
-            className="flex-1 bg-online text-primary-foreground py-3 rounded-xl flex items-center justify-center gap-2 font-bold text-sm shadow-lg hover:scale-[1.02] transition-transform"
+            className="flex-1 bg-online text-primary-foreground py-3 rounded-xl flex flex-col items-center justify-center gap-0.5 font-bold text-sm shadow-lg hover:scale-[1.02] transition-transform"
           >
-            <Phone size={18} />
-            Voice Call
+            <span className="flex items-center gap-2">
+              <Phone size={18} />
+              Voice Call
+            </span>
+            <span className="flex items-center gap-1 text-[10px] font-semibold opacity-90">
+              <Coins size={10} />
+              {audioRate} coins / min
+            </span>
           </button>
         </div>
       </header>
