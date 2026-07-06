@@ -7,7 +7,7 @@ const updateMock = vi.fn(() => ({ eq: updateEqMock }));
 const fromMock = vi.fn(() => ({ update: updateMock }));
 
 vi.mock("@/integrations/supabase/client", () => ({
-  supabase: { from: (t: string) => fromMock(t) },
+  supabase: { from: (...args: unknown[]) => (fromMock as unknown as (...a: unknown[]) => unknown)(...args) },
 }));
 
 const authState: { user: { id: string } | null } = { user: null };
