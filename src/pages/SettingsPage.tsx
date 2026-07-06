@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { APP_VERSION } from "@/config/appVersion";
 import { useQuery } from "@tanstack/react-query";
 import { Skeleton } from "@/components/ui/skeleton";
+import { clearLocalConsent } from "@/lib/consent";
 import {
   Dialog,
   DialogContent,
@@ -226,10 +227,7 @@ const SettingsPage = () => {
             </div>
             <button
               onClick={() => {
-                localStorage.removeItem("findbesti_age_verified");
-                localStorage.removeItem("findbesti_age_verified_at");
-                localStorage.removeItem("findbesti_terms_accepted_at");
-                if (user?.id) sessionStorage.removeItem(`findbesti_consent_synced_${user.id}`);
+                clearLocalConsent(user?.id);
                 toast.success("Please re-confirm to continue");
                 window.location.href = "/";
               }}
