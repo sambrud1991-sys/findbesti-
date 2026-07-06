@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ShieldAlert, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { saveLocalConsent } from "@/lib/consent";
 
 interface AgeGateProps {
   onConfirm: () => void;
@@ -12,10 +13,7 @@ const AgeGate = ({ onConfirm }: AgeGateProps) => {
   const [denied, setDenied] = useState(false);
 
   const handleConfirm = () => {
-    const now = new Date().toISOString();
-    localStorage.setItem("findbesti_age_verified", "true");
-    localStorage.setItem("findbesti_age_verified_at", now);
-    localStorage.setItem("findbesti_terms_accepted_at", now);
+    saveLocalConsent();
     onConfirm();
   };
 
