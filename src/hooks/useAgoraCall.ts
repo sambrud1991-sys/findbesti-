@@ -208,6 +208,8 @@ export const useAgoraCall = ({ targetUserId, callType }: UseAgoraCallOptions) =>
     toggleCamera,
     switchCamera,
     leave,
+    callStatus,
+    connectionState,
     localVideoTrack: localVideoTrackRef.current,
   };
 };
