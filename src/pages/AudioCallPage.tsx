@@ -1,8 +1,9 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { mockUsers } from "@/data/mockData";
-import { PhoneOff, Mic, MicOff, Volume2, VolumeX, Loader2 } from "lucide-react";
+import { PhoneOff, Mic, MicOff, Volume2, Loader2 } from "lucide-react";
 import { useAgoraCall } from "@/hooks/useAgoraCall";
 import PreCallPermissionGate from "@/components/PreCallPermissionGate";
+import CallStatusPill from "@/components/CallStatusPill";
 
 const AudioCallInner = () => {
   const { userId } = useParams();
