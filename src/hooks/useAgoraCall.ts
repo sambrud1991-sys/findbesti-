@@ -115,6 +115,10 @@ export const useAgoraCall = ({ targetUserId, callType }: UseAgoraCallOptions) =>
         setRemoteUsers((prev) => prev.filter((u) => u.uid !== user.uid));
       });
 
+      client.on("connection-state-change", (curState) => {
+        setConnectionState(curState as any);
+      });
+
       await client.join(data.appId, data.channelName, data.token, data.uid);
 
       // Create local tracks
