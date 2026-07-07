@@ -43,11 +43,12 @@ const AudioCallInner = () => {
           )}
         </div>
         <h2 className="text-2xl font-extrabold text-primary-foreground mt-2">{user.name}</h2>
+        <CallStatusPill status={callStatus} />
         <p className="text-primary-foreground/70 text-sm font-medium">
-          {joining ? "Connecting..." : error ? "Connection failed" : formatTime(callTime)}
+          {callStatus === "connected" ? formatTime(callTime) : ""}
         </p>
         {error && (
-          <p className="text-primary-foreground/60 text-xs bg-destructive/30 rounded-lg px-3 py-1">{error}</p>
+          <p className="text-primary-foreground/60 text-xs bg-destructive/30 rounded-lg px-3 py-1 max-w-xs text-center">{error}</p>
         )}
       </div>
 
