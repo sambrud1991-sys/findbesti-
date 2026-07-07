@@ -38,6 +38,7 @@ const VideoCallInner = () => {
     switchCamera,
     leave,
     localVideoTrack,
+    callStatus,
   } = useAgoraCall({ targetUserId: userId || "", callType: "video" });
 
   // Fetch user coins
