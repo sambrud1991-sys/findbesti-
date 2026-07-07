@@ -9,6 +9,7 @@ import GiftPanel, { GiftItem } from "@/components/GiftPanel";
 import GiftAnimation from "@/components/GiftAnimation";
 import DraggableSelfVideo from "@/components/DraggableSelfVideo";
 import PreCallPermissionGate from "@/components/PreCallPermissionGate";
+import CallStatusPill from "@/components/CallStatusPill";
 
 const VideoCallInner = () => {
   const { userId } = useParams();
