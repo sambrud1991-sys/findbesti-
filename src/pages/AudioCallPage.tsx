@@ -20,6 +20,7 @@ const AudioCallInner = () => {
     formatTime,
     toggleMute,
     leave,
+    callStatus,
   } = useAgoraCall({ targetUserId: userId || "", callType: "audio" });
 
   const handleEndCall = async () => {
