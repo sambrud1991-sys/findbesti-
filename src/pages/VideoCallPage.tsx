@@ -9,6 +9,7 @@ import GiftPanel, { GiftItem } from "@/components/GiftPanel";
 import GiftAnimation from "@/components/GiftAnimation";
 import DraggableSelfVideo from "@/components/DraggableSelfVideo";
 import PreCallPermissionGate from "@/components/PreCallPermissionGate";
+import CallStatusPill from "@/components/CallStatusPill";
 
 const VideoCallInner = () => {
   const { userId } = useParams();
@@ -37,6 +38,7 @@ const VideoCallInner = () => {
     switchCamera,
     leave,
     localVideoTrack,
+    callStatus,
   } = useAgoraCall({ targetUserId: userId || "", callType: "video" });
 
   // Fetch user coins
@@ -141,11 +143,14 @@ const VideoCallInner = () => {
       <GiftAnimation incomingGift={incomingGift} />
 
       {/* Top info — WhatsApp style centered name + timer */}
-      <div className="absolute top-10 left-0 right-0 z-10 flex flex-col items-center safe-top">
+      <div className="absolute top-10 left-0 right-0 z-10 flex flex-col items-center gap-1.5 safe-top">
         <h2 className="text-primary-foreground font-extrabold text-lg drop-shadow-lg">{user2.name}</h2>
-        <p className="text-primary-foreground/80 text-sm font-semibold drop-shadow">
-          {joining ? "Connecting..." : error ? "Connection failed" : formatTime(callTime)}
-        </p>
+        <CallStatusPill status={callStatus} />
+        {callStatus === "connected" && (
+          <p className="text-primary-foreground/90 text-sm font-semibold drop-shadow">
+            {formatTime(callTime)}
+          </p>
+        )}
       </div>
 
       {/* Error */}

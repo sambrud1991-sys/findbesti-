@@ -28,6 +28,24 @@ export const useAgoraCall = ({ targetUserId, callType }: UseAgoraCallOptions) =>
   const [remoteUsers, setRemoteUsers] = useState<IAgoraRTCRemoteUser[]>([]);
   const [callTime, setCallTime] = useState(0);
   const [isFrontCamera, setIsFrontCamera] = useState(true);
+  const [connectionState, setConnectionState] = useState<
+    "CONNECTING" | "CONNECTED" | "RECONNECTING" | "DISCONNECTED" | "DISCONNECTING"
+  >("CONNECTING");
+
+  // Live human-readable status for both caller and receiver
+  const callStatus: "joining" | "waiting" | "connected" | "reconnecting" | "failed" | "ended" =
+    error
+      ? "failed"
+      : connectionState === "RECONNECTING"
+      ? "reconnecting"
+      : connectionState === "DISCONNECTED" || connectionState === "DISCONNECTING"
+      ? "ended"
+      : !joined || joining
+      ? "joining"
+      : remoteUsers.length === 0
+      ? "waiting"
+      : "connected";
+
 
   // Ringing sound
   const ringAudioRef = useRef<HTMLAudioElement | null>(null);
@@ -95,6 +113,10 @@ export const useAgoraCall = ({ targetUserId, callType }: UseAgoraCallOptions) =>
 
       client.on("user-left", (user) => {
         setRemoteUsers((prev) => prev.filter((u) => u.uid !== user.uid));
+      });
+
+      client.on("connection-state-change", (curState) => {
+        setConnectionState(curState as any);
       });
 
       await client.join(data.appId, data.channelName, data.token, data.uid);
@@ -186,6 +208,8 @@ export const useAgoraCall = ({ targetUserId, callType }: UseAgoraCallOptions) =>
     toggleCamera,
     switchCamera,
     leave,
+    callStatus,
+    connectionState,
     localVideoTrack: localVideoTrackRef.current,
   };
 };
