@@ -231,9 +231,15 @@ serve(async (req) => {
     }
 
     // Server-side channel naming bound to BOTH participants' real UUIDs.
-    // Prevents any authenticated user from joining an arbitrary call by guessing names.
+    // Hashed to stay within Agora's 64-byte channel name limit.
     const sortedIds = [user.id, targetUserId].sort();
-    const channelName = `call_${sortedIds[0]}_${sortedIds[1]}`;
+    const pairKey = `${sortedIds[0]}_${sortedIds[1]}`;
+    const hashBuf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(pairKey));
+    const hashHex = Array.from(new Uint8Array(hashBuf))
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
+    const channelName = `call_${hashHex.slice(0, 40)}`;
+
 
     if (!CHANNEL_NAME_REGEX.test(channelName)) {
       return new Response(
