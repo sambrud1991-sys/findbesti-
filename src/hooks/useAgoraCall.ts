@@ -28,6 +28,24 @@ export const useAgoraCall = ({ targetUserId, callType }: UseAgoraCallOptions) =>
   const [remoteUsers, setRemoteUsers] = useState<IAgoraRTCRemoteUser[]>([]);
   const [callTime, setCallTime] = useState(0);
   const [isFrontCamera, setIsFrontCamera] = useState(true);
+  const [connectionState, setConnectionState] = useState<
+    "CONNECTING" | "CONNECTED" | "RECONNECTING" | "DISCONNECTED" | "DISCONNECTING"
+  >("CONNECTING");
+
+  // Live human-readable status for both caller and receiver
+  const callStatus: "joining" | "waiting" | "connected" | "reconnecting" | "failed" | "ended" =
+    error
+      ? "failed"
+      : connectionState === "RECONNECTING"
+      ? "reconnecting"
+      : connectionState === "DISCONNECTED" || connectionState === "DISCONNECTING"
+      ? "ended"
+      : !joined || joining
+      ? "joining"
+      : remoteUsers.length === 0
+      ? "waiting"
+      : "connected";
+
 
   // Ringing sound
   const ringAudioRef = useRef<HTMLAudioElement | null>(null);
