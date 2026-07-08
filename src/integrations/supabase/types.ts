@@ -80,6 +80,48 @@ export type Database = {
         }
         Relationships: []
       }
+      call_history: {
+        Row: {
+          call_type: Database["public"]["Enums"]["call_type_enum"]
+          caller_id: string
+          channel_name: string | null
+          created_at: string
+          duration_seconds: number
+          ended_at: string | null
+          id: string
+          receiver_id: string
+          started_at: string
+          status: Database["public"]["Enums"]["call_status_enum"]
+          updated_at: string
+        }
+        Insert: {
+          call_type: Database["public"]["Enums"]["call_type_enum"]
+          caller_id: string
+          channel_name?: string | null
+          created_at?: string
+          duration_seconds?: number
+          ended_at?: string | null
+          id?: string
+          receiver_id: string
+          started_at?: string
+          status?: Database["public"]["Enums"]["call_status_enum"]
+          updated_at?: string
+        }
+        Update: {
+          call_type?: Database["public"]["Enums"]["call_type_enum"]
+          caller_id?: string
+          channel_name?: string | null
+          created_at?: string
+          duration_seconds?: number
+          ended_at?: string | null
+          id?: string
+          receiver_id?: string
+          started_at?: string
+          status?: Database["public"]["Enums"]["call_status_enum"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
       coin_packs: {
         Row: {
           active: boolean
@@ -797,6 +839,13 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
+      call_status_enum:
+        | "accepted"
+        | "rejected"
+        | "missed"
+        | "cancelled"
+        | "completed"
+      call_type_enum: "audio" | "video"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -925,6 +974,14 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "moderator", "user"],
+      call_status_enum: [
+        "accepted",
+        "rejected",
+        "missed",
+        "cancelled",
+        "completed",
+      ],
+      call_type_enum: ["audio", "video"],
     },
   },
 } as const
