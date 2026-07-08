@@ -3,6 +3,7 @@ import { mockUsers } from "@/data/mockData";
 import { PhoneOff, Mic, MicOff, Camera, CameraOff, RotateCcw, Gift, Loader2 } from "lucide-react";
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useAgoraCall } from "@/hooks/useAgoraCall";
+import { useCallerSignaling } from "@/hooks/useCallerSignaling";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import GiftPanel, { GiftItem } from "@/components/GiftPanel";
@@ -40,6 +41,8 @@ const VideoCallInner = () => {
     localVideoTrack,
     callStatus,
   } = useAgoraCall({ targetUserId: userId || "", callType: "video" });
+
+  useCallerSignaling({ targetUserId: userId || "", callType: "video", onEnd: leave });
 
   // Fetch user coins
   useEffect(() => {

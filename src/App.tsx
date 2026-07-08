@@ -54,6 +54,7 @@ import SplashScreen from "@/components/SplashScreen";
 import OnboardingPage from "@/pages/OnboardingPage";
 import AgeGate from "@/components/AgeGate";
 import { useConsentSync } from "@/hooks/useConsentSync";
+import IncomingCallModal from "@/components/IncomingCallModal";
 import { useState } from "react";
 
 const queryClient = new QueryClient({
@@ -157,6 +158,7 @@ const App = () => (
               <Route path="*" element={<NotFound />} />
             </Routes>
             <BottomNav />
+            <IncomingCallModal />
           </AuthProvider>
         </BrowserRouter>
       </ScreenProtectionWrapper>
