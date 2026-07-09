@@ -70,7 +70,9 @@ const steps = [
 
 const AboutWebsite = () => {
   return (
-    <div className="min-h-screen bg-[#0a0418] text-white overflow-x-hidden" style={jakarta}>
+    <>
+      <PageSeo />
+      <div className="min-h-screen bg-[#0a0418] text-white overflow-x-hidden" style={jakarta}>
       {/* Background glow */}
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[900px] rounded-full bg-pink-500/20 blur-[160px]" />
