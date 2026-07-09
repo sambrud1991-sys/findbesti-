@@ -1,9 +1,44 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import {
   Video, MessageCircle, Gift, Crown, Shield, Sparkles,
   Users, Coins, Trophy, Heart, Phone, Star, ArrowRight,
   Globe, Zap, CheckCircle2
 } from "lucide-react";
+
+const baseUrl = "https://www.findbesti.online";
+
+const routeMeta = {
+  "/website": {
+    title: "FindBesti — Video Chat, Audio Calls & Virtual Gifts",
+    description: "Discover FindBesti: the new-age video chat app to meet, chat and go live with people worldwide. HD calls, real-time chat, virtual gifts, premium plans and a coin economy that rewards you.",
+    canonical: `${baseUrl}/website`,
+  },
+  "/about": {
+    title: "About FindBesti — Meet, Chat & Earn Coins",
+    description: "Learn about FindBesti: HD video calls, audio calls, real-time messaging, virtual gifts, leaderboards, premium perks and UPI withdrawals starting at ₹100.",
+    canonical: `${baseUrl}/about`,
+  },
+};
+
+const PageSeo = () => {
+  const { pathname } = useLocation();
+  const meta = routeMeta[pathname as keyof typeof routeMeta] || routeMeta["/website"];
+  return (
+    <Helmet>
+      <title>{meta.title}</title>
+      <meta name="description" content={meta.description} />
+      <link rel="canonical" href={meta.canonical} />
+      <meta property="og:title" content={meta.title} />
+      <meta property="og:description" content={meta.description} />
+      <meta property="og:url" content={meta.canonical} />
+      <meta property="og:type" content="website" />
+      <meta name="twitter:title" content={meta.title} />
+      <meta name="twitter:description" content={meta.description} />
+    </Helmet>
+  );
+};
+
 
 const syne = { fontFamily: "'Syne', sans-serif" };
 const jakarta = { fontFamily: "'Plus Jakarta Sans', sans-serif" };
@@ -35,7 +70,9 @@ const steps = [
 
 const AboutWebsite = () => {
   return (
-    <div className="min-h-screen bg-[#0a0418] text-white overflow-x-hidden" style={jakarta}>
+    <>
+      <PageSeo />
+      <div className="min-h-screen bg-[#0a0418] text-white overflow-x-hidden" style={jakarta}>
       {/* Background glow */}
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[900px] rounded-full bg-pink-500/20 blur-[160px]" />
@@ -328,6 +365,7 @@ const AboutWebsite = () => {
         </div>
       </footer>
     </div>
+    </>
   );
 };
 
