@@ -99,6 +99,14 @@ const AdminRoute = ({ children }: { children: React.ReactNode }) => {
 
 const ScreenProtectionWrapper = ({ children }: { children: React.ReactNode }) => {
   useScreenProtection();
+  useEffect(() => {
+    if (Capacitor.isNativePlatform()) {
+      PrivacyScreen.enable({
+        android: { enabled: true, preventScreenshots: true },
+        ios: { enabled: true },
+      } as any).catch(() => {});
+    }
+  }, []);
   return <>{children}</>;
 };
 
