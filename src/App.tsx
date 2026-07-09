@@ -55,7 +55,9 @@ import OnboardingPage from "@/pages/OnboardingPage";
 import AgeGate from "@/components/AgeGate";
 import { useConsentSync } from "@/hooks/useConsentSync";
 import IncomingCallModal from "@/components/IncomingCallModal";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Capacitor } from "@capacitor/core";
+import { PrivacyScreen } from "@capacitor-community/privacy-screen";
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1 } },
