@@ -1,4 +1,6 @@
-import { Settings, Edit3, Crown, Heart, Star, ChevronRight, LogOut, Users, Trophy, ShieldCheck } from "lucide-react";
+import { Settings, Edit3, Crown, Heart, Star, ChevronRight, LogOut, Users, Trophy, ShieldCheck, Download } from "lucide-react";
+import { toast } from "sonner";
+import { Capacitor } from "@capacitor/core";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -55,8 +57,53 @@ const ProfilePage = () => {
             <button
               onClick={() => navigate("/profile/edit")}
               className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-card flex items-center justify-center shadow-md"
+              aria-label="Edit profile"
             >
               <Edit3 size={12} className="text-primary" />
+            </button>
+            <button
+              onClick={async () => {
+                try {
+                  const res = await fetch(avatarUrl, { mode: "cors" });
+                  if (!res.ok) throw new Error("Fetch failed");
+                  const blob = await res.blob();
+                  const ext = (blob.type.split("/")[1] || "jpg").split(";")[0];
+                  const filename = `${displayName.replace(/\s+/g, "_")}_profile.${ext}`;
+
+                  if (Capacitor.isNativePlatform()) {
+                    const dataUrl: string = await new Promise((resolve, reject) => {
+                      const r = new FileReader();
+                      r.onloadend = () => resolve(r.result as string);
+                      r.onerror = reject;
+                      r.readAsDataURL(blob);
+                    });
+                    const { Filesystem, Directory } = await import("@capacitor/filesystem");
+                    await Filesystem.writeFile({
+                      path: `Pictures/${filename}`,
+                      data: dataUrl.split(",")[1],
+                      directory: Directory.ExternalStorage,
+                      recursive: true,
+                    });
+                    toast.success("Photo saved to gallery");
+                  } else {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    URL.revokeObjectURL(url);
+                    toast.success("Photo downloaded");
+                  }
+                } catch (e: any) {
+                  toast.error("Save failed: " + (e?.message || "unknown"));
+                }
+              }}
+              className="absolute -top-1 -right-1 w-7 h-7 rounded-full bg-card flex items-center justify-center shadow-md"
+              aria-label="Save profile photo"
+            >
+              <Download size={12} className="text-primary" />
             </button>
           </div>
           <div>
