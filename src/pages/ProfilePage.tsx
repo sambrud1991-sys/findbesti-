@@ -1,4 +1,6 @@
-import { Settings, Edit3, Crown, Heart, Star, ChevronRight, LogOut, Users, Trophy, ShieldCheck } from "lucide-react";
+import { Settings, Edit3, Crown, Heart, Star, ChevronRight, LogOut, Users, Trophy, ShieldCheck, Download } from "lucide-react";
+import { toast } from "sonner";
+import { Capacitor } from "@capacitor/core";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 
