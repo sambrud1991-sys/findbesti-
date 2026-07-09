@@ -4,6 +4,12 @@ const config: CapacitorConfig = {
   appId: 'com.findbesti.app',
   appName: 'FindBesti',
   webDir: 'dist',
+  plugins: {
+    PrivacyScreen: {
+      enable: true,
+      preventScreenshots: true,
+    },
+  },
 };
 
 export default config;
